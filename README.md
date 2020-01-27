@@ -5,11 +5,11 @@ Yet Another PasteBin implemented in Golang.
 ## Prerequisites
 
 - MongoDB
-- Reverse Proxy with HTTPS and Rate-Limit Support (like: Caddy, Nginx)
-- A Server
+- Reverse Proxy with HTTPS and Rate-Limit Support (Recommend: Traefik, Caddy)
+- A Linux Server (If you need Windows version, compile by yourself.)
 
 Note: Since we are offering public services, we don't want to implement any rate-limit
-on application side.
+on application side and we will ONLY allow you to listen `127.0.0.1` instead of 
 
 ## To-Do list (features)
 
