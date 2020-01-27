@@ -13,10 +13,10 @@ db.createCollection("userdata",{
             properties: {
                 shortId: {
                     bsonType: "string",
-                    description: "shorter than 5 bytes, nanoid"         
+                    description: "shorter than 5 bytes, nanoid"
                 },
                 userIP: {
-                    bsonType: "decimal128",
+                    bsonType: "decimal",
                     description: "save user IP, including IPv6 support"
                 },
                 expireAt: {
@@ -24,7 +24,7 @@ db.createCollection("userdata",{
                     description: "expire time, max 24h"
                 },
                 data: {
-                    bsonType: "bindata",
+                    bsonType: "binData",
                     description: "utf8 only, stored after chacha20 encrypted. userdata."
                 },
                 pwdIsSet: {
@@ -36,10 +36,10 @@ db.createCollection("userdata",{
                     description: "blake2b hashed password"
                 }
             }
-        }   
+        }
     },
     validationAction: "error"
-)
+    })
 ```
 
 Set TTL to get document expired.
@@ -48,6 +48,10 @@ Set TTL to get document expired.
 db.userdata.createIndex(
     {"expireAt": 1},
     {expireAfterSeconds: 0}
+    );
+db.userdata.createIndex(
+    {"shortId": 1},
+    {unique: true}
     );
 ```
 
