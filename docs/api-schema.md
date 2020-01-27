@@ -15,6 +15,7 @@ Response Code:
 - HTTP 200, Okay.
 - HTTP 4xx, Failed (Usually Client Side Reason).
 - HTTP 5xx, Failed due to server failure.
+- HTTP 403, Content failed to pass checking.
 
 Response Content:
 
@@ -30,6 +31,14 @@ https://<DOMAIN>:<PORT>/<SHORTID>
 ```http request
 GET /<SHORTID>?f=<FORMAT>&p=<PASSWD>
 ```
+
+If `f` is not set, you will not get syntax-highlighted output.
+
+The code syntax highlighting is done in client side using Google Prettify.js ,
+
+The `f`'s valid values are:
+
+TODO
 
 Response Code:
 
@@ -50,3 +59,12 @@ Response Content:
 DELETE /api/admin/<shortid>?k=<masterkey>
 ```
 
+You should set a master key in server config as administrator credential.
+
+The `masterkey` param is the md5-hashed key concatenated with current date and hour in UTC. So make sure your time is correct.
+
+Response Code:
+
+- HTTP 200, Okay.
+- HTTP 403, Authentication Error.
+- HTTP 404, Not found.
