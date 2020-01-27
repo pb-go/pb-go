@@ -16,10 +16,25 @@ db.createCollection("userdata",{
                     description: "shorter than 5 bytes, nanoid"         
                 },
                 userIP: {
-                    bsonType: "Decimal128",
+                    bsonType: "decimal128",
                     description: "save user IP, including IPv6 support"
                 },
-                expireAt: {}           
+                expireAt: {
+                    bsonType: "date",
+                    description: "expire time, max 24h"
+                },
+                data: {
+                    bsonType: "bindata",
+                    description: "utf8 only, stored after chacha20 encrypted. userdata."
+                },
+                pwdIsSet: {
+                    bsonType: "bool",
+                    description: "check if password is set to use encryption."
+                },
+                passwd: {
+                    bsonType: "string",
+                    description: "blake2b hashed password"
+                }
             }
         }   
     },
@@ -35,3 +50,4 @@ db.userdata.createIndex(
     {expireAfterSeconds: 0}
     );
 ```
+

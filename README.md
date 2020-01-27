@@ -9,13 +9,14 @@ Yet Another PasteBin implemented in Golang.
 - A Linux Server (If you need Windows version, compile by yourself.)
 
 Note: Since we are offering public services, we don't want to implement any rate-limit
-on application side and we will ONLY allow you to listen `127.0.0.1` instead of 
+on application side. You must apply a reverse proxy or something else do that.
+Your data is encrypted and finally stored on our server using Chacha20 algorithm.
 
 ## To-Do list (features)
 
 - [ ] | Content detection, only allow pure texts.
 - [ ] | Expiring feature done in MongoDB.
-- [ ] | Encrypting optionally.
+- [ ] | Private Share optionally, Share password using BLAKE2b stored. 
 - [X] | <del> Rate-limit to avoid abusing. (SHOULD BE DONE IN REVERSE PROXY SIDE) </del>
 - [ ] | Code Syntax Highlighting.
 - [ ] | Shortlink using hashids.
