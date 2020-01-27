@@ -21,7 +21,7 @@ Your data is encrypted and finally stored on our server using Chacha20 algorithm
 - [ ] | ReCaptcha support to prevent from a large scale abusing.
 - [ ] | Code Syntax Highlighting.
 - [ ] | Shortlink using hashids.
-- [ ] | Pure CLI.
+- [X] | <del> Pure CLI. (Use `curl` instead)</del>
 - [ ] | Web page upload.
 
 ## Usage

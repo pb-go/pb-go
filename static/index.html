@@ -1,10 +1,53 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>pb-go</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css" integrity="sha256-L/W5Wfqfa0sdBNIKN9cG6QA5F2qx4qICmU2VgLruv9Y=" crossorigin="anonymous">
+
 </head>
 <body>
-
+<div class="container">
+    <nav class="navbar navbar-dark bg-primary">
+        <a class="navbar-brand" href="#">pb-go</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarText">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item active">
+                    <a class="nav-link" href="#">Index<span class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="submit.html">Upload</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="https://github.com/kmahyyg/pb-go">About Software</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+    <h1 class="text-center">Yet Another Pastebin</h1>
+    <h3 class="text-center">Disclaimer</h3>
+    <div class="alert alert-danger" role="alert">
+        We only offer pastebin service. Don't abuse. No PHOTO, No BINARY, No COPYRIGHT CONTENTS, No TROJANS!
+    </div>
+    <div class="alert alert-primary" role="alert">
+        The maximum storage length is 24h, we will delete it after that. We will record your IP address and may ask you to pass reCAPTCHA check if needed.
+    </div>
+    <p>We do allow you share your code snippet with your friends. We support private share, expiring and all-encrypted storage using CHACHA20 on our server.</p>
+    <p>We reserve the rights to ban and delete any contents served on our server. The software author will take no responsibility for any contents you uploaded.</p>
+    <p><b>We reserve the rights to submit all the data to authorities we collected about you if we received a legal notice from law enforcement. We don't store any information after your paste expired or burned.</b></p>
+    <h3 class="text-center">Usage</h3>
+    <pre class="prettyprint">
+$ cmd | curl -X POST -F 'p=password' -F 'e=24' -F 'd=@-' http://DOMAIN:PORT/api/upload
+    </pre>
+    <p> "-F 'p=password'" and "-F 'e=24'" can be safely ignored. </p>
+    <p>This site is proudly hosted using <a href="https://github.com/kmahyyg/pb-go">pb-go</a>. </p>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.4.1/dist/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/js/bootstrap.bundle.min.js" integrity="sha256-OUFW7hFO0/r5aEGTQOz9F/aXQOt+TwqI1Z4fbVvww04=" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/code-prettify@0.1.0/loader/run_prettify.js" integrity="sha256-BiZ7IhC9RtaPNJUrs+oO0+I2ea+vE9NVvCXQluQrnYQ=" crossorigin="anonymous"></script>
 </body>
 </html>

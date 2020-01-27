@@ -5,10 +5,18 @@
 ```http request
 POST /api/upload HTTP/1.1
 Content-Type:multi‐part/form-data
-Content-Length: <ORIGINAL DATA LENGTH>
 
 p=<PASSWD>&e=<EXPIRATION>&d=<DATA>
 ```
+
+`EXPIRATION` should be integer from 1 to 24, 
+set to 0 will result in burning after read,
+if `EXPIRATION` is not set, default is 24, which means expired after 24h.
+
+`PASSWD` should be the password you wanna use,
+its length must be larger than or equal to 6.
+if `PASSWD` is not set, no password will be required.
+But your data will still be encrypted stored on our server.
 
 Response Code:
 
@@ -31,16 +39,12 @@ If you getting a notice about CAPTCHA test, it will show you another URL instead
 ## Show
 
 ```http request
-GET /<SHORTID>?f=<FORMAT>&p=<PASSWD>
+GET /<SHORTID>?f=<FORMAT>&p=<PASSWD> HTTP/1.1
 ```
 
-If `f` is not set, you will not get syntax-highlighted output.
+If `f` is raw, you will not get syntax-highlighted output.
 
 The code syntax highlighting is done in client side using Google Prettify.js ,
-
-The `f`'s valid values are:
-
-TODO
 
 Response Code:
 
@@ -51,14 +55,14 @@ Response Code:
 
 Response Content:
 
-- If `f` is set, will output prettified code.
+- If `f` is not set, will output prettified code.
 - If `p` is not set, but encryption required, will return 404.
 - If `shortid` is not exists, will return 404.
 
 ## Delete
 
 ```http request
-DELETE /api/admin/<shortid>?k=<masterkey>
+DELETE /api/admin/<shortid>?k=<masterkey> HTTP/1.1
 ```
 
 You should set a master key in server config as administrator credential.
@@ -70,3 +74,6 @@ Response Code:
 - HTTP 200, Okay.
 - HTTP 403, Authentication Error.
 - HTTP 404, Not found.
+
+## Recaptcha
+

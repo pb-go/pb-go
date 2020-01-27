@@ -1,10 +1,56 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>pb-go: submit</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css" integrity="sha256-L/W5Wfqfa0sdBNIKN9cG6QA5F2qx4qICmU2VgLruv9Y=" crossorigin="anonymous">
 </head>
 <body>
-
+<div class="container">
+    <nav class="navbar navbar-dark bg-primary">
+        <a class="navbar-brand" href="#">pb-go</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarText">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item active">
+                    <a class="nav-link" href="index.html">Index</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Upload<span class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="https://github.com/kmahyyg/pb-go">About Software</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+    <h1 class="text-center">Yet Another Pastebin</h1>
+    <div class="alert alert-danger" role="alert">
+        DO NOT ABUSE THIS SERVICE OR UPLOAD ANY ILLEGAL CONTENTS!
+    </div>
+    <h3 class="text-center">Upload Form</h3>
+    <form method="post" action="/api/upload" enctype="multipart/form-data">
+        <div class="form-group">
+            <label for="expire4">Expire After:</label><br>
+            <span>Set to 0 means burn after read, allowed value: 0~24, default is 24. Force Expire after 24h.</span>
+            <input type="number" min="0" max="24" class="form-control" id="expire4" name="d">
+        </div>
+        <div class="form-group">
+            <label for="encpwd">Password:</label>
+            <input type="password" class="form-control" id="encpwd" name="p">
+        </div>
+        <div class="form-group">
+            <label for="snipfile">Code Snippet:</label>
+            <textarea class="form-control" id="snipfile" name="d"></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary float-right">Submit</button>
+    </form>
+    <p>This site is proudly hosted using <a href="https://github.com/kmahyyg/pb-go">pb-go</a>. </p>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.4.1/dist/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/js/bootstrap.bundle.min.js" integrity="sha256-OUFW7hFO0/r5aEGTQOz9F/aXQOt+TwqI1Z4fbVvww04=" crossorigin="anonymous"></script>
 </body>
 </html>
