@@ -26,6 +26,8 @@ Content-Length: <ORIGINAL DATA LENGTH>
 https://<DOMAIN>:<PORT>/<SHORTID> 
 ```
 
+If you getting a notice about CAPTCHA test, it will show you another URL instead of the URL contains shortID. If you failed to pass, the content you uploaded will be deleted after 5 mins and will NOT be published.
+
 ## Show
 
 ```http request
