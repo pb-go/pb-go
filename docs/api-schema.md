@@ -77,3 +77,10 @@ Response Code:
 
 ## Recaptcha
 
+```http request
+POST /api/g_verify HTTP/1.1
+
+g-recaptcha-response=<BLAHBLAH>&tempID=<BLAHBLAH>
+```
+
+Ask user to run reCAPTCHA test. Server-side verification.
