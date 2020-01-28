@@ -3,11 +3,16 @@ package databaseop
 import (
 	"github.com/matoous/go-nanoid"
 	"log"
-	"os"
 )
 
 type DBClient interface {
-
+	connect2DB(dbURI string) error
+	checkConn(dbCli interface{}) error
+	testCollectionNIndex(dbCli interface{}, dbName string, collName string) int
+	itemCreate(dbCli interface{}, dbName string, collName string, data interface{}) int
+	itemUpdate(dbCli interface{}, dbName string, collName string, data interface{}) int
+	itemDelete(dbCli interface{}, dbName string, collName string, data interface{}) int
+	itemRead(dbCli interface{}, dbName string, collName string, data interface{}) int
 }
 
 func getNanoID() (string, error) {

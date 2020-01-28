@@ -9,8 +9,12 @@ db.createCollection("userdata",{
     validator: {
         $jsonSchema: {
             bsonType: "object",
-            required: ["shortId", "userIP", "expireAt", "data", "pwdIsSet", "passwd"],
+            required: ["waitVerify", "shortId", "userIP", "expireAt", "data", "pwdIsSet", "passwd"],
             properties: {
+                waitVerify: {
+                    bsonType: "bool",
+                    description: "If captcha enabled, this will mark if publish or not."
+                },
                 shortId: {
                     bsonType: "string",
                     description: "shorter than 5 bytes, nanoid"
