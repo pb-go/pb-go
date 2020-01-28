@@ -8,10 +8,10 @@ import (
 )
 
 type ServConfig struct {
-	Network map[string]*Network `yaml:"network"`
-	Recaptcha map[string]*Recaptcha `yaml:"recaptcha"`
-	Security map[string]*Security `yaml:"security"`
-	Content map[string]*Content `yaml:"content"`
+	network Network `yaml:"network"`
+	recaptcha Recaptcha `yaml:"recaptcha"`
+	security Security `yaml:"security"`
+	content Content `yaml:"content"`
 }
 
 type Network struct {

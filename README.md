@@ -15,14 +15,14 @@ Your data is encrypted and finally stored on our server using Chacha20 algorithm
 ## To-Do list (features)
 
 - [ ] | Content detection, only allow pure texts.
-- [ ] | Expiring feature done in MongoDB.
+- [X] [ ] | Expiring feature done in MongoDB. <del> (TTL done, DB Driver not implement) </del>
 - [ ] | Private Share optionally, Share password using BLAKE2b stored. 
 - [X] | <del> Rate-limit to avoid abusing. (SHOULD BE DONE IN REVERSE PROXY SIDE) </del>
 - [ ] | ReCaptcha v2 support to prevent from a large scale abusing.
-- [ ] | Code Syntax Highlighting.
+- [X] | Code Syntax Highlighting.
 - [ ] | Shortlink using hashids.
 - [X] | <del> Pure CLI. (Use `curl` instead)</del>
-- [ ] | Web page upload.
+- [X] | Web page upload.
 
 ## Usage
 
