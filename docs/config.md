@@ -1,5 +1,9 @@
 # Server configuration 
 
+## Configuration Example
+
+
+
 ## Database
 
 MongoDB should be configured as described in DB schema file to make sure the data TTL is correctly set. You do need to add SCRAM authentication to your DB and make sure your DB listened just on localhost.
@@ -21,6 +25,8 @@ If your public instance is experiencing abusing, please do enable recaptcha and 
 We use the password you offered or the default encryption password set in server configuration using CHACHA20 algorithm to make sure your data safety.
 
 BUT, DO REMEMBER, we don't guarantee about unintended data loss like hardware failure and maintenance.
+
+Do Remember: `masterkey` must be longer than 12 bytes. Encryption key should be 32 bytes and corresponding nonce should be 12 bytes.
 
 ## Network
 

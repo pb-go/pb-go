@@ -18,7 +18,7 @@ Your data is encrypted and finally stored on our server using Chacha20 algorithm
 - [ ] | Expiring feature done in MongoDB.
 - [ ] | Private Share optionally, Share password using BLAKE2b stored. 
 - [X] | <del> Rate-limit to avoid abusing. (SHOULD BE DONE IN REVERSE PROXY SIDE) </del>
-- [ ] | ReCaptcha support to prevent from a large scale abusing.
+- [ ] | ReCaptcha v2 support to prevent from a large scale abusing.
 - [ ] | Code Syntax Highlighting.
 - [ ] | Shortlink using hashids.
 - [X] | <del> Pure CLI. (Use `curl` instead)</del>

@@ -1,0 +1,14 @@
+network:
+  - host: 0.0.0.0
+  - port: 8181
+recaptcha:
+  - enable: false
+  - secret_key:
+  - site_key:
+security:
+  - master_key:
+  - encryption_key:
+  - encryption_nonce:
+content:
+  - detect_abuse: true
+  - default_expire: 24
