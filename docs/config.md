@@ -4,19 +4,19 @@
 
 ```yaml
 network:
-  - listen: 127.0.0.1:8181
-  - mongodb_url: mongodb+srv://
+  listen: 127.0.0.1:8181
+  mongodb_url: mongodb+srv://
 recaptcha:
-  - enable: false
-  - secret_key:
-  - site_key:
+  enable: false
+  secret_key:
+  site_key:
 security:
-  - master_key:
-  - encryption_key:
-  - encryption_nonce:
+  master_key:
+  encryption_key:
+  encryption_nonce:
 content:
-  - detect_abuse: true
-  - default_expire: 24
+  detect_abuse: true
+  default_expire: 24
 ```
 
 Default listens at `127.0.0.1:8181`, Configure reCAPTCHA v2 related key and enable in `recaptcha` part.

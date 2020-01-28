@@ -1,12 +1,13 @@
 package main
 
 import (
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"net/http"
     "github.com/fvbock/endless"
-	"fmt"
 	"flag"
 	"os"
+	"log"
 	"os/signal"
 	"path/filepath"
 	"syscall"
@@ -20,9 +21,9 @@ var (
 )
 
 func printVersion() {
-	fmt.Printf("Current Version: %s \n", currentVer)
-	fmt.Println("For more information: https://github.com/kmahyyg/pb-go")
-	fmt.Println("This Program is licensed under AGPLv3.")
+	log.Printf("Current Version: %s \n", currentVer)
+	log.Println("For more information: https://github.com/kmahyyg/pb-go")
+	log.Println("This Program is licensed under AGPLv3.")
 }
 
 func fileExist(filepath string) bool{
@@ -34,33 +35,52 @@ func startServer(conf ServConfig) error{
 
 }
 
+func init(){
+	log.SetFlags(log.Ldate|log.Ltime|log.LUTC|log.Lshortfile)
+}
+
 func main() {
 	flag.Parse()
 
+	printVersion()
+
+	// after parsing command line args, do corresponding operation
 	if *version {
-		printVersion()
+		os.Exit(0)
 	}
 
 	if workingDir, err := os.Getwd(); err == nil {
-		confPath := filepath.Join(workingDir, *confFile)
+		var confPath string
+		// if user doesn't offer absolute path of config file
+		if !filepath.IsAbs(*confFile){
+			confPath = filepath.Join(workingDir, *confFile)
+		} else {
+			confPath = *confFile
+		}
+		// check if file exists and not a directory
 		if fileExist(confPath){
 			servConf, err := loadConfig(confPath)
 			if err != nil {
+				log.Println("Please check document on our project page.")
 				os.Exit(14)
 			} else {
+				// start server with graceful restart
 				err := startServer(servConf)
-				os.Exit(0)
+				if err != nil {
+					os.Exit(1)
+				}
+				defer os.Exit(0)
 			}
 		}
 	} else {
 		os.Exit(13)
 	}
 
+	// handler of user issued system signal
 	{
 		osSignals := make(chan os.Signal, 1)
 		signal.Notify(osSignals, os.Interrupt, os.Kill, syscall.SIGTERM)
 		<-osSignals
 	}
-
 
 }
