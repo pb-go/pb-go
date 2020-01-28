@@ -1,13 +1,13 @@
 package main
 
 import (
-	"fmt"
-	"github.com/gin-gonic/gin"
-	"net/http"
-    "github.com/fvbock/endless"
 	"flag"
-	"os"
+	"fmt"
+	"github.com/fvbock/endless"
+	"github.com/gin-gonic/gin"
 	"log"
+	"net/http"
+	"os"
 	"os/signal"
 	"path/filepath"
 	"syscall"
@@ -32,7 +32,9 @@ func fileExist(filepath string) bool{
 }
 
 func startServer(conf ServConfig) error{
-
+	//todo: graceful restart
+	//todo: custom port and listen host
+	//todo: gin framework
 }
 
 func init(){
