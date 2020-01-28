@@ -5,39 +5,60 @@ import (
 	"gopkg.in/yaml.v2"
 	"io/ioutil"
 	"log"
+	"strings"
 )
 
 type ServConfig struct {
-	network Network `yaml:"network"`
-	recaptcha Recaptcha `yaml:"recaptcha"`
-	security Security `yaml:"security"`
-	content Content `yaml:"content"`
+	Network   Network   `yaml:"network"`
+	Recaptcha Recaptcha `yaml:"recaptcha"`
+	Security  Security  `yaml:"security"`
+	Content   Content   `yaml:"content"`
 }
 
 type Network struct {
-	listen string `yaml:"listen"`
-	mongodb_url string `yaml:"mongodb_url"`
+	Listen      string `yaml:"listen"`
+	Mongodb_url string `yaml:"mongodb_url"`
 }
 
 type Recaptcha struct {
-	enable bool `yaml:"enable"`
-	secret_key string `yaml:"secret_key"`
-	site_key string	`yaml:"site_key"`
+	Enable     bool   `yaml:"enable"`
+	Secret_key string `yaml:"secret_key"`
+	Site_key   string `yaml:"site_key"`
 }
 
 type Security struct {
-	master_key string `yaml:"master_key"`
-	encryption_key string `yaml:"encryption_key"`
-	encryption_nonce string `yaml:"encryption_nonce"`
+	Master_key       string `yaml:"master_key"`
+	Encryption_key   string `yaml:"encryption_key"`
+	Encryption_nonce string `yaml:"encryption_nonce"`
 }
 
 type Content struct {
-	detect_abuse bool `yaml:"detect_abuse"`
-	expire_hrs int `yaml:"expire_hrs"`
+	Detect_abuse bool `yaml:"detect_abuse"`
+	Expire_hrs   int  `yaml:"expire_hrs"`
 }
 
 func checkConfig(servConf ServConfig) (int) {
-
+	isDBURI := strings.Contains(servConf.Network.Mongodb_url, "mongodb")
+	if !isDBURI {
+		return 2
+	}
+	if servConf.Recaptcha.Enable {
+		isCAPTsec := len(servConf.Recaptcha.Secret_key) == 40
+		isCAPTsit := len(servConf.Recaptcha.Site_key) == 40
+		if !(isCAPTsec && isCAPTsit){
+			return 3
+		}
+	}
+	if (servConf.Content.Expire_hrs > 24) || (servConf.Content.Expire_hrs < 0){
+		return 3
+	}
+	isMasterKeySec := len(servConf.Security.Master_key) >= 12
+	isEncrKeySec := len(servConf.Security.Encryption_key) == 32
+	isEncrNonceSec := len(servConf.Security.Encryption_nonce) == 12
+	if !(isMasterKeySec || isEncrKeySec || isEncrNonceSec){
+		return 1
+	}
+	return 0
 }
 
 func loadConfig(filePath string) (ServConfig, error) {
@@ -56,6 +77,7 @@ func loadConfig(filePath string) (ServConfig, error) {
 	var status int = checkConfig(conf)
 	switch status{
 	case 0:
+		log.Println("Config Validation successfully finished!")
 	case 1:
 		err = errors.New("Security Option not met standard requirement.")
 	case 2:
