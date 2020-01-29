@@ -1,0 +1,18 @@
+{{ define  "recaptcha_site_key" }}<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>pb-go</title>
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+
+</head>
+<body>
+<form action="/recaptcha/verify" method="POST">
+    <div class="g-recaptcha" data-sitekey="{{.}}"></div>
+    <br/>
+    <input type="submit" value="Submit">
+</form>
+</body>
+</html>
+{{ end }}
