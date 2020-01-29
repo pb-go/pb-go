@@ -16,6 +16,14 @@ type MongoDB struct {
 	BsonData chan bson.M
 }
 
+func bsonM2bsonD(var1 bson.M) bson.D{
+
+}
+
+func bsonD2bsonM(var1 bson.D) bson.M{
+
+}
+
 func (mdbc MongoDB) connect2DB(dbURI string) error{
 
 }
@@ -24,22 +32,22 @@ func (mdbc MongoDB) checkConn(dbCli interface{}) error{
 
 }
 
-func (mdbc MongoDB) testCollectionNIndex(dbCli interface{}, dbName string, collName string) int{
+func (mdbc MongoDB) testCollectionNIndex() int{
 
 }
 
-func (mdbc MongoDB) itemCreate(dbCli interface{}, dbName string, collName string, data interface{}) int{
+func (mdbc MongoDB) itemCreate() int{
 
 }
 
-func (mdbc MongoDB) itemUpdate(dbCli interface{}, dbName string, collName string, data interface{}) int{
+func (mdbc MongoDB) itemUpdate() int{
 
 }
 
-func (mdbc MongoDB) itemDelete(dbCli interface{}, dbName string, collName string, data interface{}) int{
+func (mdbc MongoDB) itemDelete() int{
 
 }
 
-func (mdbc MongoDB) itemRead(dbCli interface{}, dbName string, collName string, data interface{}) int{
+func (mdbc MongoDB) itemRead() int{
 
 }
