@@ -20,5 +20,7 @@ vendor/
 
 # Personal Stuff
 yyg*
-
 config.yaml
+
+# Test Product
+test_*.html
