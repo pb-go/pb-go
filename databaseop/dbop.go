@@ -8,6 +8,7 @@ import (
 type DBClient interface {
 	connect2DB(dbURI string) error
 	checkConn(dbCli interface{}) error
+	reConn(dbCli interface{}) error
 	testCollectionNIndex() int
 	itemCreate() int
 	itemUpdate() int

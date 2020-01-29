@@ -7,13 +7,20 @@ import (
 	"time"
 )
 
-type MongoDB struct {
+type MongoConnPool struct {
 	DbCli mongo.Client
+	Position int
+	Available bool
+}
+
+type MongoDB struct {
+	DbConn *MongoConnPool
 	DbURI string
+	DbColl mongo.Collection
 	DefaultDB string
 	DefaultColl string
 	DefaultTimeout time.Time
-	BsonData chan bson.M
+	BsonData chan interface{}
 }
 
 func bsonM2bsonD(var1 bson.M) bson.D{
@@ -21,6 +28,10 @@ func bsonM2bsonD(var1 bson.M) bson.D{
 }
 
 func bsonD2bsonM(var1 bson.D) bson.M{
+
+}
+
+func (mdbc MongoDB) reConn (dbCli interface{}) error {
 
 }
 

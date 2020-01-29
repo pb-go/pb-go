@@ -2,6 +2,12 @@
 
 Yet Another PasteBin implemented in Golang.
 
+### Discussion
+
+We need developer and help, for feature request and discussion, please go to our [Telegram Group](https://t.me/pb_go_discuss).
+
+Bug report please attach log and finish the whole issue template. Thanks.
+
 ## Prerequisites
 
 - MongoDB
