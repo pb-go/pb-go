@@ -13,7 +13,7 @@ type DBClient interface {
 	itemRead(filter1 interface{}) error
 }
 
-func getNanoID() (string, error) {
+func GetNanoID() (string, error) {
 	id, err := gonanoid.Nanoid(4)
 	if err != nil {
 		log.Fatalln("Failed to generate nanoid!")

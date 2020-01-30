@@ -22,10 +22,6 @@ func printVersion() {
 	log.Println("This Program is licensed under AGPLv3.")
 }
 
-func fileExist(filepath string) bool {
-	info, err := os.Stat(filepath)
-	return err == nil && !info.IsDir()
-}
 
 func startServer(conf config.ServConfig) error {
 	//todo: graceful restart
@@ -56,7 +52,7 @@ func main() {
 			confPath = *confFile
 		}
 		// check if file exists and not a directory
-		if fileExist(confPath) {
+		if config.FileExist(confPath) {
 			config.ServConf, err = config.LoadConfig(confPath)
 			if err != nil {
 				log.Println("Please check document on our project page.")

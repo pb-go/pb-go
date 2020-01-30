@@ -17,7 +17,7 @@ type ReCaptchaResponse struct {
 	ErrorCodes  []string  `json:"error-codes"`
 }
 
-func verifyRecaptcha(config config.Recaptcha, recaptchaResponse string, remoteIp string) (result bool, err error) {
+func VerifyRecaptcha(config config.Recaptcha, recaptchaResponse string, remoteIp string) (result bool, err error) {
 	response, err := http.PostForm(recaptchaUrl, url.Values{
 		"secret":   {config.Secret_key},
 		"response": {recaptchaResponse},

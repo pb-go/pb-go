@@ -8,7 +8,7 @@ import (
 	"github.com/kmahyyg/pb-go/config"
 )
 
-func contentValidityCheck(data []byte, shortid string) error{
+func ContentValidityCheck(data []byte, shortid string) error{
 	// https://stackoverflow.com/questions/42758054/read-multipart-form-data-as-byte-in-go/42758241
 	detectedType, err := filetype.Match(data)
 	if detectedType != types.Unknown && err != filetype.ErrEmptyBuffer {

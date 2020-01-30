@@ -5,6 +5,7 @@ import (
 	"gopkg.in/yaml.v2"
 	"io/ioutil"
 	"log"
+	"os"
 	"strings"
 )
 
@@ -64,6 +65,11 @@ func CheckConfig(servConf ServConfig) int {
 		return 1
 	}
 	return 0
+}
+
+func FileExist(filepath string) bool {
+	info, err := os.Stat(filepath)
+	return err == nil && !info.IsDir()
 }
 
 func LoadConfig(filePath string) (ServConfig, error) {
