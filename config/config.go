@@ -74,7 +74,7 @@ func LoadConfig(filePath string) (ServConfig, error) {
 		log.Fatalf("YAML Decode Error. %#v", err)
 		return conf, err
 	}
-	var status int = checkConfig(conf)
+	var status int = CheckConfig(conf)
 	switch status {
 	case 0:
 		log.Println("Config Validation successfully finished!")
