@@ -47,7 +47,7 @@ func TestMongoDBConn(t *testing.T) {
 		ShortId:    "2s4D",
 		UserIP:     IPval,
 		ExpireAt:   UserDT,
-		Data:       Pack2BinData("abcdefghijklmnopqrstuvwxyz"),
+		Data:       Pack2BinData("testdata001"),
 		PwdIsSet:   true,
 		Password:   "He1loWorld234",
 	}
@@ -68,7 +68,7 @@ func TestMongoDBConn(t *testing.T) {
 	time.Sleep(5 * time.Second)
 	update1 := bson.D{
 		{"$set", bson.D{
-			{"data", Pack2BinData("fuckyouasshole")},
+			{"data", Pack2BinData("testdata002")},
 		}},
 	}
 	err = mgcli.itemUpdate(filter1, update1)
