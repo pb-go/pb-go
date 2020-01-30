@@ -9,7 +9,6 @@ require (
 	github.com/golang/snappy v0.0.1 // indirect
 	github.com/google/go-cmp v0.4.0 // indirect
 	github.com/h2non/filetype v1.0.10
-	github.com/imroc/req v0.3.0
 	github.com/matoous/go-nanoid v1.1.0
 	github.com/pkg/errors v0.9.1 // indirect
 	github.com/stretchr/testify v1.4.0 // indirect
