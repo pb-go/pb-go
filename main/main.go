@@ -14,7 +14,6 @@ var (
 	currentVer string = "v0.1.0"
 	version           = flag.Bool("version", false, "Show current version of pb-go.")
 	confFile          = flag.String("config", "config.yaml", "Server config for pb-go.")
-	ServConf   config.ServConfig
 )
 
 func printVersion() {
@@ -58,13 +57,13 @@ func main() {
 		}
 		// check if file exists and not a directory
 		if fileExist(confPath) {
-			ServConf, err = config.LoadConfig(confPath)
+			config.ServConf, err = config.LoadConfig(confPath)
 			if err != nil {
 				log.Println("Please check document on our project page.")
 				os.Exit(14)
 			} else {
 				// start server with graceful restart
-				err := startServer(ServConf)
+				err := startServer(config.ServConf)
 				if err != nil {
 					os.Exit(1)
 				}

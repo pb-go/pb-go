@@ -8,6 +8,10 @@ import (
 	"strings"
 )
 
+var (
+	ServConf   ServConfig
+)
+
 type ServConfig struct {
 	Network   Network   `yaml:"network"`
 	Recaptcha Recaptcha `yaml:"recaptcha"`
@@ -22,8 +26,8 @@ type Network struct {
 
 type Recaptcha struct {
 	Enable     bool   `yaml:"enable"`
-	Secret_key string `yaml:"secret_key"`
-	Site_key   string `yaml:"site_key"`
+	Secret_key string `yaml:"secret_key,omitempty"`
+	Site_key   string `yaml:"site_key,omitempty"`
 }
 
 type Security struct {
@@ -35,6 +39,7 @@ type Security struct {
 type Content struct {
 	Detect_abuse bool `yaml:"detect_abuse"`
 	Expire_hrs   int  `yaml:"expire_hrs"`
+	Allow_Base64Encode bool `yaml:"allow_b64enc"`
 }
 
 func CheckConfig(servConf ServConfig) int {

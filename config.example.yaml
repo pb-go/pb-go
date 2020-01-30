@@ -12,3 +12,4 @@ security:
 content:
   detect_abuse: true
   default_expire: 24
+  allow_b64enc: true
