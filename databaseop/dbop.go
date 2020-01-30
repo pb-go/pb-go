@@ -6,14 +6,11 @@ import (
 )
 
 type DBClient interface {
-	connect2DB(dbURI string) error
-	checkConn(dbCli interface{}) error
-	reConn(dbCli interface{}) error
-	testCollectionNIndex() int
-	itemCreate() int
-	itemUpdate() int
-	itemDelete() int
-	itemRead() int
+	connNCheck(dbCliOption interface{}) error
+	itemCreate() error
+	itemUpdate(filter1 interface{}, change1 interface{}) error
+	itemDelete(filter1 interface{}) error
+	itemRead(filter1 interface{}) error
 }
 
 func getNanoID() (string, error) {
