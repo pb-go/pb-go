@@ -1,4 +1,4 @@
-package main
+package config
 
 import (
 	"errors"
@@ -37,7 +37,7 @@ type Content struct {
 	Expire_hrs   int  `yaml:"expire_hrs"`
 }
 
-func checkConfig(servConf ServConfig) (int) {
+func CheckConfig(servConf ServConfig) int {
 	isDBURI := strings.Contains(servConf.Network.Mongodb_url, "mongodb")
 	if !isDBURI {
 		return 2
@@ -45,23 +45,23 @@ func checkConfig(servConf ServConfig) (int) {
 	if servConf.Recaptcha.Enable {
 		isCAPTsec := len(servConf.Recaptcha.Secret_key) == 40
 		isCAPTsit := len(servConf.Recaptcha.Site_key) == 40
-		if !(isCAPTsec && isCAPTsit){
+		if !(isCAPTsec && isCAPTsit) {
 			return 3
 		}
 	}
-	if (servConf.Content.Expire_hrs > 24) || (servConf.Content.Expire_hrs < 0){
+	if (servConf.Content.Expire_hrs > 24) || (servConf.Content.Expire_hrs < 0) {
 		return 3
 	}
 	isMasterKeySec := len(servConf.Security.Master_key) >= 12
 	isEncrKeySec := len(servConf.Security.Encryption_key) == 32
 	isEncrNonceSec := len(servConf.Security.Encryption_nonce) == 12
-	if !(isMasterKeySec || isEncrKeySec || isEncrNonceSec){
+	if !(isMasterKeySec || isEncrKeySec || isEncrNonceSec) {
 		return 1
 	}
 	return 0
 }
 
-func loadConfig(filePath string) (ServConfig, error) {
+func LoadConfig(filePath string) (ServConfig, error) {
 	var conf = ServConfig{}
 	yamlFd, err := ioutil.ReadFile(filePath)
 	log.Printf("Loaded Config: %s \n", filePath)
@@ -75,7 +75,7 @@ func loadConfig(filePath string) (ServConfig, error) {
 		return conf, err
 	}
 	var status int = checkConfig(conf)
-	switch status{
+	switch status {
 	case 0:
 		log.Println("Config Validation successfully finished!")
 	case 1:
