@@ -17,6 +17,7 @@ security:
 content:
   detect_abuse: true
   default_expire: 24
+  allow_b64enc: true
 ```
 
 Default listens at `127.0.0.1:8181`, Configure reCAPTCHA v2 related key and enable in `recaptcha` part.
