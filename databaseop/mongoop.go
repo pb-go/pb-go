@@ -11,8 +11,8 @@ import (
 )
 
 type MongoConn struct {
-	DbCli mongo.Client
-	Position int
+	DbCli     mongo.Client
+	Position  int
 	Available bool
 }
 
@@ -115,4 +115,3 @@ func (mdbc MongoDB) itemDelete(filter1 interface{}) error {
 	log.Printf("Deleted %v documents.", deleteRes.DeletedCount)
 	return nil
 }
-

@@ -18,5 +18,5 @@ func GetNanoID() (string, error) {
 	if err != nil {
 		log.Fatalln("Failed to generate nanoid!")
 	}
-	return id,err
+	return id, err
 }

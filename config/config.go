@@ -9,12 +9,12 @@ import (
 	"strings"
 )
 
-const(
+const (
 	CurrentVer string = "v0.1.0"
 )
 
 var (
-	ServConf   ServConfig
+	ServConf ServConfig
 )
 
 type ServConfig struct {
@@ -42,8 +42,8 @@ type Security struct {
 }
 
 type Content struct {
-	Detect_abuse bool `yaml:"detect_abuse"`
-	Expire_hrs   int  `yaml:"expire_hrs"`
+	Detect_abuse       bool `yaml:"detect_abuse"`
+	Expire_hrs         int  `yaml:"expire_hrs"`
 	Allow_Base64Encode bool `yaml:"allow_b64enc"`
 }
 

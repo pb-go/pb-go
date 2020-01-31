@@ -11,8 +11,8 @@ import (
 )
 
 var (
-	version           = flag.Bool("version", false, "Show current version of pb-go.")
-	confFile          = flag.String("config", "config.yaml", "Server config for pb-go.")
+	version  = flag.Bool("version", false, "Show current version of pb-go.")
+	confFile = flag.String("config", "config.yaml", "Server config for pb-go.")
 )
 
 func printVersion() {
@@ -20,7 +20,6 @@ func printVersion() {
 	log.Println("For more information: https://github.com/kmahyyg/pb-go")
 	log.Println("This Program is licensed under AGPLv3.")
 }
-
 
 func startServer(conf config.ServConfig) error {
 	//todo: graceful restart
