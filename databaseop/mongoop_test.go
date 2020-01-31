@@ -21,8 +21,6 @@ func TestMongoDBConn(t *testing.T) {
 		DefaultDB:      "pbgo",
 		DefaultColl:    "userdata",
 		DefaultTimeout: time.Time{},
-		BsonRData:      make(chan UserData, 100),
-		BsonWData:      make(chan UserData, 100),
 	}
 	clientOptions := options.Client()
 	clientOptions.ApplyURI(mgcli.DbURI)
@@ -51,19 +49,18 @@ func TestMongoDBConn(t *testing.T) {
 		PwdIsSet:   true,
 		Password:   "He1loWorld234",
 	}
-	mgcli.BsonWData <- testdt1
-	err = mgcli.itemCreate()
+	err = mgcli.itemCreate(testdt1)
 	if err != nil {
 		log.Println("Failed to create document")
 		t.Fail()
 	}
 	filter1 := bson.M{"shortId": "2s4D"}
-	err = mgcli.itemRead(filter1)
-	if err != nil {
+	var readOutData UserData
+	readOutData, err = mgcli.itemRead(filter1)
+	if err != nil && readOutData.equalsTo(UserData{})  {
 		t.Fail()
 	} else {
-		queryres := <-mgcli.BsonRData
-		log.Println(queryres)
+		log.Println(readOutData)
 	}
 	time.Sleep(5 * time.Second)
 	update1 := bson.D{

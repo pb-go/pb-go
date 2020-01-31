@@ -11,6 +11,9 @@ Yet Another PasteBin implemented in Golang.
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/269b77a2b64c41bbaa4aa109ecf4d55a)](https://www.codacy.com/manual/kmahyyg/pb-go)
 ![Codacy coverage](https://img.shields.io/codacy/coverage/269b77a2b64c41bbaa4aa109ecf4d55a?logo=codacy)
 
+We use [Sentry.io](https://sentry.io) for bug tracking and log collection which was GDPR-complaint, 
+their privacy policy can be found at: [here](https://sentry.io/legal/privacy/2.1.0/)
+
 ### Discussion
 
 We need developer and help, for feature request and discussion, please go to our [Telegram Group](https://t.me/pb_go_discuss).

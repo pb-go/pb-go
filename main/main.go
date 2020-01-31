@@ -2,12 +2,17 @@ package main
 
 import (
 	"flag"
+	"github.com/getsentry/sentry-go"
+	"github.com/gin-gonic/gin"
 	"github.com/kmahyyg/pb-go/config"
 	"log"
+	"net/http"
 	"os"
 	"os/signal"
 	"path/filepath"
+	sentrygin "github.com/getsentry/sentry-go/gin"
 	"syscall"
+	"time"
 )
 
 var (
@@ -22,14 +27,22 @@ func printVersion() {
 }
 
 func startServer(conf config.ServConfig) error {
-	//todo: graceful restart
-	//todo: custom port and listen host
-	//todo: gin framework
+	app := gin.Default()
+	app.Use(sentrygin.New(sentrygin.Options{
+		Repanic:         false,
+		WaitForDelivery: false,
+		Timeout:         5 * time.Second,
+	}))
+	//todo
 	panic("todo")
 }
 
 func init() {
 	log.SetFlags(log.Ldate | log.Ltime | log.LUTC | log.Lshortfile)
+	if err := sentry.Init(sentry.ClientOptions {
+		Dsn:config.CurrentDSN,
+	}); err != nil {
+			log.Printf("Sentry Bug-Tracking init failed: %v \n", err)}
 }
 
 func main() {

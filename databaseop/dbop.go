@@ -7,10 +7,10 @@ import (
 
 type DBClient interface {
 	connNCheck(dbCliOption interface{}) error
-	itemCreate() error
+	itemCreate(inputdata interface{}) error
 	itemUpdate(filter1 interface{}, change1 interface{}) error
 	itemDelete(filter1 interface{}) error
-	itemRead(filter1 interface{}) error
+	itemRead(filter1 interface{}) (UserData, error)
 }
 
 func GetNanoID() (string, error) {

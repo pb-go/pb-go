@@ -11,6 +11,7 @@ import (
 
 const (
 	CurrentVer string = "v0.1.0"
+	CurrentDSN string = "https://72dd7f93900d4742a436a525692a13ed@sentry.io/2124482"
 )
 
 var (

@@ -2,6 +2,7 @@ package databaseop
 
 import (
 	"context"
+	"github.com/kmahyyg/pb-go/content_tools"
 	"github.com/pkg/errors"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
@@ -23,8 +24,6 @@ type MongoDB struct {
 	DefaultDB      string
 	DefaultColl    string
 	DefaultTimeout time.Time
-	BsonWData      chan UserData
-	BsonRData      chan UserData
 }
 
 type UserData struct {
@@ -61,12 +60,12 @@ func (mdbc *MongoDB) connNCheck(dbCliOption interface{}) error {
 	}
 }
 
-func (mdbc MongoDB) itemCreate() error {
-	if len(mdbc.BsonWData) == 0 {
+func (mdbc MongoDB) itemCreate(inputdata interface{}) error {
+	if inputdata == nil {
 		return errors.New("Insert Queue Empty.")
 	} else {
 		tctx, _ := context.WithTimeout(context.Background(), 5*time.Second)
-		tempData := <-mdbc.BsonWData
+		tempData := inputdata
 		insertRes, err := mdbc.DbColl.InsertOne(tctx, tempData)
 		if insertRes != nil && err == nil {
 			log.Println("DB Inserted a single document: ", insertRes.InsertedID)
@@ -75,18 +74,17 @@ func (mdbc MongoDB) itemCreate() error {
 	}
 }
 
-func (mdbc MongoDB) itemRead(filter1 interface{}) error {
+func (mdbc MongoDB) itemRead(filter1 interface{}) (UserData, error) {
 	tctx, _ := context.WithTimeout(context.Background(), 5*time.Second)
 	if (mdbc.DbColl == mongo.Collection{}) {
-		return errors.New("Default connection to coll is not setup.")
+		return UserData{}, errors.New("Default connection to coll is not setup.")
 	}
 	var queryRes UserData
 	err := mdbc.DbColl.FindOne(tctx, filter1).Decode(&queryRes)
-	if err != nil {
-		return err
+	if err != nil && !queryRes.equalsTo(UserData{}){
+		return UserData{}, err
 	} else {
-		mdbc.BsonRData <- queryRes
-		return nil
+		return queryRes, nil
 	}
 }
 
@@ -114,4 +112,25 @@ func (mdbc MongoDB) itemDelete(filter1 interface{}) error {
 	}
 	log.Printf("Deleted %v documents.", deleteRes.DeletedCount)
 	return nil
+}
+
+func (dt UserData) equalsTo(comparedto UserData) bool {
+	var check5 bool = false
+	check1 := dt.WaitVerify == comparedto.WaitVerify
+	check2 := dt.Data.Subtype == dt.Data.Subtype
+	check3 := len(dt.Data.Data) == len(dt.Data.Data)
+	if check2 && check3 {
+		tmpvar1 := content_tools.GenBlake2B(dt.Data.Data)
+		tmpvar2 := content_tools.GenBlake2B(comparedto.Data.Data)
+		if tmpvar1 == tmpvar2 {
+			check5 = true
+		}
+	} else {
+		return false
+	}
+	check4 := dt.ExpireAt == comparedto.ExpireAt
+	check6 := dt.Password == comparedto.Password
+	check7 := dt.PwdIsSet == comparedto.PwdIsSet
+	check8 := dt.ShortId == comparedto.ShortId
+	return check1 && check2 && check3 && check4 && check5 && check6 && check7 && check8
 }
