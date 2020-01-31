@@ -11,13 +11,12 @@ import (
 )
 
 var (
-	currentVer string = "v0.1.0"
 	version           = flag.Bool("version", false, "Show current version of pb-go.")
 	confFile          = flag.String("config", "config.yaml", "Server config for pb-go.")
 )
 
 func printVersion() {
-	log.Printf("Current Version: %s \n", currentVer)
+	log.Printf("Current Version: %s \n", config.CurrentVer)
 	log.Println("For more information: https://github.com/kmahyyg/pb-go")
 	log.Println("This Program is licensed under AGPLv3.")
 }

@@ -9,6 +9,10 @@ import (
 	"strings"
 )
 
+const(
+	CurrentVer string = "v0.1.0"
+)
+
 var (
 	ServConf   ServConfig
 )
