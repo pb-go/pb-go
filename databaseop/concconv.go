@@ -1,6 +1,7 @@
 package databaseop
 
 import (
+	"github.com/pkg/errors"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"math/big"
 	"net"

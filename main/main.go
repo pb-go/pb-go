@@ -26,6 +26,7 @@ func startServer(conf config.ServConfig) error {
 	//todo: graceful restart
 	//todo: custom port and listen host
 	//todo: gin framework
+	panic("todo")
 }
 
 func init() {

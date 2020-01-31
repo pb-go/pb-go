@@ -22,3 +22,5 @@ vendor/
 yyg*
 config.yaml
 
+# output
+output/
