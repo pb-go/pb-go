@@ -2,6 +2,15 @@
 
 Yet Another PasteBin implemented in Golang.
 
+![GitHub stars](https://img.shields.io/github/stars/kmahyyg/pb-go?style=social)
+![Go Report](https://goreportcard.com/badge/github.com/kmahyyg/pb-go)
+[![Build Status](https://travis-ci.com/kmahyyg/pb-go.svg?branch=master)](https://travis-ci.com/kmahyyg/pb-go)
+![GitHub](https://img.shields.io/github/license/kmahyyg/pb-go)
+![GitHub last commit](https://img.shields.io/github/last-commit/kmahyyg/pb-go)
+![GitHub All Releases](https://img.shields.io/github/downloads/kmahyyg/pb-go/total)
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/269b77a2b64c41bbaa4aa109ecf4d55a)](https://www.codacy.com/manual/kmahyyg/pb-go)
+![Codacy coverage](https://img.shields.io/codacy/coverage/269b77a2b64c41bbaa4aa109ecf4d55a?logo=codacy)
+
 ### Discussion
 
 We need developer and help, for feature request and discussion, please go to our [Telegram Group](https://t.me/pb_go_discuss).
