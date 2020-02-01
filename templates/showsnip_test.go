@@ -14,7 +14,7 @@ func TestRendingSnippets(t *testing.T) {
 		var buffer bytes.Buffer
 		err := template.ExecuteTemplate(&buffer, "content", "%bool;\n\n &foo #bar*test <xml>")
 		if err == nil {
-			file, err := ioutil.ReadFile("test_expect_showsnip.html")
+			file, err := ioutil.ReadFile("expect_showsnip_test.html")
 			if err == nil {
 				if buffer.String() != string(file) {
 					fmt.Println("expect is:")

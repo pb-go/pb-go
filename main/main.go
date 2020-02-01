@@ -3,14 +3,13 @@ package main
 import (
 	"flag"
 	"github.com/getsentry/sentry-go"
+	sentrygin "github.com/getsentry/sentry-go/gin"
 	"github.com/gin-gonic/gin"
 	"github.com/kmahyyg/pb-go/config"
 	"log"
-	"net/http"
 	"os"
 	"os/signal"
 	"path/filepath"
-	sentrygin "github.com/getsentry/sentry-go/gin"
 	"syscall"
 	"time"
 )
@@ -18,6 +17,7 @@ import (
 var (
 	version  = flag.Bool("version", false, "Show current version of pb-go.")
 	confFile = flag.String("config", "config.yaml", "Server config for pb-go.")
+	app = gin.Default()
 )
 
 func printVersion() {
@@ -27,14 +27,13 @@ func printVersion() {
 }
 
 func startServer(conf config.ServConfig) error {
-	app := gin.Default()
 	app.Use(sentrygin.New(sentrygin.Options{
 		Repanic:         false,
 		WaitForDelivery: false,
 		Timeout:         5 * time.Second,
 	}))
-	//todo
-	panic("todo")
+	app.LoadHTMLGlob("templates/*")
+
 }
 
 func init() {
