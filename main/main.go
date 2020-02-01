@@ -1,13 +1,12 @@
 package main
 
 import (
-	"context"
 	"flag"
 	"github.com/fvbock/endless"
 	"github.com/getsentry/sentry-go"
 	sentrygin "github.com/getsentry/sentry-go/gin"
-	"github.com/gin-gonic/gin"
 	"github.com/gin-contrib/static"
+	"github.com/gin-gonic/gin"
 	"github.com/kmahyyg/pb-go/config"
 	"github.com/kmahyyg/pb-go/content_tools"
 	"log"
@@ -36,7 +35,7 @@ func startServer(conf config.ServConfig) error {
 		WaitForDelivery: false,
 		Timeout:         5 * time.Second,
 	}))
-	app.LoadHTMLGlob("templates/*")
+	app.LoadHTMLGlob("templates/*.tmpl")
 	app.POST("/api/upload", content_tools.UserUploadParse)
 	app.DELETE("/api/admin", content_tools.DeleteSnip)
 	app.Use(static.Serve("/", static.LocalFile("/static", false)))
