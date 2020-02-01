@@ -2,12 +2,13 @@ package main
 
 import (
 	"flag"
+	"fmt"
 	"github.com/fvbock/endless"
 	"github.com/getsentry/sentry-go"
-	sentrygin "github.com/getsentry/sentry-go/gin"
-	"github.com/gin-gonic/gin"
+	sentryfasthttp "github.com/getsentry/sentry-go/fasthttp"
 	"github.com/kmahyyg/pb-go/config"
 	"github.com/kmahyyg/pb-go/content_tools"
+	"github.com/valyala/fasthttp"
 	"log"
 	"os"
 	"os/signal"
@@ -28,21 +29,16 @@ func printVersion() {
 }
 
 func startServer(conf config.ServConfig) error {
-	// todo: remove to use fasthttp as replace
-	app      := gin.Default()
-	app.Use(sentrygin.New(sentrygin.Options{
+	// init sentry
+	sentryHandler := sentryfasthttp.New(sentryfasthttp.Options{
 		Repanic:         false,
 		WaitForDelivery: false,
 		Timeout:         5 * time.Second,
-	}))
-	app.LoadHTMLGlob("templates/*.tmpl")
-	app.POST("/api/upload", content_tools.UserUploadParse)
-	app.DELETE("/api/admin", content_tools.DeleteSnip)
-	// there's gin's bug here, cannot use both static and
-	app.GET("/:shortId", content_tools.DefaultHand)
-	app.NoRoute(content_tools.DefaultHand)
-	err := endless.ListenAndServe(conf.Network.Listen, app)
-	return err
+	})
+	// After creating the instance, you can attach the handler as one of your middleware
+	//fastHTTPHandler := sentryHandler.Handle(func(ctx *fasthttp.RequestCtx) {
+	//	panic("y tho")
+	//})
 }
 
 func init() {

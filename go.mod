@@ -4,9 +4,8 @@ go 1.13
 
 require (
 	github.com/DataDog/zstd v1.4.4 // indirect
-	github.com/fvbock/endless v0.0.0-20170109170031-447134032cb6 // indirect
-	github.com/getsentry/sentry-go v0.4.0 // indirect
-	github.com/gin-contrib/static v0.0.0-20191128031702-f81c604d8ac2 // indirect
+	github.com/fvbock/endless v0.0.0-20170109170031-447134032cb6
+	github.com/getsentry/sentry-go v0.4.0
 	github.com/gin-gonic/gin v1.5.0
 	github.com/go-playground/universal-translator v0.17.0 // indirect
 	github.com/go-stack/stack v1.8.0 // indirect
@@ -20,6 +19,7 @@ require (
 	github.com/mattn/go-isatty v0.0.12 // indirect
 	github.com/pkg/errors v0.9.1
 	github.com/tidwall/pretty v1.0.0 // indirect
+	github.com/valyala/fasthttp v1.6.0
 	github.com/xdg/scram v0.0.0-20180814205039-7eeb5667e42c // indirect
 	github.com/xdg/stringprep v1.0.0 // indirect
 	go.mongodb.org/mongo-driver v1.2.1
