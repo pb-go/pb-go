@@ -1,40 +1,39 @@
 package content_tools
 
 import (
-	"github.com/gin-gonic/gin"
-	"log"
-	"net/http"
+	"fmt"
+	"github.com/valyala/fasthttp"
 )
 
-func UserUploadParse(c *gin.Context) {
+func UserUploadParse(c *fasthttp.RequestCtx) {
 	// todo: remove to use fasthttp as replace
 	panic("todo: not implemented")
 }
 
-func DefaultHand(c *gin.Context) {
+func ShowSnip(c *fasthttp.RequestCtx) {
 	// todo: remove to use fasthttp as replace
-	snipid := c.Param("shortId")
-	log.Println([]byte(snipid))
-	switch snipid {
-	case "":
-
+	tmpvar := c.UserValue("shortId")
+	switch tmpvar {
+	case nil:
+		fallthrough
+	case "index.html":
+		fasthttp.ServeFile(c, "./static/index.html")
+	case "submit.html":
+		fasthttp.ServeFile(c, "./static/submit.html")
+	case "favicon.ico":
+		fasthttp.ServeFile(c, "./static/favicon.ico")
+	default:
+		fmt.Println(tmpvar)
 	}
-	c.JSON(http.StatusOK, gin.H{
-		"message": "boom",
-	})
-}
-
-func ShowSnip(c *gin.Context) {
-	// todo: remove to use fasthttp as replace
 }
 
 
-func DeleteSnip(c *gin.Context) {
+func DeleteSnip(c *fasthttp.RequestCtx) {
 	// todo: remove to use fasthttp as replace
 	panic("todo: not implemented")
 }
 
-func VerifyCAPT(c *gin.Context) {
+func VerifyCAPT(c *fasthttp.RequestCtx) {
 	// todo: remove to use fasthttp as replace
 	panic("todo: not implemented")
 }

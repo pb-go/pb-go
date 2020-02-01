@@ -24,3 +24,6 @@ config.yaml
 
 # output
 output/
+
+# fasthttp generated
+*.fasthttp.gz

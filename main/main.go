@@ -37,6 +37,9 @@ func startServer(conf config.ServConfig) error {
 		Timeout:         5 * time.Second,
 	})
 	app := router.New()
+	app.GET("/", content_tools.ShowSnip)
+	app.GET("/:shortId", content_tools.ShowSnip)
+
 	wrappedhand := sentryHandler.Handle(app.Handler)
 	fahtserv = &fasthttp.Server{
 		Handler:      wrappedhand,
