@@ -5,7 +5,6 @@ import (
 	"github.com/fvbock/endless"
 	"github.com/getsentry/sentry-go"
 	sentrygin "github.com/getsentry/sentry-go/gin"
-	"github.com/gin-contrib/static"
 	"github.com/gin-gonic/gin"
 	"github.com/kmahyyg/pb-go/config"
 	"github.com/kmahyyg/pb-go/content_tools"
@@ -20,7 +19,6 @@ import (
 var (
 	version  = flag.Bool("version", false, "Show current version of pb-go.")
 	confFile = flag.String("config", "config.yaml", "Server config for pb-go.")
-	app      = gin.Default()
 )
 
 func printVersion() {
@@ -30,6 +28,8 @@ func printVersion() {
 }
 
 func startServer(conf config.ServConfig) error {
+	// todo: remove to use fasthttp as replace
+	app      := gin.Default()
 	app.Use(sentrygin.New(sentrygin.Options{
 		Repanic:         false,
 		WaitForDelivery: false,
@@ -38,8 +38,9 @@ func startServer(conf config.ServConfig) error {
 	app.LoadHTMLGlob("templates/*.tmpl")
 	app.POST("/api/upload", content_tools.UserUploadParse)
 	app.DELETE("/api/admin", content_tools.DeleteSnip)
-	app.Use(static.Serve("/", static.LocalFile("/static", false)))
-	app.GET("/:shortId", content_tools.ShowSnip)
+	// there's gin's bug here, cannot use both static and
+	app.GET("/:shortId", content_tools.DefaultHand)
+	app.NoRoute(content_tools.DefaultHand)
 	err := endless.ListenAndServe(conf.Network.Listen, app)
 	return err
 }
