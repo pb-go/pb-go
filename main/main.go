@@ -6,6 +6,7 @@ import (
 	sentrygin "github.com/getsentry/sentry-go/gin"
 	"github.com/gin-gonic/gin"
 	"github.com/kmahyyg/pb-go/config"
+	"github.com/kmahyyg/pb-go/content_tools"
 	"log"
 	"os"
 	"os/signal"
@@ -17,7 +18,7 @@ import (
 var (
 	version  = flag.Bool("version", false, "Show current version of pb-go.")
 	confFile = flag.String("config", "config.yaml", "Server config for pb-go.")
-	app = gin.Default()
+	app      = gin.Default()
 )
 
 func printVersion() {
@@ -33,15 +34,19 @@ func startServer(conf config.ServConfig) error {
 		Timeout:         5 * time.Second,
 	}))
 	app.LoadHTMLGlob("templates/*")
-
+	app.POST("/api/upload", content_tools.Upload)
+	app.DELETE("/api/admin", content_tools.Delete)
+	app.GET("/:shortId", content_tools.Show)
+	return app.Run()
 }
 
 func init() {
 	log.SetFlags(log.Ldate | log.Ltime | log.LUTC | log.Lshortfile)
-	if err := sentry.Init(sentry.ClientOptions {
-		Dsn:config.CurrentDSN,
+	if err := sentry.Init(sentry.ClientOptions{
+		Dsn: config.CurrentDSN,
 	}); err != nil {
-			log.Printf("Sentry Bug-Tracking init failed: %v \n", err)}
+		log.Printf("Sentry Bug-Tracking init failed: %v \n", err)
+	}
 }
 
 func main() {
