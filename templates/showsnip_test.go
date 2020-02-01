@@ -8,11 +8,17 @@ import (
 	"testing"
 )
 
+type ShowSnippet struct {
+	Content string
+}
+
 func TestRendingSnippets(t *testing.T) {
 	template, err := template.New("test").ParseFiles("showsnip.html.tmpl")
 	if err == nil {
 		var buffer bytes.Buffer
-		err := template.ExecuteTemplate(&buffer, "content", "%bool;\n\n &foo #bar*test <xml>")
+		err := template.ExecuteTemplate(&buffer, "", ShowSnippet{
+			Content: "%bool;\n\n &foo #bar*test <xml>",
+		})
 		if err == nil {
 			file, err := ioutil.ReadFile("expect_showsnip_test.html")
 			if err == nil {

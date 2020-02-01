@@ -1,4 +1,4 @@
-{{ define  "recaptcha_site_key" }}<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="zh">
 <head>
     <meta charset="UTF-8">
@@ -9,10 +9,9 @@
 </head>
 <body>
 <form action="/api/g_verify" method="POST">
-    <div class="g-recaptcha" data-sitekey="{{.}}"></div>
+    <div class="g-recaptcha" data-sitekey="{{.SiteKey}}"></div>
     <br/>
     <input type="submit" value="Submit">
 </form>
 </body>
 </html>
-{{ end }}
