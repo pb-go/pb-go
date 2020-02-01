@@ -1,5 +1,7 @@
 # pb-go
 
+![Logo](./readme-logo.png)
+
 Yet Another PasteBin implemented in Golang.
 
 ![GitHub stars](https://img.shields.io/github/stars/kmahyyg/pb-go?style=social)
