@@ -4,8 +4,9 @@ go 1.13
 
 require (
 	github.com/DataDog/zstd v1.4.4 // indirect
+	github.com/fvbock/endless v0.0.0-20170109170031-447134032cb6 // indirect
 	github.com/getsentry/sentry-go v0.4.0 // indirect
-	github.com/gin-gonic/gin v1.5.0 // indirect
+	github.com/gin-contrib/static v0.0.0-20191128031702-f81c604d8ac2 // indirect
 	github.com/go-playground/universal-translator v0.17.0 // indirect
 	github.com/go-stack/stack v1.8.0 // indirect
 	github.com/golang/protobuf v1.3.3 // indirect

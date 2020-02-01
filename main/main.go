@@ -1,10 +1,13 @@
 package main
 
 import (
+	"context"
 	"flag"
+	"github.com/fvbock/endless"
 	"github.com/getsentry/sentry-go"
 	sentrygin "github.com/getsentry/sentry-go/gin"
 	"github.com/gin-gonic/gin"
+	"github.com/gin-contrib/static"
 	"github.com/kmahyyg/pb-go/config"
 	"github.com/kmahyyg/pb-go/content_tools"
 	"log"
@@ -34,10 +37,12 @@ func startServer(conf config.ServConfig) error {
 		Timeout:         5 * time.Second,
 	}))
 	app.LoadHTMLGlob("templates/*")
-	app.POST("/api/upload", content_tools.Upload)
-	app.DELETE("/api/admin", content_tools.Delete)
-	app.GET("/:shortId", content_tools.Show)
-	return app.Run()
+	app.POST("/api/upload", content_tools.UserUploadParse)
+	app.DELETE("/api/admin", content_tools.DeleteSnip)
+	app.Use(static.Serve("/", static.LocalFile("/static", false)))
+	app.GET("/:shortId", content_tools.ShowSnip)
+	err := endless.ListenAndServe(conf.Network.Listen, app)
+	return err
 }
 
 func init() {
@@ -91,6 +96,7 @@ func main() {
 		osSignals := make(chan os.Signal, 1)
 		signal.Notify(osSignals, os.Interrupt, os.Kill, syscall.SIGTERM)
 		<-osSignals
+		log.Println("Signal Received to shutdown server...")
 	}
 
 }

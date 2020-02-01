@@ -2,18 +2,18 @@ package content_tools
 
 import "github.com/gin-gonic/gin"
 
-func Upload(c *gin.Context) {
+func UserUploadParse(c *gin.Context) {
 	panic("todo: not implemented")
 }
 
-func Show(c *gin.Context) {
+func ShowSnip(c *gin.Context) {
 	panic("todo: not implemented")
 }
 
-func Delete(c *gin.Context) {
+func DeleteSnip(c *gin.Context) {
 	panic("todo: not implemented")
 }
 
-func Verify(c *gin.Context) {
+func VerifyCAPT(c *gin.Context) {
 	panic("todo: not implemented")
 }
