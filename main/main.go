@@ -2,8 +2,7 @@ package main
 
 import (
 	"flag"
-	"fmt"
-	"github.com/fvbock/endless"
+	"github.com/fasthttp/router"
 	"github.com/getsentry/sentry-go"
 	sentryfasthttp "github.com/getsentry/sentry-go/fasthttp"
 	"github.com/kmahyyg/pb-go/config"
@@ -20,6 +19,7 @@ import (
 var (
 	version  = flag.Bool("version", false, "Show current version of pb-go.")
 	confFile = flag.String("config", "config.yaml", "Server config for pb-go.")
+	fahtserv *fasthttp.Server
 )
 
 func printVersion() {
@@ -30,15 +30,23 @@ func printVersion() {
 
 func startServer(conf config.ServConfig) error {
 	// init sentry
+	var err error
 	sentryHandler := sentryfasthttp.New(sentryfasthttp.Options{
 		Repanic:         false,
 		WaitForDelivery: false,
 		Timeout:         5 * time.Second,
 	})
-	// After creating the instance, you can attach the handler as one of your middleware
-	//fastHTTPHandler := sentryHandler.Handle(func(ctx *fasthttp.RequestCtx) {
-	//	panic("y tho")
-	//})
+	app := router.New()
+	wrappedhand := sentryHandler.Handle(app.Handler)
+	fahtserv = &fasthttp.Server{
+		Handler:      wrappedhand,
+		Name:         "pb-go",
+		TCPKeepalive: true,
+	}
+	if err := fahtserv.ListenAndServe(config.ServConf.Network.Listen); err != nil {
+		log.Fatalf("Error in listen on %s : %s", config.ServConf.Network.Listen, err)
+	}
+	return err
 }
 
 func init() {
@@ -93,6 +101,10 @@ func main() {
 		signal.Notify(osSignals, os.Interrupt, os.Kill, syscall.SIGTERM)
 		<-osSignals
 		log.Println("Signal Received to shutdown server...")
+		if err := fahtserv.Shutdown(); err != nil{
+			log.Fatalf("Server Shutdown Failed: %v", err)
+		}
+		log.Println("Server exit successfully.")
 	}
 
 }
