@@ -48,9 +48,23 @@ Your data is encrypted and finally stored on our server using Chacha20 algorithm
 
 TODO
 
+## FAQ
+
+1. I always encounter MongoDB Connection Error especially when trying to establish first connection.
+
+If you use `mongodb+srv://` link, please check [here](https://godoc.org/go.mongodb.org/mongo-driver/mongo#hdr-Potential_DNS_Issues) 
+and try switch to another DNS. Otherwise, check your internet connection is stable and connected or not.
+
+Official Explanation:
+
+> Building with Go 1.11+ and using connection strings with the "mongodb+srv" scheme 
+> is incompatible with some DNS servers in the wild due to the change introduced 
+> in https://github.com/golang/go/issues/10622. If you receive an error with the message 
+> "cannot unmarshal DNS message" while running an operation, we suggest you use a different DNS server.
+
 ## Compile
 
-TODO
+`make`
 
 ## License
 
