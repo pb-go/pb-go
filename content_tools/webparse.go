@@ -6,12 +6,10 @@ import (
 )
 
 func UserUploadParse(c *fasthttp.RequestCtx) {
-	// todo: remove to use fasthttp as replace
-	panic("todo: not implemented")
+	fmt.Println("todo: not implemented, upload")
 }
 
 func ShowSnip(c *fasthttp.RequestCtx) {
-	// todo: remove to use fasthttp as replace
 	tmpvar := c.UserValue("shortId")
 	switch tmpvar {
 	case nil:
@@ -22,7 +20,8 @@ func ShowSnip(c *fasthttp.RequestCtx) {
 		fasthttp.ServeFile(c, "./static/submit.html")
 	case "favicon.ico":
 		fasthttp.ServeFile(c, "./static/favicon.ico")
-	case "verify":
+	case "showverify":
+		//todo: render verify html and output
 		fmt.Println("verifying")
 	default:
 		//todo: really show snippet

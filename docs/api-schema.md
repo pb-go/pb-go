@@ -83,4 +83,8 @@ POST /api/g_verify HTTP/1.1
 g-recaptcha-response=<BLAHBLAH>&tempID=<BLAHBLAH>
 ```
 
+The API path is above. But the return to user path should be URLSAFE-Base64-encoded `id` param with renderer.
+
+The corresponding paste ID should be `showverify`. 
+
 Ask user to run reCAPTCHA test. Server-side verification.
