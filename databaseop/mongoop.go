@@ -11,11 +11,10 @@ import (
 	"time"
 )
 
-type MongoConn struct {
-	DbCli     mongo.Client
-	Position  int
-	Available bool
-}
+var (
+	globalMGC *mongo.Client
+	globalMDBC MongoDB
+)
 
 type MongoDB struct {
 	DbConn         *mongo.Client

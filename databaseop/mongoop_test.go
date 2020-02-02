@@ -26,6 +26,10 @@ func TestMongoDBConn(t *testing.T) {
 	clientOptions.ApplyURI(mgcli.DbURI)
 	clientOptions.SetMinPoolSize(2)
 	clientOptions.SetMaxPoolSize(4)
+	clientOptions.SetRetryReads(true)
+	clientOptions.SetRetryWrites(true)
+	clientOptions.SetConnectTimeout(5 * time.Second)
+	clientOptions.SetSocketTimeout(8 * time.Second)
 	err := mgcli.connNCheck(clientOptions)
 	mgcli.DbColl = *mgcli.DbConn.Database(mgcli.DefaultDB).Collection(mgcli.DefaultColl)
 	if err != nil {

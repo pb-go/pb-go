@@ -1,9 +1,11 @@
 package content_tools
 
 import (
-	"fmt"
+	"encoding/base64"
+	"github.com/kmahyyg/pb-go/config"
 	"log"
 	"github.com/valyala/fasthttp"
+	"net/http"
 )
 
 func UserUploadParse(c *fasthttp.RequestCtx) {
@@ -37,7 +39,21 @@ func DeleteSnip(c *fasthttp.RequestCtx) {
 	log.Println("todo: not implemented, delete")
 }
 
-func ShowVerifyCAPT(c *fasthttp.RequestCtx) {
-	// todo: remove to use fasthttp as replace
-	fmt.Println("todo: not implemented, verify")
+func StartVerifyCAPT(c *fasthttp.RequestCtx) {
+	if !config.ServConf.Recaptcha.Enable {
+		c.SetStatusCode(http.StatusForbidden)
+		return
+	}
+	var formsnipid []byte
+	_ , err := base64.RawURLEncoding.Decode(formsnipid, c.FormValue("snipid"))
+	current_snipid := string(formsnipid)
+	if err != nil || current_snipid == "" {
+		c.SetStatusCode(http.StatusBadRequest)
+		return
+	}
+	res, err := VerifyRecaptchaResp(string(c.FormValue("g-recaptcha-response")), c.RemoteIP().String())
+	if err != nil || res == false {
+		c.SetStatusCode(http.StatusForbidden)
+		return
+	}
 }

@@ -7,6 +7,7 @@ import (
 	sentryfasthttp "github.com/getsentry/sentry-go/fasthttp"
 	"github.com/kmahyyg/pb-go/config"
 	"github.com/kmahyyg/pb-go/content_tools"
+	"github.com/kmahyyg/pb-go/databaseop"
 	"github.com/valyala/fasthttp"
 	"log"
 	"os"
@@ -36,6 +37,8 @@ func startServer(conf config.ServConfig) error {
 		WaitForDelivery: false,
 		Timeout:         5 * time.Second,
 	})
+	// init db and check, make sure we have share db connection
+	// if db connection is lost, we might need to reconnect.
 	app := router.New()
 	app.GET("/", content_tools.ShowSnip)
 	app.GET("/:shortId", content_tools.ShowSnip)
@@ -43,9 +46,8 @@ func startServer(conf config.ServConfig) error {
 	{
 		apig.DELETE("/admin", content_tools.DeleteSnip)
 		apig.POST("/upload", content_tools.UserUploadParse)
-		apig.POST("/g_verify", content_tools.ShowVerifyCAPT)
+		apig.POST("/g_verify", content_tools.StartVerifyCAPT)
 	}
-	app.NotFound = content_tools.ShowSnip
 	wrappedhand := sentryHandler.Handle(app.Handler)
 	fahtserv = &fasthttp.Server{
 		Handler:      wrappedhand,
