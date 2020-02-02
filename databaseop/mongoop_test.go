@@ -30,7 +30,7 @@ func TestMongoDBConn(t *testing.T) {
 	clientOptions.SetRetryWrites(true)
 	clientOptions.SetConnectTimeout(5 * time.Second)
 	clientOptions.SetSocketTimeout(8 * time.Second)
-	err := mgcli.connNCheck(clientOptions)
+	err := mgcli.ConnNCheck(clientOptions)
 	mgcli.DbColl = *mgcli.DbConn.Database(mgcli.DefaultDB).Collection(mgcli.DefaultColl)
 	if err != nil {
 		t.Fail()
@@ -53,15 +53,15 @@ func TestMongoDBConn(t *testing.T) {
 		PwdIsSet:   true,
 		Password:   "He1loWorld234",
 	}
-	err = mgcli.itemCreate(testdt1)
+	err = mgcli.ItemCreate(testdt1)
 	if err != nil {
 		log.Println("Failed to create document")
 		t.Fail()
 	}
 	filter1 := bson.M{"shortId": "2s4D"}
 	var readOutData UserData
-	readOutData, err = mgcli.itemRead(filter1)
-	if err != nil && readOutData.equalsTo(UserData{})  {
+	readOutData, err = mgcli.ItemRead(filter1)
+	if err != nil && readOutData.EqualsTo(UserData{})  {
 		t.Fail()
 	} else {
 		log.Println(readOutData)
@@ -72,12 +72,12 @@ func TestMongoDBConn(t *testing.T) {
 			{"data", Pack2BinData("testdata002")},
 		}},
 	}
-	err = mgcli.itemUpdate(filter1, update1)
+	err = mgcli.ItemUpdate(filter1, update1)
 	if err != nil {
 		t.Fail()
 	}
 	time.Sleep(5 * time.Second)
-	err = mgcli.itemDelete(filter1)
+	err = mgcli.ItemDelete(filter1)
 	if err != nil {
 		t.Fail()
 	}

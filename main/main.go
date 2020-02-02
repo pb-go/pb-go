@@ -9,6 +9,7 @@ import (
 	"github.com/kmahyyg/pb-go/content_tools"
 	"github.com/kmahyyg/pb-go/databaseop"
 	"github.com/valyala/fasthttp"
+	"go.mongodb.org/mongo-driver/mongo"
 	"log"
 	"os"
 	"os/signal"
@@ -39,6 +40,22 @@ func startServer(conf config.ServConfig) error {
 	})
 	// init db and check, make sure we have share db connection
 	// if db connection is lost, we might need to reconnect.
+	databaseop.GlobalMDBC = databaseop.MongoDB{
+		DbConn:         databaseop.GlobalMGC,
+		DbURI:          config.ServConf.Network.Mongodb_url,
+		DbColl:         mongo.Collection{},
+		DefaultDB:      "pbgo",
+		DefaultColl:    "userdata",
+		DefaultTimeout: time.Time{},
+	}
+	cliOpts := databaseop.GlobalMDBC.InitMDBCOptions()
+	err = databaseop.GlobalMDBC.ConnNCheck(cliOpts)
+	if err != nil {
+		// db conn failed, exit.
+		log.Fatalln(err)
+	}
+	// db connection setup complete
+	// app route definition
 	app := router.New()
 	app.GET("/", content_tools.ShowSnip)
 	app.GET("/:shortId", content_tools.ShowSnip)
