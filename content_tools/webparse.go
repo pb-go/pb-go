@@ -22,7 +22,10 @@ func ShowSnip(c *fasthttp.RequestCtx) {
 		fasthttp.ServeFile(c, "./static/submit.html")
 	case "favicon.ico":
 		fasthttp.ServeFile(c, "./static/favicon.ico")
+	case "verify":
+		fmt.Println("verifying")
 	default:
+		//todo: really show snippet
 		fmt.Println(tmpvar)
 	}
 }

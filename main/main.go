@@ -39,7 +39,13 @@ func startServer(conf config.ServConfig) error {
 	app := router.New()
 	app.GET("/", content_tools.ShowSnip)
 	app.GET("/:shortId", content_tools.ShowSnip)
-
+	apig := app.Group("/api")
+	{
+		apig.DELETE("/admin", content_tools.DeleteSnip)
+		apig.POST("/upload", content_tools.UserUploadParse)
+		apig.POST("/g_verify", content_tools.VerifyCAPT)
+	}
+	app.NotFound = content_tools.ShowSnip
 	wrappedhand := sentryHandler.Handle(app.Handler)
 	fahtserv = &fasthttp.Server{
 		Handler:      wrappedhand,
