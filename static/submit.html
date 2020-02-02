@@ -34,10 +34,9 @@
     <h3 class="text-center">Upload Form</h3>
     <form method="post" action="/api/upload" enctype="multipart/form-data">
         <div class="form-group">
-            <label for="expire4">Expire After:</label><br>
-            <span>Set to 0 means burn after read, allowed value: 0~24, default is 24. Force Expire after 24h.</span>
+            <label for="expire4">Expire After: </label><output name="expire4Val"></output> hrs<br>
+            <span>Set to 0 means burn after read, allowed value: 0~24, default is 12. Force Expire after 24h.</span>
             <input type="range" min="0" max="24" class="form-control" id="expire4" name="d" oninput="expire4Val.value = expire4.value">
-            <output name="expire4Val"></output>
         </div>
         <div class="form-group">
             <label for="encpwd">Password:</label>
