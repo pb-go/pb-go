@@ -71,11 +71,13 @@ func StartVerifyCAPT(c *fasthttp.RequestCtx) {
 			log.Println("#############NOTE: ILLEGAL REQUEST!#############")
 			log.Println(err)
 			c.SetStatusCode(http.StatusBadRequest)
+			c.SetBodyString("If you use shunt proxy, please try disable it.")
 			return
  		} else {
  			c.SetStatusCode(http.StatusOK)
- 			c.SetContentType("text/html")
- 			c.Set
+ 			c.SetContentType("text/plain")
+ 			c.SetBodyString("Verification Passed. Go to https://"+ config.ServConf.Network.Host + "/" + current_snipid + " to see your paste.")
+ 			return
 		}
 	}
 }

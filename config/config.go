@@ -27,6 +27,7 @@ type ServConfig struct {
 
 type Network struct {
 	Listen      string `yaml:"listen"`
+	Host		string `yaml:"host"`
 	Mongodb_url string `yaml:"mongodb_url"`
 }
 

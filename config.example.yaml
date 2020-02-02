@@ -1,5 +1,6 @@
 network:
   listen: 127.0.0.1:8181
+  host: localhost
   mongodb_url: mongodb+srv://
 recaptcha:
   enable: false
