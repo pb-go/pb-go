@@ -18,7 +18,7 @@ type ReCaptchaResponse struct {
 	ErrorCodes  []string  `json:"error-codes"`
 }
 
-func VerifyRecaptcha(recaptchaResponse string, remoteIp string) (bool, error) {
+func VerifyRecaptchaResp(recaptchaResponse string, remoteIp string) (bool, error) {
 	var err error
 	httpc := fasthttp.Client{
 		NoDefaultUserAgentHeader: true,

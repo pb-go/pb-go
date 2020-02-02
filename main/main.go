@@ -43,7 +43,7 @@ func startServer(conf config.ServConfig) error {
 	{
 		apig.DELETE("/admin", content_tools.DeleteSnip)
 		apig.POST("/upload", content_tools.UserUploadParse)
-		apig.POST("/g_verify", content_tools.VerifyCAPT)
+		apig.POST("/g_verify", content_tools.ShowVerifyCAPT)
 	}
 	app.NotFound = content_tools.ShowSnip
 	wrappedhand := sentryHandler.Handle(app.Handler)

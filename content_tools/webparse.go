@@ -2,11 +2,13 @@ package content_tools
 
 import (
 	"fmt"
+	"log"
 	"github.com/valyala/fasthttp"
 )
 
 func UserUploadParse(c *fasthttp.RequestCtx) {
-	fmt.Println("todo: not implemented, upload")
+	//todo: parse user upload and detect
+	log.Println("todo: not implemented, upload")
 }
 
 func ShowSnip(c *fasthttp.RequestCtx) {
@@ -20,22 +22,22 @@ func ShowSnip(c *fasthttp.RequestCtx) {
 		fasthttp.ServeFile(c, "./static/submit.html")
 	case "favicon.ico":
 		fasthttp.ServeFile(c, "./static/favicon.ico")
-	case "showverify":
+	case "showVerify":
 		//todo: render verify html and output
-		fmt.Println("verifying")
+		log.Println("verifying")
 	default:
 		//todo: really show snippet
-		fmt.Println(tmpvar)
+		log.Println(tmpvar)
 	}
 }
 
 
 func DeleteSnip(c *fasthttp.RequestCtx) {
 	// todo: remove to use fasthttp as replace
-	panic("todo: not implemented")
+	log.Println("todo: not implemented, delete")
 }
 
-func VerifyCAPT(c *fasthttp.RequestCtx) {
+func ShowVerifyCAPT(c *fasthttp.RequestCtx) {
 	// todo: remove to use fasthttp as replace
-	panic("todo: not implemented")
+	fmt.Println("todo: not implemented, verify")
 }

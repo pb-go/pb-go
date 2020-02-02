@@ -83,8 +83,11 @@ POST /api/g_verify HTTP/1.1
 g-recaptcha-response=<BLAHBLAH>&tempID=<BLAHBLAH>
 ```
 
-The API path is above. But the return to user path should be URLSAFE-Base64-encoded `id` param with renderer.
-
-The corresponding paste ID should be `showverify`. 
+The API path is above. 
 
 Ask user to run reCAPTCHA test. Server-side verification.
+
+If the `recaptcha.enable` inside the server administrators' config is true, then we will try to return 
+a URI like this `/showVerify?id=<SNIPPET ID WITH URLSAFE BASE64 ENCODED>` and ask user to continue.
+
+If user failed, this snippet will be automatically expired in 2 mins. Else it will give user the published path.
