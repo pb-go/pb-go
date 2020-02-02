@@ -1,3 +1,4 @@
+{% func VerifyPageRend(sitekey string) %}
 <!DOCTYPE html>
 <html lang="zh">
 <head>
@@ -8,7 +9,7 @@
 </head>
 <body onload="getDataFromURI()">
 <form action="/api/g_verify" method="POST">
-    <div class="g-recaptcha" data-sitekey="{{.SiteKey}}" data-expired-callback="disableBtn" data-callback="enableBtn"></div>
+    <div class="g-recaptcha" data-sitekey="{%s sitekey %}" data-expired-callback="disableBtn" data-callback="enableBtn"></div>
     <br/>
     <input type="hidden" id="snipid" name="snipid">
     <input type="submit" id="verchk" disabled value="Submit">
@@ -28,3 +29,4 @@
     }
 </script>
 </html>
+{% endfunc %}
