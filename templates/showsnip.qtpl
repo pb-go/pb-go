@@ -1,3 +1,4 @@
+{% func ShowSnipPageRend(data string) %}
 <!DOCTYPE html>
 <html lang="zh">
 <head>
@@ -9,10 +10,13 @@
 <div class="container">
     <div class="content-container">
         <pre class="prettyprint">
-{{.Content}}
+{%s data %}
         </pre>
     </div>
     <p>This site is proudly hosted using <a href="https://github.com/kmahyyg/pb-go">pb-go</a>. </p>
 </div>
 </body>
+<script src="https://cdn.jsdelivr.net/npm/code-prettify@0.1.0/loader/run_prettify.js"
+        integrity="sha256-BiZ7IhC9RtaPNJUrs+oO0+I2ea+vE9NVvCXQluQrnYQ=" crossorigin="anonymous"></script>
 </html>
+{% endfunc %}
