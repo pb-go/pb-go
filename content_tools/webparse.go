@@ -3,6 +3,9 @@ package content_tools
 import (
 	"encoding/base64"
 	"github.com/kmahyyg/pb-go/config"
+	"github.com/kmahyyg/pb-go/databaseop"
+	"github.com/kmahyyg/pb-go/templates"
+	"go.mongodb.org/mongo-driver/bson"
 	"log"
 	"github.com/valyala/fasthttp"
 	"net/http"
@@ -55,5 +58,24 @@ func StartVerifyCAPT(c *fasthttp.RequestCtx) {
 	if err != nil || res == false {
 		c.SetStatusCode(http.StatusForbidden)
 		return
+	}
+	if res == true {
+		filter1 := bson.M{"shortId": formsnipid}
+		update1 := bson.D{
+			{"$set", bson.D {
+				{"waitVerify", false},
+			}},
+		}
+		err = databaseop.GlobalMDBC.ItemUpdate(filter1, update1)
+		if err != nil {
+			log.Println("#############NOTE: ILLEGAL REQUEST!#############")
+			log.Println(err)
+			c.SetStatusCode(http.StatusBadRequest)
+			return
+ 		} else {
+ 			c.SetStatusCode(http.StatusOK)
+ 			c.SetContentType("text/html")
+ 			c.Set
+		}
 	}
 }
