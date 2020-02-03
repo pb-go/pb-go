@@ -1,10 +1,13 @@
 package utils
 
 import (
+	"crypto/md5"
+	"fmt"
 	"github.com/pb-go/pb-go/config"
 	"golang.org/x/crypto/blake2b"
 	"golang.org/x/crypto/chacha20poly1305"
 	"log"
+	"time"
 )
 
 func GenBlake2B(data []byte) string {
@@ -49,4 +52,12 @@ func DecryptData(src []byte, passwd []byte, nonce []byte) (string, error) {
 		log.Println(err)
 	}
 	return string(plaintext[:]), err
+}
+
+func GetUTCTimeHash() string {
+	masterkey := "{" + config.ServConf.Security.Master_key + "}"
+	currentTime := "{" + string(time.Now().UTC().Format(time.RFC822)) + "}"
+	data := []byte(masterkey+currentTime)
+	hashed := fmt.Sprintf("%x", md5.Sum(data))
+	return hashed
 }

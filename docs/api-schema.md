@@ -62,7 +62,7 @@ Response Content:
 ## Delete
 
 ```http request
-DELETE /api/admin/<shortid> HTTP/1.1
+DELETE /api/admin?id=<shortid> HTTP/1.1
 ```
 
 You should set a master key in server config as administrator credential.
@@ -72,12 +72,19 @@ So make sure your time is correct (at least on hour level), and this should be s
 
 For Example:
 
-The password is `123456`, Current UTC Time represented in RFC1123 Format `RFC1123 = "Mon, 02 Jan 2006 15:04:05 MST"` is: 
-`Mon, 03 Feb 2020 03:15:35 UTC`.
+The password is `123456`, UTC Time represented in RFC822 Format `RFC822 = "02 Jan 06 15:04 MST"` is: 
+`02 Jan 06 15:04 UTC`.
 
-So the finally hashed key should be represent as:
+So the finally key should be represent as: `{123456}{02 Jan 06 15:04 UTC}`  **(Don't forget `{}`).**
 
-``
+The hashed key is : `3c841b5c136c47dfb764119d41c7c5c1`
+
+The legal HTTP POST request should be:
+
+```http request
+DELETE /api/admin?id=<SHORTID> HTTP/1.1
+X-Master-Key: 3c841b5c136c47dfb764119d41c7c5c1
+```
 
 Response Code:
 
