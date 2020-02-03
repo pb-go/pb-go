@@ -14,6 +14,7 @@ client:
 all-platform:generate
 	OUTPUT=./output/pb-go ./scripts/build-all.sh ./cmd/server/main.go
 	OUTPUT=./output/pb-cli ./scripts/build-all.sh ./cmd/client/main.go
-    strip ./output/*
+	strip ./output/pb-go
+	strip ./output/pb-cli
 	bash ./scripts/archive-release.sh
 	bash ./scripts/sha256sums.sh
