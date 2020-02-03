@@ -3,7 +3,7 @@ package content_tools
 import (
 	"crypto/tls"
 	"encoding/json"
-	"github.com/kmahyyg/pb-go/config"
+	"github.com/pb-go/pb-go/config"
 	"github.com/valyala/fasthttp"
 	"net/url"
 	"time"
@@ -18,7 +18,7 @@ type ReCaptchaResponse struct {
 	ErrorCodes  []string  `json:"error-codes"`
 }
 
-func VerifyRecaptcha(recaptchaResponse string, remoteIp string) (bool, error) {
+func VerifyRecaptchaResp(recaptchaResponse string, remoteIp string) (bool, error) {
 	var err error
 	httpc := fasthttp.Client{
 		NoDefaultUserAgentHeader: true,

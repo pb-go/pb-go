@@ -62,12 +62,22 @@ Response Content:
 ## Delete
 
 ```http request
-DELETE /api/admin/<shortid>?k=<masterkey> HTTP/1.1
+DELETE /api/admin/<shortid> HTTP/1.1
 ```
 
 You should set a master key in server config as administrator credential.
 
-The `masterkey` param is the md5-hashed key concatenated with current date and hour in UTC. So make sure your time is correct.
+The `X-Master-Key` param is the md5-hashed key concatenated with current date and hour in UTC. 
+So make sure your time is correct (at least on hour level), and this should be set in `X-Master-Key` of HTTP Header.
+
+For Example:
+
+The password is `123456`, Current UTC Time represented in RFC1123 Format `RFC1123 = "Mon, 02 Jan 2006 15:04:05 MST"` is: 
+`Mon, 03 Feb 2020 03:15:35 UTC`.
+
+So the finally hashed key should be represent as:
+
+``
 
 Response Code:
 
@@ -83,8 +93,11 @@ POST /api/g_verify HTTP/1.1
 g-recaptcha-response=<BLAHBLAH>&tempID=<BLAHBLAH>
 ```
 
-The API path is above. But the return to user path should be URLSAFE-Base64-encoded `id` param with renderer.
-
-The corresponding paste ID should be `showverify`. 
+The API path is above. 
 
 Ask user to run reCAPTCHA test. Server-side verification.
+
+If the `recaptcha.enable` inside the server administrators' config is true, then we will try to return 
+a URI like this `/showVerify?id=<SNIPPET ID WITH URLSAFE BASE64 ENCODED>` and ask user to continue.
+
+If user failed, this snippet will be automatically expired in 2 mins. Else it will give user the published path.

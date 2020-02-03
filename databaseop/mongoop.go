@@ -2,7 +2,7 @@ package databaseop
 
 import (
 	"context"
-	"github.com/kmahyyg/pb-go/content_tools"
+	"github.com/pb-go/pb-go/utils"
 	"github.com/pkg/errors"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
@@ -11,11 +11,10 @@ import (
 	"time"
 )
 
-type MongoConn struct {
-	DbCli     mongo.Client
-	Position  int
-	Available bool
-}
+var (
+	GlobalMGC  *mongo.Client
+	GlobalMDBC MongoDB
+)
 
 type MongoDB struct {
 	DbConn         *mongo.Client
@@ -38,7 +37,19 @@ type UserData struct {
 
 // only allow bson.M to be used
 
-func (mdbc *MongoDB) connNCheck(dbCliOption interface{}) error {
+func (mdbc *MongoDB) InitMDBCOptions() *options.ClientOptions {
+	clientOptions := options.Client()
+	clientOptions.ApplyURI(mdbc.DbURI)
+	clientOptions.SetMinPoolSize(2)
+	clientOptions.SetMaxPoolSize(4)
+	clientOptions.SetRetryReads(true)
+	clientOptions.SetRetryWrites(true)
+	clientOptions.SetConnectTimeout(5 * time.Second)
+	clientOptions.SetSocketTimeout(8 * time.Second)
+	return clientOptions
+}
+
+func (mdbc *MongoDB) ConnNCheck(dbCliOption interface{}) error {
 	// https://github.com/mongodb/mongo-go-driver/blob/master/data/connection-monitoring-and-pooling/connection-monitoring-and-pooling.rst
 	ctx, _ := context.WithTimeout(context.Background(), time.Second*10)
 	var err error
@@ -60,7 +71,7 @@ func (mdbc *MongoDB) connNCheck(dbCliOption interface{}) error {
 	}
 }
 
-func (mdbc MongoDB) itemCreate(inputdata interface{}) error {
+func (mdbc MongoDB) ItemCreate(inputdata interface{}) error {
 	if inputdata == nil {
 		return errors.New("Insert Queue Empty.")
 	} else {
@@ -74,21 +85,21 @@ func (mdbc MongoDB) itemCreate(inputdata interface{}) error {
 	}
 }
 
-func (mdbc MongoDB) itemRead(filter1 interface{}) (UserData, error) {
+func (mdbc MongoDB) ItemRead(filter1 interface{}) (UserData, error) {
 	tctx, _ := context.WithTimeout(context.Background(), 5*time.Second)
 	if (mdbc.DbColl == mongo.Collection{}) {
 		return UserData{}, errors.New("Default connection to coll is not setup.")
 	}
 	var queryRes UserData
 	err := mdbc.DbColl.FindOne(tctx, filter1).Decode(&queryRes)
-	if err != nil && !queryRes.equalsTo(UserData{}){
+	if err != nil && !queryRes.EqualsTo(UserData{}){
 		return UserData{}, err
 	} else {
 		return queryRes, nil
 	}
 }
 
-func (mdbc MongoDB) itemUpdate(filter1 interface{}, change1 interface{}) error {
+func (mdbc MongoDB) ItemUpdate(filter1 interface{}, change1 interface{}) error {
 	tctx, _ := context.WithTimeout(context.Background(), 5*time.Second)
 	if (mdbc.DbColl == mongo.Collection{}) {
 		return errors.New("Default connection to coll is not setup.")
@@ -101,7 +112,7 @@ func (mdbc MongoDB) itemUpdate(filter1 interface{}, change1 interface{}) error {
 	return nil
 }
 
-func (mdbc MongoDB) itemDelete(filter1 interface{}) error {
+func (mdbc MongoDB) ItemDelete(filter1 interface{}) error {
 	if (mdbc.DbColl == mongo.Collection{}) {
 		return errors.New("Connection to coll is not setup.")
 	}
@@ -114,14 +125,14 @@ func (mdbc MongoDB) itemDelete(filter1 interface{}) error {
 	return nil
 }
 
-func (dt UserData) equalsTo(comparedto UserData) bool {
+func (dt UserData) EqualsTo(comparedto UserData) bool {
 	var check5 bool = false
 	check1 := dt.WaitVerify == comparedto.WaitVerify
 	check2 := dt.Data.Subtype == dt.Data.Subtype
 	check3 := len(dt.Data.Data) == len(dt.Data.Data)
 	if check2 && check3 {
-		tmpvar1 := content_tools.GenBlake2B(dt.Data.Data)
-		tmpvar2 := content_tools.GenBlake2B(comparedto.Data.Data)
+		tmpvar1 := utils.GenBlake2B(dt.Data.Data)
+		tmpvar2 := utils.GenBlake2B(comparedto.Data.Data)
 		if tmpvar1 == tmpvar2 {
 			check5 = true
 		}

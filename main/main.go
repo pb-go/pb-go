@@ -1,3 +1,6 @@
+//go:generate go get -u github.com/valyala/quicktemplate/qtc
+//go:generate qtc -dir=../templates
+
 package main
 
 import (
@@ -5,9 +8,11 @@ import (
 	"github.com/fasthttp/router"
 	"github.com/getsentry/sentry-go"
 	sentryfasthttp "github.com/getsentry/sentry-go/fasthttp"
-	"github.com/kmahyyg/pb-go/config"
-	"github.com/kmahyyg/pb-go/content_tools"
+	"github.com/pb-go/pb-go/config"
+	"github.com/pb-go/pb-go/databaseop"
+	"github.com/pb-go/pb-go/webserv"
 	"github.com/valyala/fasthttp"
+	"go.mongodb.org/mongo-driver/mongo"
 	"log"
 	"os"
 	"os/signal"
@@ -24,7 +29,7 @@ var (
 
 func printVersion() {
 	log.Printf("Current Version: %s \n", config.CurrentVer)
-	log.Println("For more information: https://github.com/kmahyyg/pb-go")
+	log.Println("For more information: https://github.com/pb-go/pb-go")
 	log.Println("This Program is licensed under AGPLv3.")
 }
 
@@ -36,16 +41,33 @@ func startServer(conf config.ServConfig) error {
 		WaitForDelivery: false,
 		Timeout:         5 * time.Second,
 	})
+	// init db and check, make sure we have share db connection
+	// if db connection is lost, we might need to reconnect.
+	databaseop.GlobalMDBC = databaseop.MongoDB{
+		DbConn:         databaseop.GlobalMGC,
+		DbURI:          config.ServConf.Network.Mongodb_url,
+		DbColl:         mongo.Collection{},
+		DefaultDB:      "pbgo",
+		DefaultColl:    "userdata",
+		DefaultTimeout: time.Time{},
+	}
+	cliOpts := databaseop.GlobalMDBC.InitMDBCOptions()
+	err = databaseop.GlobalMDBC.ConnNCheck(cliOpts)
+	if err != nil {
+		// db conn failed, exit.
+		log.Fatalln(err)
+	}
+	// db connection setup complete
+	// app route definition
 	app := router.New()
-	app.GET("/", content_tools.ShowSnip)
-	app.GET("/:shortId", content_tools.ShowSnip)
+	app.GET("/", webserv.ShowSnip)
+	app.GET("/:shortId", webserv.ShowSnip)
 	apig := app.Group("/api")
 	{
-		apig.DELETE("/admin", content_tools.DeleteSnip)
-		apig.POST("/upload", content_tools.UserUploadParse)
-		apig.POST("/g_verify", content_tools.VerifyCAPT)
+		apig.DELETE("/admin", webserv.DeleteSnip)
+		apig.POST("/upload", webserv.UserUploadParse)
+		apig.POST("/g_verify", webserv.StartVerifyCAPT)
 	}
-	app.NotFound = content_tools.ShowSnip
 	wrappedhand := sentryHandler.Handle(app.Handler)
 	fahtserv = &fasthttp.Server{
 		Handler:      wrappedhand,
@@ -115,5 +137,4 @@ func main() {
 		}
 		log.Println("Server exit successfully.")
 	}
-
 }

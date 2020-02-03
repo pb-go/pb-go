@@ -27,3 +27,8 @@ output/
 
 # fasthttp generated
 *.fasthttp.gz
+
+# quicktemplate generated
+# the generated *.qtpl.go is really dirty
+*.qtpl.go
+!*.qtpl

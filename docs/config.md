@@ -5,6 +5,7 @@
 ```yaml
 network:
   listen: 127.0.0.1:8181
+  host: localhost
   mongodb_url: mongodb+srv://
 recaptcha:
   enable: false
@@ -21,6 +22,9 @@ content:
 ```
 
 Default listens at `127.0.0.1:8181`, Configure reCAPTCHA v2 related key and enable in `recaptcha` part.
+
+The host will be used to generate response to user, you should input your domain here, the finally output 
+will be like this: `https://<network.host>/<otherdata>`, so make sure you've covered domain and port correctly.
 
 The `masterkey` must be longer than 12 bytes, `encryption_key` will be used for storage encryption, must be equals to 32 bytes.
 

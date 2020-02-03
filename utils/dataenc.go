@@ -1,7 +1,7 @@
-package content_tools
+package utils
 
 import (
-	"github.com/kmahyyg/pb-go/config"
+	"github.com/pb-go/pb-go/config"
 	"golang.org/x/crypto/blake2b"
 	"golang.org/x/crypto/chacha20poly1305"
 	"log"
