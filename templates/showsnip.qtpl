@@ -13,7 +13,7 @@
 {%s data %}
         </pre>
     </div>
-    <p>This site is proudly hosted using <a href="https://github.com/kmahyyg/pb-go">pb-go</a>. </p>
+    <p>This site is proudly hosted using <a href="https://github.com/pb-go/pb-go">pb-go</a>. </p>
 </div>
 </body>
 <script src="https://cdn.jsdelivr.net/npm/code-prettify@0.1.0/loader/run_prettify.js"

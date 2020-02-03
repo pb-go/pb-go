@@ -4,13 +4,13 @@
 
 Yet Another PasteBin implemented in Golang.
 
-![GitHub stars](https://img.shields.io/github/stars/kmahyyg/pb-go?style=social)
-![Go Report](https://goreportcard.com/badge/github.com/kmahyyg/pb-go)
-[![Build Status](https://travis-ci.com/kmahyyg/pb-go.svg?branch=master)](https://travis-ci.com/kmahyyg/pb-go)
-![GitHub](https://img.shields.io/github/license/kmahyyg/pb-go)
-![GitHub last commit](https://img.shields.io/github/last-commit/kmahyyg/pb-go)
-![GitHub All Releases](https://img.shields.io/github/downloads/kmahyyg/pb-go/total)
-[![Codacy Badge](https://api.codacy.com/project/badge/Grade/269b77a2b64c41bbaa4aa109ecf4d55a)](https://www.codacy.com/manual/kmahyyg/pb-go)
+![GitHub stars](https://img.shields.io/github/stars/pb-go/pb-go?style=social)
+![Go Report](https://goreportcard.com/badge/github.com/pb-go/pb-go)
+[![Build Status](https://travis-ci.com/pb-go/pb-go.svg?branch=master)](https://travis-ci.com/pb-go/pb-go)
+![GitHub](https://img.shields.io/github/license/pb-go/pb-go)
+![GitHub last commit](https://img.shields.io/github/last-commit/pb-go/pb-go)
+![GitHub All Releases](https://img.shields.io/github/downloads/pb-go/pb-go/total)
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/269b77a2b64c41bbaa4aa109ecf4d55a)](https://www.codacy.com/manual/pb-go/pb-go)
 ![Codacy coverage](https://img.shields.io/codacy/coverage/269b77a2b64c41bbaa4aa109ecf4d55a?logo=codacy)
 
 We use [Sentry.io](https://sentry.io) for bug tracking and log collection which was GDPR-complaint, 

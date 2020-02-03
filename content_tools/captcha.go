@@ -3,7 +3,7 @@ package content_tools
 import (
 	"crypto/tls"
 	"encoding/json"
-	"github.com/kmahyyg/pb-go/config"
+	"github.com/pb-go/pb-go/config"
 	"github.com/valyala/fasthttp"
 	"net/url"
 	"time"

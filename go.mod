@@ -1,4 +1,4 @@
-module github.com/kmahyyg/pb-go
+module github.com/pb-go/pb-go
 
 go 1.13
 

@@ -2,8 +2,8 @@ package content_tools
 
 import (
 	"encoding/base64"
-	"github.com/kmahyyg/pb-go/config"
-	"github.com/kmahyyg/pb-go/databaseop"
+	"github.com/pb-go/pb-go/config"
+	"github.com/pb-go/pb-go/databaseop"
 	"github.com/valyala/fasthttp"
 	"go.mongodb.org/mongo-driver/bson"
 	"log"

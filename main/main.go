@@ -8,9 +8,9 @@ import (
 	"github.com/fasthttp/router"
 	"github.com/getsentry/sentry-go"
 	sentryfasthttp "github.com/getsentry/sentry-go/fasthttp"
-	"github.com/kmahyyg/pb-go/config"
-	"github.com/kmahyyg/pb-go/content_tools"
-	"github.com/kmahyyg/pb-go/databaseop"
+	"github.com/pb-go/pb-go/config"
+	"github.com/pb-go/pb-go/content_tools"
+	"github.com/pb-go/pb-go/databaseop"
 	"github.com/valyala/fasthttp"
 	"go.mongodb.org/mongo-driver/mongo"
 	"log"
@@ -29,7 +29,7 @@ var (
 
 func printVersion() {
 	log.Printf("Current Version: %s \n", config.CurrentVer)
-	log.Println("For more information: https://github.com/kmahyyg/pb-go")
+	log.Println("For more information: https://github.com/pb-go/pb-go")
 	log.Println("This Program is licensed under AGPLv3.")
 }
 

@@ -5,7 +5,7 @@ import (
 	"errors"
 	"github.com/h2non/filetype"
 	"github.com/h2non/filetype/types"
-	"github.com/kmahyyg/pb-go/config"
+	"github.com/pb-go/pb-go/config"
 )
 
 func ContentValidityCheck(data []byte, shortid string) error {
