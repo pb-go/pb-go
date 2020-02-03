@@ -62,12 +62,22 @@ Response Content:
 ## Delete
 
 ```http request
-DELETE /api/admin/<shortid>?k=<masterkey> HTTP/1.1
+DELETE /api/admin/<shortid> HTTP/1.1
 ```
 
 You should set a master key in server config as administrator credential.
 
-The `masterkey` param is the md5-hashed key concatenated with current date and hour in UTC. So make sure your time is correct.
+The `X-Master-Key` param is the md5-hashed key concatenated with current date and hour in UTC. 
+So make sure your time is correct (at least on hour level), and this should be set in `X-Master-Key` of HTTP Header.
+
+For Example:
+
+The password is `123456`, Current UTC Time represented in RFC1123 Format `RFC1123 = "Mon, 02 Jan 2006 15:04:05 MST"` is: 
+`Mon, 03 Feb 2020 03:15:35 UTC`.
+
+So the finally hashed key should be represent as:
+
+``
 
 Response Code:
 

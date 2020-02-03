@@ -1,4 +1,4 @@
-package content_tools
+package utils
 
 import (
 	"github.com/pb-go/pb-go/config"

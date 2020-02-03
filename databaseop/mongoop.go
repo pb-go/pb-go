@@ -2,7 +2,7 @@ package databaseop
 
 import (
 	"context"
-	"github.com/pb-go/pb-go/content_tools"
+	"github.com/pb-go/pb-go/utils"
 	"github.com/pkg/errors"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
@@ -131,8 +131,8 @@ func (dt UserData) EqualsTo(comparedto UserData) bool {
 	check2 := dt.Data.Subtype == dt.Data.Subtype
 	check3 := len(dt.Data.Data) == len(dt.Data.Data)
 	if check2 && check3 {
-		tmpvar1 := content_tools.GenBlake2B(dt.Data.Data)
-		tmpvar2 := content_tools.GenBlake2B(comparedto.Data.Data)
+		tmpvar1 := utils.GenBlake2B(dt.Data.Data)
+		tmpvar2 := utils.GenBlake2B(comparedto.Data.Data)
 		if tmpvar1 == tmpvar2 {
 			check5 = true
 		}

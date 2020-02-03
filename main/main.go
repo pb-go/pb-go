@@ -9,8 +9,8 @@ import (
 	"github.com/getsentry/sentry-go"
 	sentryfasthttp "github.com/getsentry/sentry-go/fasthttp"
 	"github.com/pb-go/pb-go/config"
-	"github.com/pb-go/pb-go/content_tools"
 	"github.com/pb-go/pb-go/databaseop"
+	"github.com/pb-go/pb-go/webserv"
 	"github.com/valyala/fasthttp"
 	"go.mongodb.org/mongo-driver/mongo"
 	"log"
@@ -60,13 +60,13 @@ func startServer(conf config.ServConfig) error {
 	// db connection setup complete
 	// app route definition
 	app := router.New()
-	app.GET("/", content_tools.ShowSnip)
-	app.GET("/:shortId", content_tools.ShowSnip)
+	app.GET("/", webserv.ShowSnip)
+	app.GET("/:shortId", webserv.ShowSnip)
 	apig := app.Group("/api")
 	{
-		apig.DELETE("/admin", content_tools.DeleteSnip)
-		apig.POST("/upload", content_tools.UserUploadParse)
-		apig.POST("/g_verify", content_tools.StartVerifyCAPT)
+		apig.DELETE("/admin", webserv.DeleteSnip)
+		apig.POST("/upload", webserv.UserUploadParse)
+		apig.POST("/g_verify", webserv.StartVerifyCAPT)
 	}
 	wrappedhand := sentryHandler.Handle(app.Handler)
 	fahtserv = &fasthttp.Server{
@@ -137,5 +137,4 @@ func main() {
 		}
 		log.Println("Server exit successfully.")
 	}
-
 }

@@ -1,8 +1,9 @@
-package content_tools
+package webserv
 
 import (
 	"encoding/base64"
 	"github.com/pb-go/pb-go/config"
+	"github.com/pb-go/pb-go/content_tools"
 	"github.com/pb-go/pb-go/databaseop"
 	"github.com/valyala/fasthttp"
 	"go.mongodb.org/mongo-driver/bson"
@@ -53,7 +54,7 @@ func StartVerifyCAPT(c *fasthttp.RequestCtx) {
 		c.SetStatusCode(http.StatusBadRequest)
 		return
 	}
-	res, err := VerifyRecaptchaResp(string(c.FormValue("g-recaptcha-response")), c.RemoteIP().String())
+	res, err := content_tools.VerifyRecaptchaResp(string(c.FormValue("g-recaptcha-response")), c.RemoteIP().String())
 	if err != nil || res == false {
 		c.SetStatusCode(http.StatusForbidden)
 		return
