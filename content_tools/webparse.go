@@ -4,10 +4,9 @@ import (
 	"encoding/base64"
 	"github.com/kmahyyg/pb-go/config"
 	"github.com/kmahyyg/pb-go/databaseop"
-	"github.com/kmahyyg/pb-go/templates"
+	"github.com/valyala/fasthttp"
 	"go.mongodb.org/mongo-driver/bson"
 	"log"
-	"github.com/valyala/fasthttp"
 	"net/http"
 )
 
@@ -68,10 +67,8 @@ func StartVerifyCAPT(c *fasthttp.RequestCtx) {
 		}
 		err = databaseop.GlobalMDBC.ItemUpdate(filter1, update1)
 		if err != nil {
-			log.Println("#############NOTE: ILLEGAL REQUEST!#############")
 			log.Println(err)
-			c.SetStatusCode(http.StatusBadRequest)
-			c.SetBodyString("If you use shunt proxy, please try disable it.")
+			c.SetStatusCode(http.StatusGone)
 			return
  		} else {
  			c.SetStatusCode(http.StatusOK)
