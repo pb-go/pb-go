@@ -26,8 +26,8 @@ jobs:
         shell: bash
         run: echo "::add-path::$(go env GOPATH)/bin"
 
-      - name: Build
-        run: make
+      - name: Build all platform
+        run: make all-platform
 
       - name: Release
         uses: softprops/action-gh-release@v1
@@ -35,5 +35,6 @@ jobs:
         with:
           draft: true
           files: output/*
+          body_path: ${{ github.workflow }}-CHANGELOG.txt
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
