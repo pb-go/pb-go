@@ -18,26 +18,59 @@ func UserUploadParse(c *fasthttp.RequestCtx) {
 	log.Println("todo: not implemented, upload")
 }
 
+func setRenderData(userdt *databaseop.UserData, ctx *fasthttp.RequestCtx, israw bool){
+	if israw {
+		ctx.SetContentType("text/plain")
+		ctx.SetBody(userdt.Data.Data)
+		return
+	} else {
+		ctx.SetContentType("text/html; charset=utf-8")
+		ctx.SetBodyString(templates.ShowSnipPageRend(string(userdt.Data.Data)))
+		return
+	}
+}
+
 func ShowSnip(c *fasthttp.RequestCtx) {
-	var readoutDta databaseop.UserData
 	tmpvar := c.UserValue("shortId")
 	switch tmpvar {
 	case nil:
 		fallthrough
 	case "index.html":
-		fasthttp.ServeFile(c, "./static/index.html")
+		c.SendFile("./static/index.html")
+		return
 	case "submit.html":
-		fasthttp.ServeFile(c, "./static/submit.html")
+		c.SendFile("./static/submit.html")
+		return
 	case "favicon.ico":
-		fasthttp.ServeFile(c, "./static/favicon.ico")
+		c.SendFile("./static/favicon.ico")
+		return
 	case "showVerify":
-		templates.VerifyPageRend(config.ServConf.Recaptcha.Site_key)
+		c.SetContentType("text/html")
+		c.SetStatusCode(http.StatusOK)
+		c.SetBodyString(templates.VerifyPageRend(config.ServConf.Recaptcha.Site_key))
 		return
 	default:
 		filter1 := bson.M{"shortId": tmpvar}
 		readoutDta, err := databaseop.GlobalMDBC.ItemRead(filter1)
 		if err != nil {
-
+			c.SetStatusCode(http.StatusBadRequest)
+			return
+ 		} else {
+ 			var rawRender = false
+ 			if string(c.FormValue("f")) == "raw" {
+ 				rawRender = true
+			}
+ 			if readoutDta.PwdIsSet {
+ 				uploadedpwd := c.FormValue("p")
+ 				hashedupdpwd := utils.GenBlake2B(uploadedpwd)
+ 				if hashedupdpwd != readoutDta.Password {
+					c.SetStatusCode(http.StatusForbidden)
+					return
+				}
+			}
+			c.SetStatusCode(http.StatusOK)
+ 			setRenderData(&readoutDta, c, rawRender)
+ 			return
 		}
 	}
 }
