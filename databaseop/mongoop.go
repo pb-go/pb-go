@@ -92,7 +92,7 @@ func (mdbc MongoDB) ItemRead(filter1 interface{}) (UserData, error) {
 	}
 	var queryRes UserData
 	err := mdbc.DbColl.FindOne(tctx, filter1).Decode(&queryRes)
-	if err != nil && !queryRes.EqualsTo(UserData{}){
+	if err != nil || queryRes.EqualsTo(UserData{}){
 		return UserData{}, err
 	} else {
 		return queryRes, nil

@@ -19,6 +19,7 @@ func UserUploadParse(c *fasthttp.RequestCtx) {
 }
 
 func ShowSnip(c *fasthttp.RequestCtx) {
+	var readoutDta databaseop.UserData
 	tmpvar := c.UserValue("shortId")
 	switch tmpvar {
 	case nil:
@@ -33,7 +34,11 @@ func ShowSnip(c *fasthttp.RequestCtx) {
 		templates.VerifyPageRend(config.ServConf.Recaptcha.Site_key)
 		return
 	default:
-		panic("todo")
+		filter1 := bson.M{"shortId": tmpvar}
+		readoutDta, err := databaseop.GlobalMDBC.ItemRead(filter1)
+		if err != nil {
+
+		}
 	}
 }
 
