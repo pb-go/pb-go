@@ -11,6 +11,7 @@ server:
 	go build -o output/pb-go cmd/server/main.go
 client:
 	go build -o output/pb-cli cmd/client/main.go
-all-platform:
+all-platform:generate
 	OUTPUT=./output/pb-go ./scripts/build-all.sh ./cmd/server/main.go
 	OUTPUT=./output/pb-cli ./scripts/build-all.sh ./cmd/client/main.go
+	bash ./scripts/archive-release.sh
