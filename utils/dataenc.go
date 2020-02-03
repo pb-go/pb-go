@@ -1,10 +1,14 @@
 package utils
 
 import (
+	"crypto/md5"
+	"fmt"
+	gonanoid "github.com/matoous/go-nanoid"
 	"github.com/pb-go/pb-go/config"
 	"golang.org/x/crypto/blake2b"
 	"golang.org/x/crypto/chacha20poly1305"
 	"log"
+	"time"
 )
 
 func GenBlake2B(data []byte) string {
@@ -50,3 +54,20 @@ func DecryptData(src []byte, passwd []byte, nonce []byte) (string, error) {
 	}
 	return string(plaintext[:]), err
 }
+
+func GetUTCTimeHash() string {
+	masterkey := "{" + config.ServConf.Security.Master_key + "}"
+	currentTime := "{" + string(time.Now().UTC().Format(time.RFC822)) + "}"
+	data := []byte(masterkey+currentTime)
+	hashed := fmt.Sprintf("%x", md5.Sum(data))
+	return hashed
+}
+
+func GetNanoID() (string, error) {
+	id, err := gonanoid.Nanoid(4)
+	if err != nil {
+		log.Fatalln("Failed to generate nanoid!")
+	}
+	return id, err
+}
+

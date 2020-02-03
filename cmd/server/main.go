@@ -57,6 +57,7 @@ func startServer(conf config.ServConfig) error {
 		// db conn failed, exit.
 		log.Fatalln(err)
 	}
+	databaseop.GlobalMDBC.DbColl = *databaseop.GlobalMDBC.DbConn.Database(databaseop.GlobalMDBC.DefaultDB).Collection(databaseop.GlobalMDBC.DefaultColl)
 	// db connection setup complete
 	// app route definition
 	app := router.New()

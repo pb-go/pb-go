@@ -5,6 +5,7 @@ import (
 	"github.com/pb-go/pb-go/config"
 	"github.com/pb-go/pb-go/content_tools"
 	"github.com/pb-go/pb-go/databaseop"
+	"github.com/pb-go/pb-go/utils"
 	"github.com/valyala/fasthttp"
 	"go.mongodb.org/mongo-driver/bson"
 	"log"
@@ -38,8 +39,27 @@ func ShowSnip(c *fasthttp.RequestCtx) {
 
 
 func DeleteSnip(c *fasthttp.RequestCtx) {
-	// todo: remove to use fasthttp as replace
-	log.Println("todo: not implemented, delete")
+	masterkey := string(c.Request.Header.Peek("X-Master-Key"))
+	if masterkey == "" {
+		c.SetStatusCode(http.StatusForbidden)
+		return
+	}
+	legalkey := utils.GetUTCTimeHash()
+	if masterkey == legalkey {
+		curshortid := string(c.FormValue("id"))
+		filter1 := bson.M{"shortId": curshortid}
+		err := databaseop.GlobalMDBC.ItemDelete(filter1)
+		if err != nil {
+			c.SetStatusCode(http.StatusBadRequest)
+			return
+ 		} else {
+ 			c.SetStatusCode(http.StatusAccepted)
+ 			return
+		}
+	} else {
+		c.SetStatusCode(http.StatusForbidden)
+		return
+	}
 }
 
 func StartVerifyCAPT(c *fasthttp.RequestCtx) {
@@ -54,7 +74,12 @@ func StartVerifyCAPT(c *fasthttp.RequestCtx) {
 		c.SetStatusCode(http.StatusBadRequest)
 		return
 	}
-	res, err := content_tools.VerifyRecaptchaResp(string(c.FormValue("g-recaptcha-response")), c.RemoteIP().String())
+	rmtIPhd := string(c.Request.Header.Peek("X-Real-IP"))
+	if rmtIPhd == "" {
+		c.SetStatusCode(http.StatusBadGateway)
+		return
+	}
+	res, err := content_tools.VerifyRecaptchaResp(string(c.FormValue("g-recaptcha-response")), rmtIPhd)
 	if err != nil || res == false {
 		c.SetStatusCode(http.StatusForbidden)
 		return

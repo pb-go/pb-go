@@ -30,6 +30,7 @@ Bug report please attach log and finish the whole issue template. Thanks.
 
 Note: Since we are offering public services, we don't want to implement any rate-limit
 on application side. You must apply a reverse proxy or something else do that.
+You must ensure your proxy is properly configured to send `X-Real-IP` header.
 Your data is encrypted and finally stored on our server using Chacha20 algorithm.
 
 ## To-Do list (features)
