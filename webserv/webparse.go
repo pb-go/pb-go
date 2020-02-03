@@ -18,7 +18,7 @@ func UserUploadParse(c *fasthttp.RequestCtx) {
 	log.Println("todo: not implemented, upload")
 }
 
-func setRenderData(userdt *databaseop.UserData, ctx *fasthttp.RequestCtx, israw bool){
+func setShowSnipRenderData(userdt *databaseop.UserData, ctx *fasthttp.RequestCtx, israw bool){
 	if israw {
 		ctx.SetContentType("text/plain")
 		ctx.SetBody(userdt.Data.Data)
@@ -69,7 +69,7 @@ func ShowSnip(c *fasthttp.RequestCtx) {
 				}
 			}
 			c.SetStatusCode(http.StatusOK)
- 			setRenderData(&readoutDta, c, rawRender)
+ 			setShowSnipRenderData(&readoutDta, c, rawRender)
  			return
 		}
 	}
