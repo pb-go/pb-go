@@ -5,6 +5,7 @@ import (
 	"github.com/pb-go/pb-go/config"
 	"github.com/pb-go/pb-go/content_tools"
 	"github.com/pb-go/pb-go/databaseop"
+	"github.com/pb-go/pb-go/templates"
 	"github.com/pb-go/pb-go/utils"
 	"github.com/valyala/fasthttp"
 	"go.mongodb.org/mongo-driver/bson"
@@ -29,11 +30,10 @@ func ShowSnip(c *fasthttp.RequestCtx) {
 	case "favicon.ico":
 		fasthttp.ServeFile(c, "./static/favicon.ico")
 	case "showVerify":
-		//todo: render verify html and output
-		log.Println("verifying")
+		templates.VerifyPageRend(config.ServConf.Recaptcha.Site_key)
+		return
 	default:
-		//todo: really show snippet
-		log.Println(tmpvar)
+		panic("todo")
 	}
 }
 
