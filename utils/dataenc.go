@@ -3,6 +3,7 @@ package utils
 import (
 	"crypto/md5"
 	"fmt"
+	gonanoid "github.com/matoous/go-nanoid"
 	"github.com/pb-go/pb-go/config"
 	"golang.org/x/crypto/blake2b"
 	"golang.org/x/crypto/chacha20poly1305"
@@ -61,3 +62,12 @@ func GetUTCTimeHash() string {
 	hashed := fmt.Sprintf("%x", md5.Sum(data))
 	return hashed
 }
+
+func GetNanoID() (string, error) {
+	id, err := gonanoid.Nanoid(4)
+	if err != nil {
+		log.Fatalln("Failed to generate nanoid!")
+	}
+	return id, err
+}
+
