@@ -62,6 +62,8 @@ BUT, DO REMEMBER, we don't guarantee about unintended data loss like hardware fa
 
 Do Remember: `masterkey` must be longer than 12 bytes. Encryption key should be 32 bytes and corresponding nonce should be 12 bytes.
 
+One thing you must listen: correctly set the reverse proxy and offer a `X-Real-IP` header in http request, if this is not offered, we'll decline the request immediately.
+
 ## Network
 
 Set the listen port and domain and IP in server configuration, in YAML format.
