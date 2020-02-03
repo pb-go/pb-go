@@ -56,10 +56,7 @@ func ShowSnip(c *fasthttp.RequestCtx) {
 			c.SetStatusCode(http.StatusBadRequest)
 			return
  		} else {
- 			var rawRender = false
- 			if string(c.FormValue("f")) == "raw" {
- 				rawRender = true
-			}
+ 			var rawRender = string(c.FormValue("f")) == "raw"
  			if readoutDta.PwdIsSet {
  				uploadedpwd := c.FormValue("p")
  				hashedupdpwd := utils.GenBlake2B(uploadedpwd)
