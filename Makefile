@@ -1,4 +1,4 @@
-.PHONY: build test clean
+.PHONY: build generate test clean
 build:generate
 	go build -o output/pb-go main/main.go
 generate:
