@@ -72,7 +72,6 @@ func ShowSnip(c *fasthttp.RequestCtx) {
 	}
 }
 
-
 func DeleteSnip(c *fasthttp.RequestCtx) {
 	masterkey := string(c.Request.Header.Peek("X-Master-Key"))
 	if masterkey == "" {
