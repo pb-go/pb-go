@@ -16,6 +16,10 @@ jobs:
           go-version: 1.13
         id: go
 
+      - name: Get the version
+        id: get_version
+        run: echo ::set-output name=VERSION::${GITHUB_REF#refs/tags/}
+
       - name: Check out code into the Go module directory
         uses: actions/checkout@v2
 
@@ -35,6 +39,6 @@ jobs:
         with:
           draft: true
           files: output/*
-          body_path: ${{ github.workflow }}-CHANGELOG.txt
+          body_path: ${{ steps.get_version.outputs.VERSION }}-CHANGELOG.txt
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
