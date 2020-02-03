@@ -1,6 +1,5 @@
-.PHONY: build generate test clean
-build:generate
-	go build -o output/pb-go main/main.go
+.PHONY: build generate test clean server client
+build:generate server client
 generate:
 	go generate main/main.go
 test:
@@ -8,3 +7,7 @@ test:
 clean:
 	rm -rf output
 	rm -rf templates/*.qtpl.go
+server:
+	go build -o output/pb-go main/main.go
+client:
+	# todo: build pg-go-cli
