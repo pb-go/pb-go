@@ -24,7 +24,7 @@ jobs:
     - name: Get dependencies
       run: go mod download
 
-    - name: apply bin from GOPATH
+    - name: Apply GoBin from GOPATH
       shell: bash
       run: echo "::add-path::$(go env GOPATH)/bin"
       

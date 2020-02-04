@@ -1,5 +1,5 @@
 .PHONY: build generate test clean server client
-build:clean generate server client
+build: clean generate server client
 generate:
 	go generate cmd/server/main.go
 	ls -alh ./statik/
