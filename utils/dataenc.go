@@ -57,10 +57,10 @@ func DecryptData(src []byte, passwd []byte) ([]byte, error) {
 	return plaintext, err
 }
 
-func GetUTCTimeHash() string {
-	masterkey := "{" + config.ServConf.Security.Master_key + "}"
+func GetUTCTimeHash(masterkey string) string {
+	hmasterkey := "{" + masterkey + "}"
 	currentTime := "{" + string(time.Now().UTC().Format(time.RFC822)) + "}"
-	data := []byte(masterkey+currentTime)
+	data := []byte(hmasterkey+currentTime)
 	hashed := fmt.Sprintf("%x", md5.Sum(data))
 	return hashed
 }

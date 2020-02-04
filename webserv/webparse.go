@@ -119,7 +119,7 @@ func DeleteSnip(c *fasthttp.RequestCtx) {
 		c.SetStatusCode(http.StatusForbidden)
 		return
 	}
-	legalkey := utils.GetUTCTimeHash()
+	legalkey := utils.GetUTCTimeHash(config.ServConf.Security.Master_key)
 	if masterkey == legalkey {
 		curshortid := string(c.FormValue("id"))
 		filter1 := bson.M{"shortId": curshortid}
