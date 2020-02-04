@@ -20,6 +20,7 @@ require (
 	github.com/matoous/go-nanoid v1.1.0
 	github.com/mattn/go-isatty v0.0.12 // indirect
 	github.com/pkg/errors v0.9.1
+	github.com/rakyll/statik v0.1.6 // indirect
 	github.com/tidwall/pretty v1.0.0 // indirect
 	github.com/valyala/fasthttp v1.8.0
 	github.com/valyala/quicktemplate v1.4.1

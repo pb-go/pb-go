@@ -32,3 +32,6 @@ output/
 # the generated *.qtpl.go is really dirty
 *.qtpl.go
 !*.qtpl
+
+# Statik genreated file
+/statik/

@@ -1,5 +1,7 @@
 //go:generate go get -u github.com/valyala/quicktemplate/qtc
 //go:generate qtc -dir=../../templates
+//go:generate go get -u github.com/rakyll/statik
+//go:generate bash -c "cd ../../; statik -src=static/"
 
 package main
 
