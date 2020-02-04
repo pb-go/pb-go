@@ -32,40 +32,54 @@ func UserUploadParse(c *fasthttp.RequestCtx) {
 	log.Println("todo: not implemented, upload")
 }
 
-func setShowSnipRenderData(userdt *databaseop.UserData, ctx *fasthttp.RequestCtx, israw bool){
+func setShowSnipRenderData(userdt *databaseop.UserData, ctx *fasthttp.RequestCtx, israw bool) {
+	decres, err := utils.DecryptData(userdt.Data.Data, ctx.FormValue("p"))
+	if err != nil {
+		ctx.SetStatusCode(http.StatusForbidden)
+		return
+	}
+	ctx.SetStatusCode(http.StatusOK)
 	if israw {
 		ctx.SetContentType("text/plain")
-		//todo: decrypt data and output as binary
-		ctx.SetBody(userdt.Data.Data)
+		ctx.SetBody(decres)
 		return
 	} else {
 		ctx.SetContentType("text/html; charset=utf-8")
-		//todo: decrypt data and output as binary
-		ctx.SetBodyString(templates.ShowSnipPageRend(string(userdt.Data.Data)))
+		ctx.SetBodyString(templates.ShowSnipPageRend(string(decres)))
 		return
 	}
 }
 
+func readFromEmbed(statikfs http.FileSystem, filenm string, c *fasthttp.RequestCtx){
+	tempfd, err := fs.ReadFile(statikfs, filenm)
+	if err != nil {
+		c.SetStatusCode(http.StatusNotFound)
+		return
+	}
+	c.SetStatusCode(http.StatusOK)
+	c.SetBody(tempfd)
+	return
+}
+
 func ShowSnip(c *fasthttp.RequestCtx) {
-	var tempfd []byte
 	tmpvar := c.UserValue("shortId")
 	switch tmpvar {
 	case nil:
 		fallthrough
 	case "index.html":
-		tempfd, _ = fs.ReadFile(STFS, "/index.html")
-		c.SetBody(tempfd)
+		c.SetContentType("text/html; charset=utf-8")
+		readFromEmbed(STFS, "/index.html", c)
 		return
 	case "submit.html":
-		tempfd, _ = fs.ReadFile(STFS, "/submit.html")
-		c.SetBody(tempfd)
+		c.SetContentType("text/html; charset=utf-8")
+		readFromEmbed(STFS, "/submit.html", c)
 		return
 	case "favicon.ico":
-		tempfd, _ = fs.ReadFile(STFS, "/favicon.ico")
-		c.SetBody(tempfd)
+		c.SetContentType("image/vnd.microsoft.icon")
+		readFromEmbed(STFS, "/favicon.ico", c)
 		return
 	case "showVerify":
-		c.SetContentType("text/html")
+		c.SetContentType("text/html; charset=utf-8")
 		c.SetStatusCode(http.StatusOK)
 		c.SetBodyString(templates.VerifyPageRend(config.ServConf.Recaptcha.Site_key))
 		return
@@ -85,7 +99,6 @@ func ShowSnip(c *fasthttp.RequestCtx) {
 					return
 				}
 			}
-			c.SetStatusCode(http.StatusOK)
  			setShowSnipRenderData(&readoutDta, c, rawRender)
  			return
 		}

@@ -19,8 +19,7 @@ func GenBlake2B(data []byte) string {
 func EncryptData(src []byte, passwd []byte) ([]byte, string, error) {
 	// ciphertext output as []byte, original text hash output as string
 	// Passwd 32Bytes, Nonce 12Bytes
-	// if Passwd is not satisfying 32 Bytes, use Original Default Encryption Key instaed.
-	//todo: change output to byte[]
+	// if Passwd is not satisfying 32 Bytes, use Original Default Encryption Key instead.
 	var nonce = []byte(config.ServConf.Security.Encryption_nonce)
 	var usedpwd []byte
 	if len(passwd) != 32 {
@@ -37,8 +36,7 @@ func EncryptData(src []byte, passwd []byte) ([]byte, string, error) {
 	return ciphertext, hashedpwd, err
 }
 
-func DecryptData(src []byte, passwd []byte) (string, error) {
-	//todo: change output to byte[]
+func DecryptData(src []byte, passwd []byte) ([]byte, error) {
 	var nonce = []byte(config.ServConf.Security.Encryption_nonce)
 	var usedpwd []byte
 	if len(passwd) != 32 {
@@ -56,7 +54,7 @@ func DecryptData(src []byte, passwd []byte) (string, error) {
 	if err != nil {
 		log.Println(err)
 	}
-	return string(plaintext[:]), err
+	return plaintext, err
 }
 
 func GetUTCTimeHash() string {
