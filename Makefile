@@ -2,11 +2,13 @@
 build:generate server client
 generate:
 	go generate cmd/server/main.go
+	ls -alh ./statik/
 test:
 	go test -coverprofile=output/coverage.out ./...
 clean:
 	rm -rf output
 	rm -rf templates/*.qtpl.go
+	rm -rf statik
 server:
 	go build -o output/pb-go cmd/server/main.go
 client:
