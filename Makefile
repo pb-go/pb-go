@@ -1,5 +1,5 @@
 .PHONY: build generate test clean server client
-build:generate server client
+build:clean generate server client
 generate:
 	go generate cmd/server/main.go
 	ls -alh ./statik/
@@ -9,6 +9,7 @@ clean:
 	rm -rf output
 	rm -rf templates/*.qtpl.go
 	rm -rf statik
+	rm -rf static/*.fasthttp.gz
 server:
 	go build -o output/pb-go cmd/server/main.go
 client:

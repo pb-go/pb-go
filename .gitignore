@@ -34,4 +34,4 @@ output/
 !*.qtpl
 
 # Statik genreated file
-/statik/
+/statik/statik.go
