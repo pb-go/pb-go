@@ -45,18 +45,22 @@ func setShowSnipRenderData(userdt *databaseop.UserData, ctx *fasthttp.RequestCtx
 }
 
 func ShowSnip(c *fasthttp.RequestCtx) {
+	var tempfd []byte
 	tmpvar := c.UserValue("shortId")
 	switch tmpvar {
 	case nil:
 		fallthrough
 	case "index.html":
-		c.SendFile("./static/index.html")
+		tempfd, _ = fs.ReadFile(STFS, "/index.html")
+		c.SetBody(tempfd)
 		return
 	case "submit.html":
-		c.SendFile("./static/submit.html")
+		tempfd, _ = fs.ReadFile(STFS, "/submit.html")
+		c.SetBody(tempfd)
 		return
 	case "favicon.ico":
-		c.SendFile("./static/favicon.ico")
+		tempfd, _ = fs.ReadFile(STFS, "/favicon.ico")
+		c.SetBody(tempfd)
 		return
 	case "showVerify":
 		c.SetContentType("text/html")
