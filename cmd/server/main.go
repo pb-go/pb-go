@@ -36,8 +36,15 @@ func printVersion() {
 }
 
 func startServer(conf config.ServConfig) error {
-	// init sentry
 	var err error
+	// extract statikfs
+	webserv.InitStatikFS(&webserv.STFS)
+	// init sentry
+	if err := sentry.Init(sentry.ClientOptions{
+		Dsn: config.CurrentDSN,
+	}); err != nil {
+		log.Printf("Sentry Bug-Tracking init failed: %v \n", err)
+	}
 	sentryHandler := sentryfasthttp.New(sentryfasthttp.Options{
 		Repanic:         false,
 		WaitForDelivery: false,
@@ -85,11 +92,6 @@ func startServer(conf config.ServConfig) error {
 
 func init() {
 	log.SetFlags(log.Ldate | log.Ltime | log.LUTC | log.Lshortfile)
-	if err := sentry.Init(sentry.ClientOptions{
-		Dsn: config.CurrentDSN,
-	}); err != nil {
-		log.Printf("Sentry Bug-Tracking init failed: %v \n", err)
-	}
 }
 
 func main() {

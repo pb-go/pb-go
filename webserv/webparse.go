@@ -7,11 +7,25 @@ import (
 	"github.com/pb-go/pb-go/databaseop"
 	"github.com/pb-go/pb-go/templates"
 	"github.com/pb-go/pb-go/utils"
+	_ "github.com/pb-go/pb-go/statik"
+	"github.com/rakyll/statik/fs"
 	"github.com/valyala/fasthttp"
 	"go.mongodb.org/mongo-driver/bson"
 	"log"
 	"net/http"
 )
+
+var (
+	STFS http.FileSystem
+)
+
+func InitStatikFS(stfs *http.FileSystem){
+	var err error
+	*stfs, err = fs.New()
+	if err != nil {
+		log.Fatalln(err)
+	}
+}
 
 func UserUploadParse(c *fasthttp.RequestCtx) {
 	//todo: parse user upload and detect
