@@ -27,6 +27,7 @@ type MongoDB struct {
 
 type UserData struct {
 	WaitVerify bool                 `bson:"waitVerify" json:"waitVerify"`
+	ReadThenBurn bool				`bson:"readThenBurn" json:"readThenBurn"`
 	ShortId    string               `bson:"shortId" json:"shortId"`
 	UserIP     primitive.Decimal128 `bson:"userIP" json:"userIP"`
 	ExpireAt   primitive.DateTime   `bson:"expireAt" json:"expireAt"`
@@ -143,5 +144,6 @@ func (dt UserData) EqualsTo(comparedto UserData) bool {
 	check6 := dt.Password == comparedto.Password
 	check7 := dt.PwdIsSet == comparedto.PwdIsSet
 	check8 := dt.ShortId == comparedto.ShortId
-	return check1 && check2 && check3 && check4 && check5 && check6 && check7 && check8
+	check9 := dt.ReadThenBurn == comparedto.ReadThenBurn
+	return check1 && check2 && check3 && check4 && check5 && check6 && check7 && check8 && check9
 }

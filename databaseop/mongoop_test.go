@@ -46,6 +46,7 @@ func TestMongoDBConn(t *testing.T) {
 	UserDT = primitive.NewDateTimeFromTime(time.Now().Add(24 * time.Hour))
 	testdt1 := UserData{
 		WaitVerify: true,
+		ReadThenBurn: true,
 		ShortId:    "2s4D",
 		UserIP:     IPval,
 		ExpireAt:   UserDT,

@@ -1,10 +1,11 @@
 ## Database Schema
 
-Start a new database in mongodb.
+Start a new database named "pbgo" in mongodb.
 
 Create a new collection called: "userdata" with default TTL 24h.
 
 ```mongodb
+use pbgo;
 db.createCollection("userdata",{
     validator: {
         $jsonSchema: {
@@ -14,6 +15,10 @@ db.createCollection("userdata",{
                 waitVerify: {
                     bsonType: "bool",
                     description: "If captcha enabled, this will mark if publish or not."
+                },
+                readThenBurn: {
+                    bsonType: "bool",
+                    description: "If user's EXPIREAT is 0, set to true"
                 },
                 shortId: {
                     bsonType: "string",
@@ -58,4 +63,3 @@ db.userdata.createIndex(
     {unique: true}
     );
 ```
-

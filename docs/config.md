@@ -42,6 +42,42 @@ If `content.detect_abuse` is enabled, the system will only allow to upload pure 
 
 MongoDB should be configured as described in DB schema file to make sure the data TTL is correctly set. You do need to add SCRAM authentication to your DB and make sure your DB listened just on localhost.
 
+Please DO NOT APPEND database name in URI.
+
+### FAQ about DB
+
+1. I always encounter MongoDB Connection Error especially when trying to establish first connection.
+
+If you use `mongodb+srv://` link, please check [here](https://godoc.org/go.mongodb.org/mongo-driver/mongo#hdr-Potential_DNS_Issues) 
+and try switch to another DNS. Otherwise, check your internet connection is stable and connected or not.
+
+Official Explanation:
+
+> Building with Go 1.11+ and using connection strings with the "mongodb+srv" scheme 
+> is incompatible with some DNS servers in the wild due to the change introduced 
+> in https://github.com/golang/go/issues/10622. If you receive an error with the message 
+> "cannot unmarshal DNS message" while running an operation, we suggest you use a different DNS server.
+
+### Garbage Collection (DB Storage Reuse)
+
+Run following command: That will block DB operation! Have a backup first:
+
+```js
+db = db.getSiblingDB('pbgo');
+db.runCommand( { compact : 'userdata' } );
+```
+
+You could try to write a cron job to do this at the no-request time.
+
+Save the above request to a file, name it as `compact_mdb.js`
+
+Then Create a Cron Job like this:
+
+```crontab
+15 2 */2 * * /usr/bin/mongo -u <USERNAME> -p <PASSWORD> --host <HOST> --port <PORT> --eval /usr/local/compact_mdb.js
+```
+
+
 ## Anti-Abuse
 
 Our application will just do the content check by examined the uploaded data, we will only allow the pure text. Any binary file or unknown file will be rejected immediately.

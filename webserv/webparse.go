@@ -28,8 +28,13 @@ func InitStatikFS(stfs *http.FileSystem){
 }
 
 func UserUploadParse(c *fasthttp.RequestCtx) {
-	//todo: parse user upload and detect
-	log.Println("todo: not implemented, upload")
+	// first parse user form
+	// then encrypt
+	// if recaptcha enabled, set to 5min expires,
+	// then return recaptcha url, set id param in url using rawurl_b64.
+	// else, set to 24hrs, then publish.
+	// return publish url instead
+
 }
 
 func setShowSnipRenderData(userdt *databaseop.UserData, ctx *fasthttp.RequestCtx, israw bool) {
@@ -100,6 +105,9 @@ func ShowSnip(c *fasthttp.RequestCtx) {
 				}
 			}
  			setShowSnipRenderData(&readoutDta, c, rawRender)
+ 			if readoutDta.ReadThenBurn {
+				_ = databaseop.GlobalMDBC.ItemDelete(filter1)
+			}
  			return
 		}
 	}

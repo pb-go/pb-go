@@ -36,36 +36,22 @@ Your data is encrypted and finally stored on our server using Chacha20 algorithm
 ## To-Do list (features)
 
 - [ ] | Content detection, only allow pure texts.
-- [X] [ ] | Expiring feature done in MongoDB. <del> (TTL done, DB Driver not implement) </del>
-- [ ] | Private Share optionally, Share password using BLAKE2b stored. 
+- [X] | Expiring feature done in MongoDB. Support Read-After-Burn.
+- [ ] | Private Share optionally, Sharing password using BLAKE2b stored. 
 - [X] | <del> Rate-limit to avoid abusing. (SHOULD BE DONE IN REVERSE PROXY SIDE) </del>
-- [ ] | ReCaptcha v2 support to prevent from a large scale abusing.
+- [X] | ReCaptcha v2 support to prevent from a large scale abusing.
 - [X] | Code Syntax Highlighting.
 - [ ] | Shortlink using hashids.
-- [X] | <del> Pure CLI. (Use `curl` instead)</del>
+- [ ] | Pure CLI. (You could also use `curl` instead)
 - [X] | Web page upload.
 
 ## Usage
 
 TODO
 
-## FAQ
-
-1. I always encounter MongoDB Connection Error especially when trying to establish first connection.
-
-If you use `mongodb+srv://` link, please check [here](https://godoc.org/go.mongodb.org/mongo-driver/mongo#hdr-Potential_DNS_Issues) 
-and try switch to another DNS. Otherwise, check your internet connection is stable and connected or not.
-
-Official Explanation:
-
-> Building with Go 1.11+ and using connection strings with the "mongodb+srv" scheme 
-> is incompatible with some DNS servers in the wild due to the change introduced 
-> in https://github.com/golang/go/issues/10622. If you receive an error with the message 
-> "cannot unmarshal DNS message" while running an operation, we suggest you use a different DNS server.
-
 ## Compile
 
-`make`
+`make build`
 
 ## License
 
