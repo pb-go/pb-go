@@ -35,10 +35,12 @@ func UserUploadParse(c *fasthttp.RequestCtx) {
 func setShowSnipRenderData(userdt *databaseop.UserData, ctx *fasthttp.RequestCtx, israw bool){
 	if israw {
 		ctx.SetContentType("text/plain")
+		//todo: decrypt data and output as binary
 		ctx.SetBody(userdt.Data.Data)
 		return
 	} else {
 		ctx.SetContentType("text/html; charset=utf-8")
+		//todo: decrypt data and output as binary
 		ctx.SetBodyString(templates.ShowSnipPageRend(string(userdt.Data.Data)))
 		return
 	}

@@ -16,10 +16,12 @@ func GenBlake2B(data []byte) string {
 	return string(hashsum[:])
 }
 
-func EncryptData(src []byte, passwd []byte, nonce []byte) ([]byte, string, error) {
+func EncryptData(src []byte, passwd []byte) ([]byte, string, error) {
 	// ciphertext output as []byte, original text hash output as string
 	// Passwd 32Bytes, Nonce 12Bytes
 	// if Passwd is not satisfying 32 Bytes, use Original Default Encryption Key instaed.
+	//todo: change output to byte[]
+	var nonce = []byte(config.ServConf.Security.Encryption_nonce)
 	var usedpwd []byte
 	if len(passwd) != 32 {
 		usedpwd = []byte(config.ServConf.Security.Encryption_key)
@@ -35,7 +37,9 @@ func EncryptData(src []byte, passwd []byte, nonce []byte) ([]byte, string, error
 	return ciphertext, hashedpwd, err
 }
 
-func DecryptData(src []byte, passwd []byte, nonce []byte) (string, error) {
+func DecryptData(src []byte, passwd []byte) (string, error) {
+	//todo: change output to byte[]
+	var nonce = []byte(config.ServConf.Security.Encryption_nonce)
 	var usedpwd []byte
 	if len(passwd) != 32 {
 		usedpwd = []byte(config.ServConf.Security.Encryption_key)
