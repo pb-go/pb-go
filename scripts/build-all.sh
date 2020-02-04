@@ -92,12 +92,11 @@ fi
 for GOOS in $PLATFORMS_ARM; do
   GOARCH="arm"
   # build for each ARM version
-  for GOARM in 7 6 5; do
-    BIN_FILENAME="${OUTPUT}-${GOOS}-${GOARCH}${GOARM}"
-    CMD="GOARM=${GOARM} GOOS=${GOOS} GOARCH=${GOARCH} go build ${GC_FLAGS} -o ${BIN_FILENAME} $@"
-    echo "${CMD}"
-    eval "${CMD}" || FAILURES="${FAILURES} ${GOOS}/${GOARCH}${GOARM}"
-  done
+  GOARM=7
+  BIN_FILENAME="${OUTPUT}-${GOOS}-${GOARCH}${GOARM}"
+  CMD="GOARM=${GOARM} GOOS=${GOOS} GOARCH=${GOARCH} go build ${GC_FLAGS} -o ${BIN_FILENAME} $@"
+  echo "${CMD}"
+  eval "${CMD}" || FAILURES="${FAILURES} ${GOOS}/${GOARCH}${GOARM}"
 done
 
 # eval errors
