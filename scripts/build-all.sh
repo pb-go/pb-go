@@ -77,7 +77,7 @@ for PLATFORM in $PLATFORMS; do
   if [[ "${GOOS}" == "windows" ]]; then BIN_FILENAME="${BIN_FILENAME}.exe"; fi
   CMD="CGO_ENABLED=0 GOOS=${GOOS} GOARCH=${GOARCH} go build ${GC_FLAGS} -o ${BIN_FILENAME} $@"
   echo "${CMD}"
-  eval $CMD || FAILURES="${FAILURES} ${PLATFORM}"
+  eval "${CMD}" || FAILURES="${FAILURES} ${PLATFORM}"
 done
 
 # ARM builds

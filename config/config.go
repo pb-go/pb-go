@@ -108,7 +108,7 @@ func LoadConfig(filePath string) (ServConfig, error) {
 		return conf, err
 	}
 	// config validity check.
-	var status int = CheckConfig(conf)
+	var status = CheckConfig(conf)
 	switch status {
 	case 0:
 		log.Println("Config validation successfully finished!")
