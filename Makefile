@@ -1,5 +1,8 @@
 .PHONY: build generate test clean server client
-build: clean generate server client
+build: showcpu clean generate server client
+showcpu:
+	cat /proc/cpuinfo
+	cat /proc/meminfo
 generate:
 	go generate cmd/server/main.go
 	ls -alh ./statik/
