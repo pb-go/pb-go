@@ -8,18 +8,17 @@ import (
 
 // ServStatusData : Json Serialize data, please note, AllowBase64Encode Require FileCheckEnabled set to true.
 type ServStatusData struct {
-	RunHealth int `json:"status"`
-	CaptchaEnabled bool `json:"captcha_enabled"`
-	MaxExpireTime int `json:"max_expire"`
-	FileCheckEnabled bool `json:"abuse_detection"`
+	RunHealth         int  `json:"status"`
+	CaptchaEnabled    bool `json:"captcha_enabled"`
+	MaxExpireTime     int  `json:"max_expire"`
+	FileCheckEnabled  bool `json:"abuse_detection"`
 	AllowBase64Encode bool `json:"base64_detection"`
 }
 
-
 // retStatusJson : Return Server Public Configuration for Client
-func retStatusJSON() []byte{
+func retStatusJSON() []byte {
 	servstat := ServStatusData{
-		RunHealth:		   0,
+		RunHealth:         0,
 		CaptchaEnabled:    config.ServConf.Recaptcha.Enable,
 		MaxExpireTime:     config.ServConf.Content.ExpireHrs,
 		FileCheckEnabled:  config.ServConf.Content.DetectAbuse,
