@@ -11,10 +11,10 @@ clean:
 	rm -rf statik
 	rm -rf static/*.fasthttp.gz
 server:
-	go build -o output/pb-go cmd/server/main.go
+	go build -race -o output/pb-go cmd/server/main.go
 	ls -alh ./output/
 client:
-	go build -o output/pb-cli cmd/client/main.go
+	go build -race -o output/pb-cli cmd/client/main.go
 	ls -alh ./output/
 all-platform:generate
 	OUTPUT=./output/pb-go ./scripts/build-all.sh ./cmd/server/main.go
