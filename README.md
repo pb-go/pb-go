@@ -5,7 +5,7 @@
 Yet Another PasteBin implemented in Golang.
 
 ![GitHub stars](https://img.shields.io/github/stars/pb-go/pb-go?style=social)
-![Go Report](https://goreportcard.com/badge/github.com/pb-go/pb-go)
+[![Go Report Card](https://goreportcard.com/badge/github.com/pb-go/pb-go)](https://goreportcard.com/report/github.com/pb-go/pb-go)
 ![Go CI Build Status](https://github.com/pb-go/pb-go/workflows/Go/badge.svg)
 ![GitHub](https://img.shields.io/github/license/pb-go/pb-go)
 ![GitHub last commit](https://img.shields.io/github/last-commit/pb-go/pb-go)
