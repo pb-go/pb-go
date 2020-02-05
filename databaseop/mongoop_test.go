@@ -48,7 +48,7 @@ func TestMongoDBConn(t *testing.T) {
 	testdt1 := UserData{
 		WaitVerify:   true,
 		ReadThenBurn: true,
-		ShortId:      "2s4D",
+		ShortID:      "2s4D",
 		UserIP:       IPval,
 		ExpireAt:     UserDT,
 		Data:         utils.Pack2BinData([]byte("testdata001")),

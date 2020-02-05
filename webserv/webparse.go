@@ -7,7 +7,7 @@ import (
 	"github.com/pb-go/pb-go/config"
 	"github.com/pb-go/pb-go/contenttools"
 	"github.com/pb-go/pb-go/databaseop"
-	_ "github.com/pb-go/pb-go/statik"
+	_ "github.com/pb-go/pb-go/statik" // indirect
 	"github.com/pb-go/pb-go/templates"
 	"github.com/pb-go/pb-go/utils"
 	"github.com/rakyll/statik/fs"
@@ -20,10 +20,12 @@ import (
 	"time"
 )
 
+// StatikFS Global Variable
 var (
 	STFS http.FileSystem
 )
 
+// InitStatikFS : Extract assets from compiled go file
 func InitStatikFS(stfs *http.FileSystem) {
 	var err error
 	*stfs, err = fs.New()
@@ -32,6 +34,7 @@ func InitStatikFS(stfs *http.FileSystem) {
 	}
 }
 
+// UserUploadParse : Upload API Processing Function
 func UserUploadParse(c *fasthttp.RequestCtx) {
 	var err error
 	// init obj
@@ -68,7 +71,7 @@ func UserUploadParse(c *fasthttp.RequestCtx) {
 		return
 	}
 	// given shortid
-	userForm.ShortId, _ = utils.GetNanoID()
+	userForm.ShortID, _ = utils.GetNanoID()
 	userForm.PwdIsSet = len(string(userPwd)) >= 1
 	userForm.UserIP, _ = primitive.ParseDecimal128(rmtIPhd)
 	// then detect if enable abuse detection
@@ -93,7 +96,7 @@ func UserUploadParse(c *fasthttp.RequestCtx) {
 		userForm.WaitVerify = true
 		userForm.ExpireAt = primitive.NewDateTimeFromTime(time.Now().Add(5 * time.Minute))
 		// then return recaptcha url, set id param in url using rawurl_b64.
-		tempurlid := base64.RawURLEncoding.EncodeToString([]byte(userForm.ShortId))
+		tempurlid := base64.RawURLEncoding.EncodeToString([]byte(userForm.ShortID))
 		err = databaseop.GlobalMDBC.ItemCreate(userForm)
 		if err != nil {
 			c.SetStatusCode(http.StatusBadGateway)
@@ -112,7 +115,7 @@ func UserUploadParse(c *fasthttp.RequestCtx) {
 	// return publish url instead
 	c.SetStatusCode(http.StatusOK)
 	c.SetContentType("text/plain")
-	c.SetBodyString("Published at https://" + config.ServConf.Network.Host + "/" + userForm.ShortId)
+	c.SetBodyString("Published at https://" + config.ServConf.Network.Host + "/" + userForm.ShortID)
 	return
 }
 
@@ -145,6 +148,7 @@ func readFromEmbed(statikfs http.FileSystem, filenm string, c *fasthttp.RequestC
 	return
 }
 
+// ShowSnip : Root Handler Function
 func ShowSnip(c *fasthttp.RequestCtx) {
 	tmpvar := c.UserValue("shortId")
 	switch tmpvar {
@@ -198,6 +202,7 @@ func ShowSnip(c *fasthttp.RequestCtx) {
 	}
 }
 
+// DeleteSnip : Remove Snippet
 func DeleteSnip(c *fasthttp.RequestCtx) {
 	masterkey := string(c.Request.Header.Peek("X-Master-Key"))
 	if masterkey == "" {
@@ -222,6 +227,7 @@ func DeleteSnip(c *fasthttp.RequestCtx) {
 	}
 }
 
+// StartVerifyCAPT : Accept Captcha Token and do SSV
 func StartVerifyCAPT(c *fasthttp.RequestCtx) {
 	if !config.ServConf.Recaptcha.Enable {
 		c.SetStatusCode(http.StatusForbidden)
