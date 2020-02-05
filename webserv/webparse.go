@@ -2,6 +2,7 @@ package webserv
 
 import (
 	"encoding/base64"
+	"encoding/binary"
 	"github.com/pb-go/pb-go/config"
 	"github.com/pb-go/pb-go/content_tools"
 	"github.com/pb-go/pb-go/databaseop"
@@ -11,8 +12,10 @@ import (
 	"github.com/rakyll/statik/fs"
 	"github.com/valyala/fasthttp"
 	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 	"log"
 	"net/http"
+	"time"
 )
 
 var (
@@ -28,9 +31,22 @@ func InitStatikFS(stfs *http.FileSystem){
 }
 
 func UserUploadParse(c *fasthttp.RequestCtx) {
+	// init obj
+	var userForm = databaseop.UserData{}
 	// first parse user form
+	userPwd := c.FormValue("p")
+	userExpire := int(binary.BigEndian.Uint16(c.FormValue("e")))
+	userData := c.FormValue("d")
+	// calculate expire
+	// if recaptcha enabled, set to 5min expires first,
+	if config.ServConf.Recaptcha.Enable {
+		userForm.ExpireAt = primitive.NewDateTimeFromTime(time.Now().Add(5 * time.Minute))
+	}
+	primitive.NewDateTimeFromTime(time.Now().Add(userExpire * time.Hour))
+
+
+
 	// then encrypt
-	// if recaptcha enabled, set to 5min expires,
 	// then return recaptcha url, set id param in url using rawurl_b64.
 	// else, set to 24hrs, then publish.
 	// return publish url instead
@@ -77,7 +93,8 @@ func ShowSnip(c *fasthttp.RequestCtx) {
 		return
 	case "submit.html":
 		c.SetContentType("text/html; charset=utf-8")
-		readFromEmbed(STFS, "/submit.html", c)
+		c.SetStatusCode(http.StatusOK)
+		c.SetBodyString(templates.ShowSubmitPage())
 		return
 	case "favicon.ico":
 		c.SetContentType("image/vnd.microsoft.icon")
@@ -86,7 +103,12 @@ func ShowSnip(c *fasthttp.RequestCtx) {
 	case "showVerify":
 		c.SetContentType("text/html; charset=utf-8")
 		c.SetStatusCode(http.StatusOK)
-		c.SetBodyString(templates.VerifyPageRend(config.ServConf.Recaptcha.Site_key))
+		c.SetBodyString(templates.VerifyPageRend())
+		return
+	case "status":
+		c.SetContentType("text/plain")
+		c.SetStatusCode(http.StatusOK)
+		c.SetBodyString(templates.ServStatus())
 		return
 	default:
 		filter1 := bson.M{"shortId": tmpvar}
@@ -164,6 +186,7 @@ func StartVerifyCAPT(c *fasthttp.RequestCtx) {
 		update1 := bson.D{
 			{"$set", bson.D {
 				{"waitVerify", false},
+				{"expireAt", primitive.NewDateTimeFromTime(time.Now().Add(24 * time.Hour))},
 			}},
 		}
 		err = databaseop.GlobalMDBC.ItemUpdate(filter1, update1)

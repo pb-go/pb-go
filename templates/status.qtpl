@@ -1,0 +1,10 @@
+{% import "github.com/pb-go/pb-go/config" %}
+
+{% func ServStatus() %}
+    Server Status: Running
+    Server Configuration:
+        CAPTCHA REQUIRED: {%v config.ServConf.Recaptcha.Enable %}
+        DEFAULT (AND MAX) EXPIRE HRS: {%d config.ServConf.Content.Expire_hrs %}
+        UPLOAD FILE ABUSE CHECK: {%v config.ServConf.Content.Detect_abuse %}
+        ALLOW BASE64 ENCODED DATA: {%v config.ServConf.Content.Allow_Base64Encode %}
+{% endfunc %}

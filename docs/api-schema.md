@@ -42,9 +42,11 @@ If you getting a notice about CAPTCHA test, it will show you another URL instead
 GET /<SHORTID>?f=<FORMAT>&p=<PASSWD> HTTP/1.1
 ```
 
-If `f` is raw, you will not get syntax-highlighted output.
+If `f` is `raw`, you will not get syntax-highlighted output. Other values are invalid.
 
 The code syntax highlighting is done in client side using Google Prettify.js ,
+
+Prettify.js will automatically detect the programming language of the snippet. (Yes, same version as SOF!)
 
 Response Code:
 

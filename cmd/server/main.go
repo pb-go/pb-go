@@ -1,7 +1,7 @@
 //go:generate go get -u github.com/valyala/quicktemplate/qtc
 //go:generate qtc -dir=../../templates
 //go:generate go get -u github.com/rakyll/statik
-//go:generate bash -c "cd ../../; statik -src=static/"
+//go:generate bash -c "cd ../../; statik -f -src=static/"
 
 package main
 
@@ -35,7 +35,7 @@ func printVersion() {
 	log.Println("This Program is licensed under AGPLv3.")
 }
 
-func startServer(conf config.ServConfig) error {
+func startServer() error {
 	var err error
 	// extract statikfs
 	webserv.InitStatikFS(&webserv.STFS)
@@ -120,7 +120,7 @@ func main() {
 				os.Exit(14)
 			} else {
 				// start server with graceful restart
-				err := startServer(config.ServConf)
+				err := startServer()
 				if err != nil {
 					os.Exit(1)
 				}
