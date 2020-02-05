@@ -13,7 +13,7 @@ func ContentValidityCheck(data []byte) bool {
 	if detectedType != types.Unknown && err != filetype.ErrEmptyBuffer {
 		return false
 	}
-	if !config.ServConf.Content.Allow_Base64Encode {
+	if !config.ServConf.Content.AllowBase64encode {
 		var abandonedDecoded []byte
 		_, decodeErr1 := base64.RawStdEncoding.Decode(abandonedDecoded, data)
 		_, decodeErr2 := base64.RawURLEncoding.Decode(abandonedDecoded, data)

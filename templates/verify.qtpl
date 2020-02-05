@@ -11,7 +11,7 @@
 </head>
 <body onload="getDataFromURI()">
 <form action="/api/g_verify" method="POST">
-    <div class="g-recaptcha" data-sitekey="{%s config.ServConf.Recaptcha.Site_key %}" data-expired-callback="disableBtn" data-callback="enableBtn"></div>
+    <div class="g-recaptcha" data-sitekey="{%s config.ServConf.Recaptcha.SiteKey %}" data-expired-callback="disableBtn" data-callback="enableBtn"></div>
     <br/>
     <input type="hidden" id="snipid" name="snipid">
     <input type="submit" id="verchk" disabled value="Submit">

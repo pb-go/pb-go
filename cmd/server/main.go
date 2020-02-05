@@ -54,7 +54,7 @@ func startServer() error {
 	// if db connection is lost, we might need to reconnect.
 	databaseop.GlobalMDBC = databaseop.MongoDB{
 		DbConn:         databaseop.GlobalMGC,
-		DbURI:          config.ServConf.Network.Mongodb_url,
+		DbURI:          config.ServConf.Network.MongodbURL,
 		DbColl:         mongo.Collection{},
 		DefaultDB:      "pbgo",
 		DefaultColl:    "userdata",
@@ -137,7 +137,7 @@ func main() {
 		signal.Notify(osSignals, os.Interrupt, os.Kill, syscall.SIGTERM)
 		<-osSignals
 		log.Println("Signal Received to shutdown server...")
-		if err := fahtserv.Shutdown(); err != nil{
+		if err := fahtserv.Shutdown(); err != nil {
 			log.Fatalf("Server Shutdown Failed: %v", err)
 		}
 		log.Println("Server exit successfully.")
