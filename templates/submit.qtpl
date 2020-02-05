@@ -38,7 +38,7 @@
     <form method="post" action="/api/upload" enctype="multipart/form-data">
         <div class="form-group">
             <label for="expire4">Expire After: </label><output name="expire4Val"></output> hrs<br>
-            <span>Set to 0 means burn after read, allowed value: 0 ~ {%d config.ServConf.Content.Expire_hrs %} , default is the median number. Forced Expire after {%d config.ServConf.Content.Expire_hrs %} h.</span>
+            <span>Set to 0 means burn after read, allowed value: 0 ~ {%d config.ServConf.Content.ExpireHrs %} , default is the median number. Forced Expire after {%d config.ServConf.Content.ExpireHrs %} h.</span>
             <input type="range" min=0 max={%d config.ServConf.Content.Expire_hrs %} class="form-control" id="expire4" name="d" oninput="expire4Val.value = expire4.value">
         </div>
         <div class="form-group">
