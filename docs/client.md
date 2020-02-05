@@ -47,6 +47,8 @@ pb-cli upload [options] <file>
 -p                Optional. Private share. Will using a random password for private share.
 -P <PASSWORD>     Optional. Private share with specificated password.
 -e <EXPIRE>       Optional. Set to 0 means burn-after-read. Default 24. (unit: hrs)
+
+If your setting is not allowed by server, the request will be rejected and the client will show you the server limitation. You may retrigger another valid upload request.
 ```
 
 When file is not given, `pb-cli` will read data from `stdin`, like as a pipe.
