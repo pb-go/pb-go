@@ -74,6 +74,15 @@ func UserUploadParse(c *fasthttp.RequestCtx) {
 	if config.ServConf.Recaptcha.Enable {
 		userForm.WaitVerify = true
 		userForm.ExpireAt = primitive.NewDateTimeFromTime(time.Now().Add(5 * time.Minute))
+		// then return recaptcha url, set id param in url using rawurl_b64.
+		tempurlid := base64.RawURLEncoding.EncodeToString([]byte(userForm.ShortId))
+		err = databaseop.GlobalMDBC.ItemCreate(userForm)
+		if err != nil{
+			c.SetStatusCode(http.StatusBadGateway)
+			return
+		}
+		c.Redirect("/showVerify?id=" + tempurlid, http.StatusFound)   // use 302, instead of 307.
+		return
 	}else {
 		userForm.ExpireAt = primitive.NewDateTimeFromTime(time.Now().Add(time.Duration(config.ServConf.Content.Expire_hrs) * time.Hour))
 		if userExpire > 0 {
@@ -82,8 +91,11 @@ func UserUploadParse(c *fasthttp.RequestCtx) {
 			userForm.ReadThenBurn = true
 		}
 	}
-	// then return recaptcha url, set id param in url using rawurl_b64.
 	// return publish url instead
+	c.SetStatusCode(http.StatusOK)
+	c.SetContentType("text/plain")
+	c.SetBodyString("Published at https://" + config.ServConf.Network.Host + "/" + userForm.ShortId)
+	return
 }
 
 func setShowSnipRenderData(userdt *databaseop.UserData, ctx *fasthttp.RequestCtx, israw bool) {
