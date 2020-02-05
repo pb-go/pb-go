@@ -35,11 +35,11 @@
 # Though more platforms may be supported (freebsd/386), they have been removed
 # from the standard ports/downloads and therefore removed from this list.
 #
-PLATFORMS="darwin/amd64" # amd64 only as of go1.5
+PLATFORMS="darwin/amd64"                         # amd64 only as of go1.5
 PLATFORMS="$PLATFORMS windows/amd64 windows/386" # arm compilation not available for Windows
 PLATFORMS="$PLATFORMS linux/amd64 linux/386"
 PLATFORMS="$PLATFORMS freebsd/amd64"
-PLATFORMS="$PLATFORMS netbsd/amd64" # amd64 only as of go1.6
+PLATFORMS="$PLATFORMS netbsd/amd64"  # amd64 only as of go1.6
 PLATFORMS="$PLATFORMS openbsd/amd64" # amd64 only as of go1.6
 
 # ARMBUILDS lists the platforms that are currently supported.  From this list
@@ -67,11 +67,8 @@ GC_FLAGS="-trimpath -race -ldflags '-s -w'"
 
 type setopt >/dev/null 2>&1
 
-SCRIPT_NAME=`basename "$0"`
+SCRIPT_NAME=$(basename "$0")
 FAILURES=""
-SOURCE_FILE=`echo $@ | sed 's/\.go//'`
-CURRENT_DIRECTORY=${PWD##*/}
-#OUTPUT=${SOURCE_FILE:-$CURRENT_DIRECTORY} # if no src file given, use current dir name
 
 for PLATFORM in $PLATFORMS; do
   GOOS=${PLATFORM%/*}
@@ -87,7 +84,7 @@ done
 if [[ $PLATFORMS_ARM == *"linux"* ]]; then
   CMD="CGO_ENABLED=0 GOOS=linux GOARCH=arm64 go build ${GC_FLAGS} -o ${OUTPUT}-linux-arm64 $@"
   echo "${CMD}"
-  eval $CMD || FAILURES="${FAILURES} ${PLATFORM}"
+  eval "${CMD}" || FAILURES="${FAILURES} ${PLATFORM}"
 fi
 for GOOS in $PLATFORMS_ARM; do
   GOARCH="arm"

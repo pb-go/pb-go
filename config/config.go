@@ -9,15 +9,18 @@ import (
 	"strings"
 )
 
+// software version, sentry bug tracking id
 const (
 	CurrentVer string = "v0.1.0"
 	CurrentDSN string = "https://72dd7f93900d4742a436a525692a13ed@sentry.io/2124482"
 )
 
+// global var for global server config read
 var (
 	ServConf ServConfig
 )
 
+// ServConfig consists of 4 parts
 type ServConfig struct {
 	Network   Network   `yaml:"network"`
 	Recaptcha Recaptcha `yaml:"recaptcha"`
@@ -25,59 +28,67 @@ type ServConfig struct {
 	Content   Content   `yaml:"content"`
 }
 
+//Network : subconfig of ServConf
 type Network struct {
-	Listen      string `yaml:"listen"`
-	Host		string `yaml:"host"`
-	Mongodb_url string `yaml:"mongodb_url"`
+	Listen     string `yaml:"listen"`
+	Host       string `yaml:"host"`
+	MongodbURL string `yaml:"mongodb_url"`
 }
 
+// Recaptcha : subconfig of ServConf
 type Recaptcha struct {
-	Enable     bool   `yaml:"enable"`
-	Secret_key string `yaml:"secret_key,omitempty"`
-	Site_key   string `yaml:"site_key,omitempty"`
+	Enable    bool   `yaml:"enable"`
+	SecretKey string `yaml:"secret_key,omitempty"`
+	SiteKey   string `yaml:"site_key,omitempty"`
 }
 
+// Security : subconfig about data encryption and administration
+// must fulfill chacha20 standard
 type Security struct {
-	Master_key       string `yaml:"master_key"`
-	Encryption_key   string `yaml:"encryption_key"`
-	Encryption_nonce string `yaml:"encryption_nonce"`
+	MasterKey       string `yaml:"master_key"`
+	EncryptionKey   string `yaml:"encryption_key"`
+	EncryptionNonce string `yaml:"encryption_nonce"`
 }
 
+// Content : subconfig about content abusing detection
 type Content struct {
-	Detect_abuse       bool `yaml:"detect_abuse"`
-	Expire_hrs         int  `yaml:"expire_hrs"`
-	Allow_Base64Encode bool `yaml:"allow_b64enc"`
+	DetectAbuse       bool `yaml:"detect_abuse"`
+	ExpireHrs         int  `yaml:"expire_hrs"`
+	AllowBase64encode bool `yaml:"allow_b64enc"`
 }
 
+// CheckConfig : detect uri validity, check needed config for recaptcha, check max expire, check cryptography requirement
 func CheckConfig(servConf ServConfig) int {
-	isDBURI := strings.Contains(servConf.Network.Mongodb_url, "mongodb")
+	isDBURI := strings.Contains(servConf.Network.MongodbURL, "mongodb")
 	if !isDBURI {
 		return 2
 	}
 	if servConf.Recaptcha.Enable {
-		isCAPTsec := len(servConf.Recaptcha.Secret_key) == 40
-		isCAPTsit := len(servConf.Recaptcha.Site_key) == 40
+		isCAPTsec := len(servConf.Recaptcha.SecretKey) == 40
+		isCAPTsit := len(servConf.Recaptcha.SiteKey) == 40
 		if !(isCAPTsec && isCAPTsit) {
 			return 3
 		}
 	}
-	if (servConf.Content.Expire_hrs > 24) || (servConf.Content.Expire_hrs < 0) {
+	if (servConf.Content.ExpireHrs > 24) || (servConf.Content.ExpireHrs < 0) {
 		return 3
 	}
-	isMasterKeySec := len(servConf.Security.Master_key) >= 12
-	isEncrKeySec := len(servConf.Security.Encryption_key) == 32
-	isEncrNonceSec := len(servConf.Security.Encryption_nonce) == 12
+	isMasterKeySec := len(servConf.Security.MasterKey) >= 12
+	isEncrKeySec := len(servConf.Security.EncryptionKey) == 32
+	isEncrNonceSec := len(servConf.Security.EncryptionNonce) == 12
 	if !(isMasterKeySec || isEncrKeySec || isEncrNonceSec) {
 		return 1
 	}
 	return 0
 }
 
+// FileExist : check if file exists, utils
 func FileExist(filepath string) bool {
 	info, err := os.Stat(filepath)
 	return err == nil && !info.IsDir()
 }
 
+// LoadConfig : config load function, read from file.
 func LoadConfig(filePath string) (ServConfig, error) {
 	var conf = ServConfig{}
 	yamlFd, err := ioutil.ReadFile(filePath)
@@ -91,16 +102,17 @@ func LoadConfig(filePath string) (ServConfig, error) {
 		log.Fatalf("YAML Decode Error. %#v", err)
 		return conf, err
 	}
+	// config validity check.
 	var status int = CheckConfig(conf)
 	switch status {
 	case 0:
-		log.Println("Config Validation successfully finished!")
+		log.Println("Config validation successfully finished!")
 	case 1:
-		err = errors.New("Security Option not met standard requirement.")
+		err = errors.New("security option not met standard requirement")
 	case 2:
-		err = errors.New("MongoDB URI not set or invalid URI schema.")
+		err = errors.New("mongoDB URI not set or invalid URI schema")
 	case 3:
-		err = errors.New("The value is invalid or conflicted in settings.")
+		err = errors.New("the value is invalid or conflicted in settings")
 	}
 	return conf, err
 }

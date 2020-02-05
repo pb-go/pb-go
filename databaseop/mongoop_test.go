@@ -63,7 +63,7 @@ func TestMongoDBConn(t *testing.T) {
 	filter1 := bson.M{"shortId": "2s4D"}
 	var readOutData UserData
 	readOutData, err = mgcli.ItemRead(filter1)
-	if err != nil && readOutData.EqualsTo(UserData{})  {
+	if err != nil && readOutData.EqualsTo(UserData{}) {
 		t.Fail()
 	} else {
 		log.Println(readOutData)
