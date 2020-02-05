@@ -89,7 +89,7 @@ func FileExist(filepath string) bool {
 }
 
 func LoadConfig(filePath string) (ServConfig, error) {
-	// config load function
+	// config load function, read from file.
 	var conf = ServConfig{}
 	yamlFd, err := ioutil.ReadFile(filePath)
 	log.Printf("Loaded Config: %s \n", filePath)
@@ -102,16 +102,17 @@ func LoadConfig(filePath string) (ServConfig, error) {
 		log.Fatalf("YAML Decode Error. %#v", err)
 		return conf, err
 	}
+	// config validity check.
 	var status int = CheckConfig(conf)
 	switch status {
 	case 0:
-		log.Println("Config Validation successfully finished!")
+		log.Println("Config validation successfully finished!")
 	case 1:
-		err = errors.New("Security Option not met standard requirement.")
+		err = errors.New("security option not met standard requirement")
 	case 2:
-		err = errors.New("MongoDB URI not set or invalid URI schema.")
+		err = errors.New("mongoDB URI not set or invalid URI schema")
 	case 3:
-		err = errors.New("The value is invalid or conflicted in settings.")
+		err = errors.New("the value is invalid or conflicted in settings")
 	}
 	return conf, err
 }
