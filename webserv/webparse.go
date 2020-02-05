@@ -1,6 +1,7 @@
 package webserv
 
 import (
+	"bytes"
 	"encoding/base64"
 	"encoding/binary"
 	"github.com/pb-go/pb-go/config"
@@ -13,6 +14,7 @@ import (
 	"github.com/valyala/fasthttp"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
+	"io"
 	"log"
 	"net/http"
 	"time"
@@ -44,7 +46,23 @@ func UserUploadParse(c *fasthttp.RequestCtx) {
 	// first parse user form
 	userPwd := c.FormValue("p")
 	userExpire := int(binary.BigEndian.Uint16(c.FormValue("e")))
-	userData := c.FormValue("d")
+	userPOSTFdHd, err := c.FormFile("d")
+	if err != nil {
+		c.SetStatusCode(http.StatusBadRequest)
+		return
+	}
+	userPOSTFile, err := userPOSTFdHd.Open()
+	if err != nil {
+		c.SetStatusCode(http.StatusBadRequest)
+		return
+	}
+	userDatabuf := bytes.NewBuffer(nil)
+	if _, err := io.Copy(userDatabuf, userPOSTFile); err != nil {
+		c.SetStatusCode(http.StatusBadRequest)
+		return
+	}
+	userData := userDatabuf.Bytes()
+	_ = userPOSTFile.Close()
 	if userExpire > config.ServConf.Content.Expire_hrs || userExpire < 0 || len(userData) < 1 {
 		c.SetStatusCode(http.StatusBadRequest)
 		return
