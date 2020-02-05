@@ -6,23 +6,39 @@
 
 We guarantee everything that worked with `pb-cli`, also worked with `curl`.
 
+Every command which communicates to server will print log(include http status code) to `stderr`, and print response body to `stdout`.
+
 ## Configuration
 
-You can use `-c file` to provide a config file. If you didn't provide one, it will find config file called `.pb-cli.toml` from current directory then home directory.
+You can use `-c file` to provide a config file. If you didn't provide one, it will find config file called `.pbcli.yaml` from current directory then home directory.
 
-Config file should be written in `toml` like:
+Config file should be written in `yaml` like:
 
-```toml
-host = "http://your.pastebin.bakcend:port"
-master_key = "Same as your config on server"
+```yaml
+host: 'http://your.pastebin.bakcend:port'
+expire: 12
+masterKey: 'Same as your config on server'
 ```
 
-You can use `-h <url>` with any command in `pb-cli`, it is a global flag.
-You can use `-k <master_key>` with `delete` command.
+About `host`:  
+You can use `-h <url>` with any command in `pb-cli`, it is a global flag.  
+You should specify schema(http/https) in url, and no need to add port when using default port(80 for http, 443 for https).  
+Notice we do NOT encrypt data while transporting, we have NO guarantee about transport layer safety, so just use HTTPS.
 
-Using flag in commands will override the value from config file.
+About `masterKey`:  
+You can use `-k <masterKey>` with `delete` command.  
+Only admin has masterKey. It is only for admin usage like delete some pastes.  
+It you are a user, just ignore this.
+
+About `expire`:  
+You can use `-e <expire>` with `upload` command.  
+Default pastes expire time in hours. If you do not set this value or `-e` flag, it will use 24 as expire time.
+
+**Using flag in commands will override the value from config file.**
 
 ## Upload
+
+Upload data to pastebin.
 
 Usage:
 
@@ -37,17 +53,21 @@ When file is not given, `pb-cli` will read data from `stdin`, like as a pipe.
 
 ## Get
 
+Fetching data from patesbin with id.
+
 Usage:
 
 ```text
-pb-cli get <id>
--p <PASSWORD> Optional. Provide password for private share.
+pb-cli get [options] <id>
+-p <PASSWORD>     Optional. Provide password for private share.
 ```
 
 ## Delete
 
+Delete a paste from pastebin with id.(Need admin permission)
 Usage:
 
 ```text
-pb-cli delete <id>
+pb-cli delete [options] <id>
+-k <MASTER_KEY>   Required. Master key in `pb-go` server's config.
 ```
