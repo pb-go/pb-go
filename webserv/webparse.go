@@ -37,12 +37,25 @@ func UserUploadParse(c *fasthttp.RequestCtx) {
 	userPwd := c.FormValue("p")
 	userExpire := int(binary.BigEndian.Uint16(c.FormValue("e")))
 	userData := c.FormValue("d")
+	if userExpire > 24 || userExpire < 0 || len(userData) < 1 {
+		c.SetStatusCode(http.StatusBadRequest)
+		return
+	}
+	// given shortid
+	userForm.ShortId, _ = utils.GetNanoID()
 	// calculate expire
 	// if recaptcha enabled, set to 5min expires first,
 	if config.ServConf.Recaptcha.Enable {
 		userForm.ExpireAt = primitive.NewDateTimeFromTime(time.Now().Add(5 * time.Minute))
+	}else {
+		userForm.ExpireAt = primitive.NewDateTimeFromTime(time.Now().Add(time.Duration(config.ServConf.Content.Expire_hrs) * time.Hour))
+		if userExpire > 0{
+			userForm.ExpireAt = primitive.NewDateTimeFromTime(time.Now().Add(time.Duration(userExpire) * time.Hour))
+		}else if userExpire == 0{
+			userForm.ReadThenBurn = true
+		}
 	}
-	primitive.NewDateTimeFromTime(time.Now().Add(userExpire * time.Hour))
+
 
 
 
@@ -186,7 +199,7 @@ func StartVerifyCAPT(c *fasthttp.RequestCtx) {
 		update1 := bson.D{
 			{"$set", bson.D {
 				{"waitVerify", false},
-				{"expireAt", primitive.NewDateTimeFromTime(time.Now().Add(24 * time.Hour))},
+				{"expireAt", primitive.NewDateTimeFromTime(time.Now().Add(time.Duration(config.ServConf.Content.Expire_hrs) * time.Hour))},
 			}},
 		}
 		err = databaseop.GlobalMDBC.ItemUpdate(filter1, update1)

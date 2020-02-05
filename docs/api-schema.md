@@ -110,3 +110,19 @@ If the `recaptcha.enable` inside the server administrators' config is true, then
 a URI like this `/showVerify?id=<SNIPPET ID WITH URLSAFE BASE64 ENCODED>` and ask user to continue.
 
 If user failed, this snippet will be automatically expired in 2 mins. Else it will give user the published path.
+
+## Server Status
+
+```http request
+GET /status HTTP/1.1
+```
+
+This request will return the configuration of a server.
+
+Including but MAY not limited to:
+
+  - Server is running
+  - Server requires recaptcha or not
+  - Server force expire time set
+  - Server anti-abuse feature enabled or not
+  
