@@ -12,13 +12,14 @@ import (
 	"time"
 )
 
+// GenBlake2B : Pack Blake2B-256 SUM to hex string
 func GenBlake2B(data []byte) string {
 	hashsum := blake2b.Sum256(data)
 	return hex.EncodeToString(hashsum[:])
 }
 
+// EncryptData : ciphertext output as []byte, original text hash output as string
 func EncryptData(src []byte, passwd []byte) ([]byte, string, error) {
-	// ciphertext output as []byte, original text hash output as string
 	// Passwd 32Bytes, Nonce 12Bytes
 	// if Passwd is not satisfying 32 Bytes, use Original Default Encryption Key instead.
 	var nonce = []byte(config.ServConf.Security.EncryptionNonce)
@@ -37,6 +38,7 @@ func EncryptData(src []byte, passwd []byte) ([]byte, string, error) {
 	return ciphertext, hashedpwd, err
 }
 
+// DecryptData : Reverse action as for EncryptData
 func DecryptData(src []byte, passwd []byte) ([]byte, error) {
 	var nonce = []byte(config.ServConf.Security.EncryptionNonce)
 	var usedpwd []byte
@@ -58,6 +60,7 @@ func DecryptData(src []byte, passwd []byte) ([]byte, error) {
 	return plaintext, err
 }
 
+// GetUTCTimeHash : MD5 Hash for verification of administration and masterkey
 func GetUTCTimeHash(masterkey string) string {
 	hmasterkey := "{" + masterkey + "}"
 	currentTime := "{" + string(time.Now().UTC().Format(time.RFC822)) + "}"
@@ -66,6 +69,7 @@ func GetUTCTimeHash(masterkey string) string {
 	return hashed
 }
 
+// GetNanoID : Nano ID Getter
 func GetNanoID() (string, error) {
 	id, err := gonanoid.Nanoid(4)
 	if err != nil {

@@ -7,13 +7,14 @@ import (
 	"github.com/pb-go/pb-go/config"
 )
 
+// ContentValidityCheck : Check if has conflicted or empty invalid config in file
 func ContentValidityCheck(data []byte) bool {
 	// https://stackoverflow.com/questions/42758054/read-multipart-form-data-as-byte-in-go/42758241
 	detectedType, err := filetype.Match(data)
 	if detectedType != types.Unknown && err != filetype.ErrEmptyBuffer {
 		return false
 	}
-	if !config.ServConf.Content.AllowBase64encode {
+	if !config.ServConf.Content.AllowBase64Encode {
 		var abandonedDecoded []byte
 		_, decodeErr1 := base64.RawStdEncoding.Decode(abandonedDecoded, data)
 		_, decodeErr2 := base64.RawURLEncoding.Decode(abandonedDecoded, data)

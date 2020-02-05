@@ -40,9 +40,6 @@ If you wanna use `content.allow_b64enc`, you must enable `detect_abuse` at the s
 > it cannot be longer than 24h, cuz the database will automatically expire after 24h in consideration of storage and 
 > anti-abuse. Set to `0` means burn after read, the valid values must be 0~24h.
 
-
-
-
 ## Database
 
 MongoDB should be configured as described in DB schema file to make sure the data TTL is correctly set. You do need to add SCRAM authentication to your DB and make sure your DB listened just on localhost.

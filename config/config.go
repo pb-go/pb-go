@@ -54,7 +54,7 @@ type Security struct {
 type Content struct {
 	DetectAbuse       bool `yaml:"detect_abuse"`
 	ExpireHrs         int  `yaml:"expire_hrs"`
-	AllowBase64encode bool `yaml:"allow_b64enc"`
+	AllowBase64Encode bool `yaml:"allow_b64enc"`
 }
 
 // CheckConfig : detect uri validity, check needed config for recaptcha, check max expire, check cryptography requirement
@@ -67,6 +67,11 @@ func CheckConfig(servConf ServConfig) int {
 		isCAPTsec := len(servConf.Recaptcha.SecretKey) == 40
 		isCAPTsit := len(servConf.Recaptcha.SiteKey) == 40
 		if !(isCAPTsec && isCAPTsit) {
+			return 3
+		}
+	}
+	if !servConf.Content.AllowBase64Encode {
+		if !servConf.Content.DetectAbuse {
 			return 3
 		}
 	}
@@ -103,7 +108,7 @@ func LoadConfig(filePath string) (ServConfig, error) {
 		return conf, err
 	}
 	// config validity check.
-	var status int = CheckConfig(conf)
+	var status = CheckConfig(conf)
 	switch status {
 	case 0:
 		log.Println("Config validation successfully finished!")
