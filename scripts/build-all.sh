@@ -69,7 +69,6 @@ type setopt >/dev/null 2>&1
 
 SCRIPT_NAME=`basename "$0"`
 FAILURES=""
-SOURCE_FILE=`echo $@ | sed 's/\.go//'`
 
 for PLATFORM in $PLATFORMS; do
   GOOS=${PLATFORM%/*}
