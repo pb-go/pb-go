@@ -1,4 +1,4 @@
-package databaseop
+package utils
 
 import (
 	"github.com/pkg/errors"
@@ -29,10 +29,10 @@ func IP2Intstr(ipaddr string) (string, error) {
 	return ipstr, nil
 }
 
-func Pack2BinData(data string) primitive.Binary {
+func Pack2BinData(data []byte) primitive.Binary {
 	var bd = primitive.Binary{
 		Subtype: 0x00,
-		Data:    []byte(data),
+		Data:    data,
 	}
 	return bd
 }

@@ -32,11 +32,16 @@ The `masterkey` must be longer than 12 bytes, `encryption_key` will be used for 
 
 If `content.detect_abuse` is enabled, the system will only allow to upload pure text.
 
+If you wanna use `content.allow_b64enc`, you must enable `detect_abuse` at the same time.
+
 `content.default_expire` defined the maximum TTL by default, CANNOT and SHOULD NOT BE LONGER than 24, the unit is hour.
 
 > Note: `default_expire` is the maximum TTL allowed, user may override their own snippet TTL by define themselves, but
 > it cannot be longer than 24h, cuz the database will automatically expire after 24h in consideration of storage and 
 > anti-abuse. Set to `0` means burn after read, the valid values must be 0~24h.
+
+
+
 
 ## Database
 

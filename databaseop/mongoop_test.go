@@ -1,6 +1,7 @@
 package databaseop
 
 import (
+	"github.com/pb-go/pb-go/utils"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
@@ -36,7 +37,7 @@ func TestMongoDBConn(t *testing.T) {
 		t.Fail()
 	}
 	var tempIP string
-	tempIP, err = IP2Intstr("113.55.13.1")
+	tempIP, err = utils.IP2Intstr("113.55.13.1")
 	if err != nil {
 		t.Fail()
 	}
@@ -45,14 +46,14 @@ func TestMongoDBConn(t *testing.T) {
 	var UserDT primitive.DateTime
 	UserDT = primitive.NewDateTimeFromTime(time.Now().Add(24 * time.Hour))
 	testdt1 := UserData{
-		WaitVerify: true,
+		WaitVerify:   true,
 		ReadThenBurn: true,
-		ShortId:    "2s4D",
-		UserIP:     IPval,
-		ExpireAt:   UserDT,
-		Data:       Pack2BinData("testdata001"),
-		PwdIsSet:   true,
-		Password:   "He1loWorld234",
+		ShortId:      "2s4D",
+		UserIP:       IPval,
+		ExpireAt:     UserDT,
+		Data:         utils.Pack2BinData([]byte("testdata001")),
+		PwdIsSet:     true,
+		Password:     "He1loWorld234",
 	}
 	err = mgcli.ItemCreate(testdt1)
 	if err != nil {
@@ -70,7 +71,7 @@ func TestMongoDBConn(t *testing.T) {
 	time.Sleep(5 * time.Second)
 	update1 := bson.D{
 		{"$set", bson.D{
-			{"data", Pack2BinData("testdata002")},
+			{"data", utils.Pack2BinData("testdata002")},
 		}},
 	}
 	err = mgcli.ItemUpdate(filter1, update1)

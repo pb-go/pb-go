@@ -2,6 +2,7 @@ package utils
 
 import (
 	"crypto/md5"
+	"encoding/hex"
 	"fmt"
 	gonanoid "github.com/matoous/go-nanoid"
 	"github.com/pb-go/pb-go/config"
@@ -13,7 +14,7 @@ import (
 
 func GenBlake2B(data []byte) string {
 	hashsum := blake2b.Sum256(data)
-	return string(hashsum[:])
+	return hex.EncodeToString(hashsum[:])
 }
 
 func EncryptData(src []byte, passwd []byte) ([]byte, string, error) {
