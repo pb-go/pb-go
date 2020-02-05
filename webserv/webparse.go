@@ -63,7 +63,7 @@ func UserUploadParse(c *fasthttp.RequestCtx) {
 	}
 	userData := userDatabuf.Bytes()
 	_ = userPOSTFile.Close()
-	if userExpire > config.ServConf.Content.Expire_hrs || userExpire < 0 || len(userData) < 1 {
+	if userExpire > config.ServConf.Content.ExpireHrs || userExpire < 0 || len(userData) < 1 {
 		c.SetStatusCode(http.StatusBadRequest)
 		return
 	}
@@ -72,7 +72,7 @@ func UserUploadParse(c *fasthttp.RequestCtx) {
 	userForm.PwdIsSet = len(string(userPwd)) >= 1
 	userForm.UserIP, _ = primitive.ParseDecimal128(rmtIPhd)
 	// then detect if enable abuse detection
-	if config.ServConf.Content.Detect_abuse {
+	if config.ServConf.Content.DetectAbuse {
 		if !utils.ContentValidityCheck(userData) {
 			c.SetStatusCode(http.StatusForbidden)
 			return
@@ -102,7 +102,7 @@ func UserUploadParse(c *fasthttp.RequestCtx) {
 		c.Redirect("/showVerify?id=" + tempurlid, http.StatusFound)   // use 302, instead of 307.
 		return
 	}else {
-		userForm.ExpireAt = primitive.NewDateTimeFromTime(time.Now().Add(time.Duration(config.ServConf.Content.Expire_hrs) * time.Hour))
+		userForm.ExpireAt = primitive.NewDateTimeFromTime(time.Now().Add(time.Duration(config.ServConf.Content.ExpireHrs) * time.Hour))
 		if userExpire > 0 {
 			userForm.ExpireAt = primitive.NewDateTimeFromTime(time.Now().Add(time.Duration(userExpire) * time.Hour))
 		}else if userExpire == 0{
@@ -204,7 +204,7 @@ func DeleteSnip(c *fasthttp.RequestCtx) {
 		c.SetStatusCode(http.StatusForbidden)
 		return
 	}
-	legalkey := utils.GetUTCTimeHash(config.ServConf.Security.Master_key)
+	legalkey := utils.GetUTCTimeHash(config.ServConf.Security.MasterKey)
 	if masterkey == legalkey {
 		curshortid := string(c.FormValue("id"))
 		filter1 := bson.M{"shortId": curshortid}
@@ -249,7 +249,7 @@ func StartVerifyCAPT(c *fasthttp.RequestCtx) {
 		update1 := bson.D{
 			{"$set", bson.D {
 				{"waitVerify", false},
-				{"expireAt", primitive.NewDateTimeFromTime(time.Now().Add(time.Duration(config.ServConf.Content.Expire_hrs) * time.Hour))},
+				{"expireAt", primitive.NewDateTimeFromTime(time.Now().Add(time.Duration(config.ServConf.Content.ExpireHrs) * time.Hour))},
 			}},
 		}
 		err = databaseop.GlobalMDBC.ItemUpdate(filter1, update1)

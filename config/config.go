@@ -19,6 +19,7 @@ var (
 )
 
 type ServConfig struct {
+	// server side config file
 	Network   Network   `yaml:"network"`
 	Recaptcha Recaptcha `yaml:"recaptcha"`
 	Security  Security  `yaml:"security"`
@@ -26,47 +27,55 @@ type ServConfig struct {
 }
 
 type Network struct {
-	Listen      string `yaml:"listen"`
-	Host		string `yaml:"host"`
-	Mongodb_url string `yaml:"mongodb_url"`
+	// subconfig about network
+	Listen     string `yaml:"listen"`
+	Host       string `yaml:"host"`
+	MongodbUrl string `yaml:"mongodb_url"`
 }
 
 type Recaptcha struct {
-	Enable     bool   `yaml:"enable"`
-	Secret_key string `yaml:"secret_key,omitempty"`
-	Site_key   string `yaml:"site_key,omitempty"`
+	// subconfig about recaptcha
+	Enable    bool   `yaml:"enable"`
+	SecretKey string `yaml:"secret_key,omitempty"`
+	SiteKey   string `yaml:"site_key,omitempty"`
 }
 
 type Security struct {
-	Master_key       string `yaml:"master_key"`
-	Encryption_key   string `yaml:"encryption_key"`
-	Encryption_nonce string `yaml:"encryption_nonce"`
+	// subconfig about data encryption and administration
+	MasterKey       string `yaml:"master_key"`
+	EncryptionKey   string `yaml:"encryption_key"`
+	EncryptionNonce string `yaml:"encryption_nonce"`
 }
 
 type Content struct {
-	Detect_abuse       bool `yaml:"detect_abuse"`
-	Expire_hrs         int  `yaml:"expire_hrs"`
-	Allow_Base64Encode bool `yaml:"allow_b64enc"`
+	// subconfig about content abusing detection
+	DetectAbuse       bool `yaml:"detect_abuse"`
+	ExpireHrs         int  `yaml:"expire_hrs"`
+	AllowBase64encode bool `yaml:"allow_b64enc"`
 }
 
 func CheckConfig(servConf ServConfig) int {
-	isDBURI := strings.Contains(servConf.Network.Mongodb_url, "mongodb")
+	// detect uri validity
+	isDBURI := strings.Contains(servConf.Network.MongodbUrl, "mongodb")
 	if !isDBURI {
 		return 2
 	}
+	// check needed config for recaptcha
 	if servConf.Recaptcha.Enable {
-		isCAPTsec := len(servConf.Recaptcha.Secret_key) == 40
-		isCAPTsit := len(servConf.Recaptcha.Site_key) == 40
+		isCAPTsec := len(servConf.Recaptcha.SecretKey) == 40
+		isCAPTsit := len(servConf.Recaptcha.SiteKey) == 40
 		if !(isCAPTsec && isCAPTsit) {
 			return 3
 		}
 	}
-	if (servConf.Content.Expire_hrs > 24) || (servConf.Content.Expire_hrs < 0) {
+	// check max expire
+	if (servConf.Content.ExpireHrs > 24) || (servConf.Content.ExpireHrs < 0) {
 		return 3
 	}
-	isMasterKeySec := len(servConf.Security.Master_key) >= 12
-	isEncrKeySec := len(servConf.Security.Encryption_key) == 32
-	isEncrNonceSec := len(servConf.Security.Encryption_nonce) == 12
+	// check cryptography requirement
+	isMasterKeySec := len(servConf.Security.MasterKey) >= 12
+	isEncrKeySec := len(servConf.Security.EncryptionKey) == 32
+	isEncrNonceSec := len(servConf.Security.EncryptionNonce) == 12
 	if !(isMasterKeySec || isEncrKeySec || isEncrNonceSec) {
 		return 1
 	}
@@ -74,11 +83,13 @@ func CheckConfig(servConf ServConfig) int {
 }
 
 func FileExist(filepath string) bool {
+	// check if file exists, utils
 	info, err := os.Stat(filepath)
 	return err == nil && !info.IsDir()
 }
 
 func LoadConfig(filePath string) (ServConfig, error) {
+	// config load function
 	var conf = ServConfig{}
 	yamlFd, err := ioutil.ReadFile(filePath)
 	log.Printf("Loaded Config: %s \n", filePath)

@@ -21,10 +21,10 @@ func EncryptData(src []byte, passwd []byte) ([]byte, string, error) {
 	// ciphertext output as []byte, original text hash output as string
 	// Passwd 32Bytes, Nonce 12Bytes
 	// if Passwd is not satisfying 32 Bytes, use Original Default Encryption Key instead.
-	var nonce = []byte(config.ServConf.Security.Encryption_nonce)
+	var nonce = []byte(config.ServConf.Security.EncryptionNonce)
 	var usedpwd []byte
 	if len(passwd) != 32 {
-		usedpwd = []byte(config.ServConf.Security.Encryption_key)
+		usedpwd = []byte(config.ServConf.Security.EncryptionKey)
 	} else {
 		usedpwd = passwd
 	}
@@ -38,10 +38,10 @@ func EncryptData(src []byte, passwd []byte) ([]byte, string, error) {
 }
 
 func DecryptData(src []byte, passwd []byte) ([]byte, error) {
-	var nonce = []byte(config.ServConf.Security.Encryption_nonce)
+	var nonce = []byte(config.ServConf.Security.EncryptionNonce)
 	var usedpwd []byte
 	if len(passwd) != 32 {
-		usedpwd = []byte(config.ServConf.Security.Encryption_key)
+		usedpwd = []byte(config.ServConf.Security.EncryptionKey)
 	} else {
 		usedpwd = passwd
 	}

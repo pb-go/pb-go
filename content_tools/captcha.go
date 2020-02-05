@@ -31,7 +31,7 @@ func VerifyRecaptchaResp(recaptchaResponse string, remoteIp string) (bool, error
 	req.Header.SetMethod("POST")
 	req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
 	req.SetBodyString(url.Values{
-		"secret":   {config.ServConf.Recaptcha.Secret_key},
+		"secret":   {config.ServConf.Recaptcha.SecretKey},
 		"response": {recaptchaResponse},
 		"remoteip": {remoteIp},
 	}.Encode())

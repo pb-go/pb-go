@@ -54,7 +54,7 @@ func startServer() error {
 	// if db connection is lost, we might need to reconnect.
 	databaseop.GlobalMDBC = databaseop.MongoDB{
 		DbConn:         databaseop.GlobalMGC,
-		DbURI:          config.ServConf.Network.Mongodb_url,
+		DbURI:          config.ServConf.Network.MongodbUrl,
 		DbColl:         mongo.Collection{},
 		DefaultDB:      "pbgo",
 		DefaultColl:    "userdata",
