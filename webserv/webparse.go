@@ -171,7 +171,7 @@ func ShowSnip(c *fasthttp.RequestCtx) {
 	case "status":
 		c.SetContentType("application/json")
 		c.SetStatusCode(http.StatusOK)
-		c.SetBody(retStatusJson())
+		c.SetBody(retStatusJSON())
 		return
 	default:
 		filter1 := bson.M{"shortId": tmpvar}

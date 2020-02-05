@@ -117,12 +117,27 @@ If user failed, this snippet will be automatically expired in 2 mins. Else it wi
 GET /status HTTP/1.1
 ```
 
-This request will return the configuration of a server.
+This request will return the configuration of a server, return a json.
 
 Including but MAY not limited to:
 
-  - Server is running
-  - Server requires recaptcha or not
-  - Server force expire time set
-  - Server anti-abuse feature enabled or not
-  
+-  Server is running
+-  Server requires recaptcha or not
+-  Server force expire time set
+-  Server anti-abuse feature enabled or not
+
+The response can be easily interpreted as the word said.
+
+The schema is:
+
+```json
+{
+  "status": 0,
+  "captcha_enabled": true,
+  "max_expire": 12,
+  "abuse_detection": true,
+  "base64_detection": true
+}
+```
+
+Status code is always `0`, means running, other values should be set according to server config.
