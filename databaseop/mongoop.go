@@ -11,6 +11,7 @@ import (
 	"time"
 )
 
+// MongoDB related global var to avoid lifetime problem.
 var (
 	GlobalMGC  *mongo.Client
 	GlobalMDBC MongoDB
@@ -28,14 +29,14 @@ type MongoDB struct {
 
 type UserData struct {
 	// user data general structure
-	WaitVerify bool                 `bson:"waitVerify" json:"waitVerify"`
-	ReadThenBurn bool				`bson:"readThenBurn" json:"readThenBurn"`
-	ShortId    string               `bson:"shortId" json:"shortId"`
-	UserIP     primitive.Decimal128 `bson:"userIP" json:"userIP"`
-	ExpireAt   primitive.DateTime   `bson:"expireAt" json:"expireAt"`
-	Data       primitive.Binary     `bson:"data" json:"data"`
-	PwdIsSet   bool                 `bson:"pwdIsSet" json:"pwdIsSet"`
-	Password   string               `bson:"passwd" json:"passwd"`
+	WaitVerify   bool                 `bson:"waitVerify" json:"waitVerify"`
+	ReadThenBurn bool                 `bson:"readThenBurn" json:"readThenBurn"`
+	ShortId      string               `bson:"shortId" json:"shortId"`
+	UserIP       primitive.Decimal128 `bson:"userIP" json:"userIP"`
+	ExpireAt     primitive.DateTime   `bson:"expireAt" json:"expireAt"`
+	Data         primitive.Binary     `bson:"data" json:"data"`
+	PwdIsSet     bool                 `bson:"pwdIsSet" json:"pwdIsSet"`
+	Password     string               `bson:"passwd" json:"passwd"`
 }
 
 // only allow bson.M to be used
@@ -100,7 +101,7 @@ func (mdbc MongoDB) ItemRead(filter1 interface{}) (UserData, error) {
 	}
 	var queryRes UserData
 	err := mdbc.DbColl.FindOne(tctx, filter1).Decode(&queryRes)
-	if err != nil || queryRes.EqualsTo(UserData{}){
+	if err != nil || queryRes.EqualsTo(UserData{}) {
 		return UserData{}, err
 	} else {
 		return queryRes, nil

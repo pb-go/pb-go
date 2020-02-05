@@ -61,7 +61,7 @@ func DecryptData(src []byte, passwd []byte) ([]byte, error) {
 func GetUTCTimeHash(masterkey string) string {
 	hmasterkey := "{" + masterkey + "}"
 	currentTime := "{" + string(time.Now().UTC().Format(time.RFC822)) + "}"
-	data := []byte(hmasterkey+currentTime)
+	data := []byte(hmasterkey + currentTime)
 	hashed := fmt.Sprintf("%x", md5.Sum(data))
 	return hashed
 }
@@ -73,4 +73,3 @@ func GetNanoID() (string, error) {
 	}
 	return id, err
 }
-

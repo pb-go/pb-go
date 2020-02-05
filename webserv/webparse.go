@@ -5,11 +5,11 @@ import (
 	"encoding/base64"
 	"encoding/binary"
 	"github.com/pb-go/pb-go/config"
-	"github.com/pb-go/pb-go/content_tools"
+	"github.com/pb-go/pb-go/contenttools"
 	"github.com/pb-go/pb-go/databaseop"
+	_ "github.com/pb-go/pb-go/statik"
 	"github.com/pb-go/pb-go/templates"
 	"github.com/pb-go/pb-go/utils"
-	_ "github.com/pb-go/pb-go/statik"
 	"github.com/rakyll/statik/fs"
 	"github.com/valyala/fasthttp"
 	"go.mongodb.org/mongo-driver/bson"
@@ -24,7 +24,7 @@ var (
 	STFS http.FileSystem
 )
 
-func InitStatikFS(stfs *http.FileSystem){
+func InitStatikFS(stfs *http.FileSystem) {
 	var err error
 	*stfs, err = fs.New()
 	if err != nil {
@@ -39,7 +39,7 @@ func UserUploadParse(c *fasthttp.RequestCtx) {
 	// evaluate remote ip
 	var rmtIPhd string
 	rmtIPhd, err = utils.IP2Intstr(string(c.Request.Header.Peek("X-Real-IP")))
-	if len(rmtIPhd) < 4 || err != nil{
+	if len(rmtIPhd) < 4 || err != nil {
 		c.SetStatusCode(http.StatusBadGateway)
 		return
 	}
@@ -95,17 +95,17 @@ func UserUploadParse(c *fasthttp.RequestCtx) {
 		// then return recaptcha url, set id param in url using rawurl_b64.
 		tempurlid := base64.RawURLEncoding.EncodeToString([]byte(userForm.ShortId))
 		err = databaseop.GlobalMDBC.ItemCreate(userForm)
-		if err != nil{
+		if err != nil {
 			c.SetStatusCode(http.StatusBadGateway)
 			return
 		}
-		c.Redirect("/showVerify?id=" + tempurlid, http.StatusFound)   // use 302, instead of 307.
+		c.Redirect("/showVerify?id="+tempurlid, http.StatusFound) // use 302, instead of 307.
 		return
-	}else {
+	} else {
 		userForm.ExpireAt = primitive.NewDateTimeFromTime(time.Now().Add(time.Duration(config.ServConf.Content.ExpireHrs) * time.Hour))
 		if userExpire > 0 {
 			userForm.ExpireAt = primitive.NewDateTimeFromTime(time.Now().Add(time.Duration(userExpire) * time.Hour))
-		}else if userExpire == 0{
+		} else if userExpire == 0 {
 			userForm.ReadThenBurn = true
 		}
 	}
@@ -134,7 +134,7 @@ func setShowSnipRenderData(userdt *databaseop.UserData, ctx *fasthttp.RequestCtx
 	}
 }
 
-func readFromEmbed(statikfs http.FileSystem, filenm string, c *fasthttp.RequestCtx){
+func readFromEmbed(statikfs http.FileSystem, filenm string, c *fasthttp.RequestCtx) {
 	tempfd, err := fs.ReadFile(statikfs, filenm)
 	if err != nil {
 		c.SetStatusCode(http.StatusNotFound)
@@ -179,21 +179,21 @@ func ShowSnip(c *fasthttp.RequestCtx) {
 		if err != nil || readoutDta.WaitVerify {
 			c.SetStatusCode(http.StatusBadRequest)
 			return
- 		} else {
- 			var rawRender = string(c.FormValue("f")) == "raw"
- 			if readoutDta.PwdIsSet {
- 				uploadedpwd := c.FormValue("p")
- 				hashedupdpwd := utils.GenBlake2B(uploadedpwd)
- 				if hashedupdpwd != readoutDta.Password {
+		} else {
+			var rawRender = string(c.FormValue("f")) == "raw"
+			if readoutDta.PwdIsSet {
+				uploadedpwd := c.FormValue("p")
+				hashedupdpwd := utils.GenBlake2B(uploadedpwd)
+				if hashedupdpwd != readoutDta.Password {
 					c.SetStatusCode(http.StatusForbidden)
 					return
 				}
 			}
- 			setShowSnipRenderData(&readoutDta, c, rawRender)
- 			if readoutDta.ReadThenBurn {
+			setShowSnipRenderData(&readoutDta, c, rawRender)
+			if readoutDta.ReadThenBurn {
 				_ = databaseop.GlobalMDBC.ItemDelete(filter1)
 			}
- 			return
+			return
 		}
 	}
 }
@@ -212,9 +212,9 @@ func DeleteSnip(c *fasthttp.RequestCtx) {
 		if err != nil {
 			c.SetStatusCode(http.StatusBadRequest)
 			return
- 		} else {
- 			c.SetStatusCode(http.StatusAccepted)
- 			return
+		} else {
+			c.SetStatusCode(http.StatusAccepted)
+			return
 		}
 	} else {
 		c.SetStatusCode(http.StatusForbidden)
@@ -228,7 +228,7 @@ func StartVerifyCAPT(c *fasthttp.RequestCtx) {
 		return
 	}
 	var formsnipid []byte
-	_ , err := base64.RawURLEncoding.Decode(formsnipid, c.FormValue("snipid"))
+	_, err := base64.RawURLEncoding.Decode(formsnipid, c.FormValue("snipid"))
 	current_snipid := string(formsnipid)
 	if err != nil || current_snipid == "" {
 		c.SetStatusCode(http.StatusBadRequest)
@@ -239,7 +239,7 @@ func StartVerifyCAPT(c *fasthttp.RequestCtx) {
 		c.SetStatusCode(http.StatusBadGateway)
 		return
 	}
-	res, err := content_tools.VerifyRecaptchaResp(string(c.FormValue("g-recaptcha-response")), rmtIPhd)
+	res, err := contenttools.VerifyRecaptchaResp(string(c.FormValue("g-recaptcha-response")), rmtIPhd)
 	if err != nil || res == false {
 		c.SetStatusCode(http.StatusForbidden)
 		return
@@ -247,7 +247,7 @@ func StartVerifyCAPT(c *fasthttp.RequestCtx) {
 	if res == true {
 		filter1 := bson.M{"shortId": formsnipid}
 		update1 := bson.D{
-			{"$set", bson.D {
+			{"$set", bson.D{
 				{"waitVerify", false},
 				{"expireAt", primitive.NewDateTimeFromTime(time.Now().Add(time.Duration(config.ServConf.Content.ExpireHrs) * time.Hour))},
 			}},
@@ -257,11 +257,11 @@ func StartVerifyCAPT(c *fasthttp.RequestCtx) {
 			log.Println(err)
 			c.SetStatusCode(http.StatusGone)
 			return
- 		} else {
- 			c.SetStatusCode(http.StatusOK)
- 			c.SetContentType("text/plain")
- 			c.SetBodyString("Verification Passed. Go to https://"+ config.ServConf.Network.Host + "/" + current_snipid + " to see your paste.")
- 			return
+		} else {
+			c.SetStatusCode(http.StatusOK)
+			c.SetContentType("text/plain")
+			c.SetBodyString("Verification Passed. Go to https://" + config.ServConf.Network.Host + "/" + current_snipid + " to see your paste.")
+			return
 		}
 	}
 }

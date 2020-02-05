@@ -9,58 +9,60 @@ import (
 	"strings"
 )
 
+// software version, sentry bug tracking id
 const (
 	CurrentVer string = "v0.1.0"
 	CurrentDSN string = "https://72dd7f93900d4742a436a525692a13ed@sentry.io/2124482"
 )
 
+// global var for global server config read
 var (
 	ServConf ServConfig
 )
 
+// ServConfig consists of 4 parts
 type ServConfig struct {
-	// server side config file
 	Network   Network   `yaml:"network"`
 	Recaptcha Recaptcha `yaml:"recaptcha"`
 	Security  Security  `yaml:"security"`
 	Content   Content   `yaml:"content"`
 }
 
+//Network : subconfig of ServConf
 type Network struct {
-	// subconfig about network
 	Listen     string `yaml:"listen"`
 	Host       string `yaml:"host"`
-	MongodbUrl string `yaml:"mongodb_url"`
+	MongodbURL string `yaml:"mongodb_url"`
 }
 
+// Recaptcha : subconfig of ServConf
 type Recaptcha struct {
-	// subconfig about recaptcha
 	Enable    bool   `yaml:"enable"`
 	SecretKey string `yaml:"secret_key,omitempty"`
 	SiteKey   string `yaml:"site_key,omitempty"`
 }
 
+// Security : subconfig about data encryption and administration
+// must fulfill chacha20 standard
 type Security struct {
-	// subconfig about data encryption and administration
 	MasterKey       string `yaml:"master_key"`
 	EncryptionKey   string `yaml:"encryption_key"`
 	EncryptionNonce string `yaml:"encryption_nonce"`
 }
 
+// Content : subconfig about content abusing detection
 type Content struct {
-	// subconfig about content abusing detection
 	DetectAbuse       bool `yaml:"detect_abuse"`
 	ExpireHrs         int  `yaml:"expire_hrs"`
 	AllowBase64encode bool `yaml:"allow_b64enc"`
 }
 
+// CheckConfig : detect uri validity, check needed config for recaptcha, check max expire, check cryptography requirement
 func CheckConfig(servConf ServConfig) int {
-	// detect uri validity
-	isDBURI := strings.Contains(servConf.Network.MongodbUrl, "mongodb")
+	isDBURI := strings.Contains(servConf.Network.MongodbURL, "mongodb")
 	if !isDBURI {
 		return 2
 	}
-	// check needed config for recaptcha
 	if servConf.Recaptcha.Enable {
 		isCAPTsec := len(servConf.Recaptcha.SecretKey) == 40
 		isCAPTsit := len(servConf.Recaptcha.SiteKey) == 40
@@ -68,11 +70,9 @@ func CheckConfig(servConf ServConfig) int {
 			return 3
 		}
 	}
-	// check max expire
 	if (servConf.Content.ExpireHrs > 24) || (servConf.Content.ExpireHrs < 0) {
 		return 3
 	}
-	// check cryptography requirement
 	isMasterKeySec := len(servConf.Security.MasterKey) >= 12
 	isEncrKeySec := len(servConf.Security.EncryptionKey) == 32
 	isEncrNonceSec := len(servConf.Security.EncryptionNonce) == 12
@@ -82,14 +82,14 @@ func CheckConfig(servConf ServConfig) int {
 	return 0
 }
 
+// FileExist : check if file exists, utils
 func FileExist(filepath string) bool {
-	// check if file exists, utils
 	info, err := os.Stat(filepath)
 	return err == nil && !info.IsDir()
 }
 
+// LoadConfig : config load function, read from file.
 func LoadConfig(filePath string) (ServConfig, error) {
-	// config load function, read from file.
 	var conf = ServConfig{}
 	yamlFd, err := ioutil.ReadFile(filePath)
 	log.Printf("Loaded Config: %s \n", filePath)

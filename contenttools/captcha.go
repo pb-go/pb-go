@@ -1,4 +1,4 @@
-package content_tools
+package contenttools
 
 import (
 	"crypto/tls"
@@ -9,8 +9,9 @@ import (
 	"time"
 )
 
-const recaptchaServUrl = "https://www.google.com/recaptcha/api/siteverify"
+const recaptchaServURL = "https://www.google.com/recaptcha/api/siteverify"
 
+// ReCaptchaResponse : defined by google, returns as json
 type ReCaptchaResponse struct {
 	Success     bool      `json:"success"`
 	ChallengeTS time.Time `json:"challenge_ts"`
@@ -18,22 +19,23 @@ type ReCaptchaResponse struct {
 	ErrorCodes  []string  `json:"error-codes"`
 }
 
-func VerifyRecaptchaResp(recaptchaResponse string, remoteIp string) (bool, error) {
+// VerifyRecaptchaResp : POST user IP and response token to do SSV
+func VerifyRecaptchaResp(recaptchaResponse string, remoteIP string) (bool, error) {
 	var err error
 	httpc := fasthttp.Client{
 		NoDefaultUserAgentHeader: true,
-		TLSConfig:                &tls.Config{InsecureSkipVerify:false},
+		TLSConfig:                &tls.Config{InsecureSkipVerify: false},
 		ReadTimeout:              5 * time.Second,
 		WriteTimeout:             5 * time.Second,
 	}
 	req := fasthttp.AcquireRequest()
-	req.SetRequestURI(recaptchaServUrl)
+	req.SetRequestURI(recaptchaServURL)
 	req.Header.SetMethod("POST")
 	req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
 	req.SetBodyString(url.Values{
 		"secret":   {config.ServConf.Recaptcha.SecretKey},
 		"response": {recaptchaResponse},
-		"remoteip": {remoteIp},
+		"remoteip": {remoteIP},
 	}.Encode())
 	resp := fasthttp.AcquireResponse()
 	if err = httpc.Do(req, resp); err != nil {
