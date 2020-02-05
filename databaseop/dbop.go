@@ -1,6 +1,5 @@
 package databaseop
 
-
 // DBClient : General Database client interface, reserved for future adopt.
 type DBClient interface {
 	connNCheck(dbCliOption interface{}) error
