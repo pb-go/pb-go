@@ -169,9 +169,9 @@ func ShowSnip(c *fasthttp.RequestCtx) {
 		c.SetBodyString(templates.VerifyPageRend())
 		return
 	case "status":
-		c.SetContentType("text/plain")
+		c.SetContentType("application/json")
 		c.SetStatusCode(http.StatusOK)
-		c.SetBodyString(templates.ServStatus())
+		c.SetBody(retStatusJson())
 		return
 	default:
 		filter1 := bson.M{"shortId": tmpvar}
@@ -229,8 +229,8 @@ func StartVerifyCAPT(c *fasthttp.RequestCtx) {
 	}
 	var formsnipid []byte
 	_, err := base64.RawURLEncoding.Decode(formsnipid, c.FormValue("snipid"))
-	current_snipid := string(formsnipid)
-	if err != nil || current_snipid == "" {
+	currentSnipid := string(formsnipid)
+	if err != nil || currentSnipid == "" {
 		c.SetStatusCode(http.StatusBadRequest)
 		return
 	}
@@ -260,7 +260,7 @@ func StartVerifyCAPT(c *fasthttp.RequestCtx) {
 		} else {
 			c.SetStatusCode(http.StatusOK)
 			c.SetContentType("text/plain")
-			c.SetBodyString("Verification Passed. Go to https://" + config.ServConf.Network.Host + "/" + current_snipid + " to see your paste.")
+			c.SetBodyString("Verification Passed. Go to https://" + config.ServConf.Network.Host + "/" + currentSnipid + " to see your paste.")
 			return
 		}
 	}
