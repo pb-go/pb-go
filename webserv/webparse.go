@@ -195,7 +195,8 @@ func ShowSnip(c *fasthttp.RequestCtx) {
 		filter1 := bson.M{"shortId": tmpvar}
 		readoutDta, err := databaseop.GlobalMDBC.ItemRead(filter1)
 		if err != nil || readoutDta.WaitVerify {
-			c.SetStatusCode(http.StatusBadRequest)
+			log.Println(err)
+			c.SetStatusCode(http.StatusNotFound)
 			return
 		} else {
 			var rawRender = string(c.FormValue("f")) == "raw"
