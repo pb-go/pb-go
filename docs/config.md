@@ -57,6 +57,11 @@ Official Explanation:
 > in https://github.com/golang/go/issues/10622. If you receive an error with the message 
 > "cannot unmarshal DNS message" while running an operation, we suggest you use a different DNS server.
 
+2. `Auth error: sasl conversation error`
+
+If you are running MongoDB locally and enabled SCRAM authentication, please first check if there's typo.
+According to official document, append `authSource=admin` as a param of connection URI might help.
+
 ### Garbage Collection (DB Storage Reuse)
 
 Run following command: That will block DB operation! Have a backup first:
