@@ -7,6 +7,7 @@ package main
 
 import (
 	"flag"
+	"github.com/AubSs/fasthttplogger"
 	"github.com/fasthttp/router"
 	"github.com/getsentry/sentry-go"
 	sentryfasthttp "github.com/getsentry/sentry-go/fasthttp"
@@ -78,7 +79,7 @@ func startServer() error {
 		apig.POST("/upload", webserv.UserUploadParse)
 		apig.POST("/g_verify", webserv.StartVerifyCAPT)
 	}
-	wrappedhand := sentryHandler.Handle(app.Handler)
+	wrappedhand := fasthttplogger.CombinedColored(sentryHandler.Handle(app.Handler))
 	fahtserv = &fasthttp.Server{
 		Handler:      wrappedhand,
 		Name:         "pb-go",

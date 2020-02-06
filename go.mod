@@ -3,6 +3,7 @@ module github.com/pb-go/pb-go
 go 1.13
 
 require (
+	github.com/AubSs/fasthttplogger v0.0.0-20170531123222-7dab642e7dab // indirect
 	github.com/DataDog/zstd v1.4.4 // indirect
 	github.com/fasthttp/router v0.6.0
 	github.com/fvbock/endless v0.0.0-20170109170031-447134032cb6
@@ -22,7 +23,7 @@ require (
 	github.com/pkg/errors v0.9.1
 	github.com/rakyll/statik v0.1.6
 	github.com/tidwall/pretty v1.0.0 // indirect
-	github.com/valyala/fasthttp v1.8.0
+	github.com/valyala/fasthttp v1.9.0
 	github.com/valyala/quicktemplate v1.4.1
 	github.com/xdg/scram v0.0.0-20180814205039-7eeb5667e42c // indirect
 	github.com/xdg/stringprep v1.0.0 // indirect
