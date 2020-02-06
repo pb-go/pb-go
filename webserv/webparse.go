@@ -133,6 +133,11 @@ func UserUploadParse(c *fasthttp.RequestCtx) {
 		} else if userExpire == 0 {
 			userForm.ReadThenBurn = true
 		}
+		err = databaseop.GlobalMDBC.ItemCreate(userForm)
+		if err != nil {
+			c.SetStatusCode(http.StatusBadGateway)
+			return
+		}
 	}
 	// return publish url instead
 	c.SetStatusCode(http.StatusOK)
