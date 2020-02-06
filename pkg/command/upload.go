@@ -17,7 +17,6 @@ import (
 
 var (
 	password  string
-	expire    uint8
 	randomPwd bool
 	uploadCmd = &cobra.Command{
 		Use:   "upload",
@@ -32,7 +31,9 @@ func UploadCommand() *cobra.Command {
 	uploadCmd.Flags().Bool("help", false, "help for upload")
 	uploadCmd.Flags().StringVarP(&password, "private-share-password", "P", "", " Optional. Private share with specificated password.")
 	uploadCmd.Flags().BoolVarP(&randomPwd, "private-share", "p", false, "Optional. Private share. Will using a random password for private share.")
-	uploadCmd.Flags().Uint8Var(&expire, "e", 24, "Optional. Set to 0 means burn-after-read. Default 24. (unit: hrs)")
+	uploadCmd.Flags().UintP("expire", "e", 24, "Optional. Set to 0 means burn-after-read. Default 24. (unit: hrs)")
+	viper.BindPFlag("expire", uploadCmd.Flags().Lookup("expire"))
+	viper.SetDefault("expire", 24)
 	return uploadCmd
 }
 
@@ -92,7 +93,7 @@ func uploadToPasteBin(context []byte) (err error) {
 	if err != nil {
 		log.Fatal(err.Error())
 	}
-	_, err = field.Write([]byte(strconv.Itoa(int(expire))))
+	_, err = field.Write([]byte(strconv.Itoa(viper.Get("expire").(int))))
 	if err != nil {
 		log.Fatal(err.Error())
 	}
