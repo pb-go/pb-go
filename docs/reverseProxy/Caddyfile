@@ -1,7 +1,6 @@
-https://localhost {
+http://localhost {
     gzip
     cors
-    tls localhost.pem localhost-key.pem
     ratelimit * / 3 5 minute
     proxy / 127.0.0.1:8181 {
         transparent
