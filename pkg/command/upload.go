@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"fmt"
 	"github.com/spf13/cobra"
+	"github.com/spf13/viper"
 	"github.com/valyala/fasthttp"
 	"io"
 	"io/ioutil"
@@ -72,7 +73,7 @@ func uploadToPasteBin(context []byte) (err error) {
 
 	request.Header.SetMethod(fasthttp.MethodPost)
 	request.Header.Set("X-Real-IP", "1.1.1.1")
-	request.SetRequestURI(host + "/api/upload")
+	request.SetRequestURI(viper.Get("host").(string) + "/api/upload")
 	writer := multipart.NewWriter(request.BodyWriter())
 	// setup password
 	if password != "" || randomPwd {
