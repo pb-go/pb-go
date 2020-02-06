@@ -6,6 +6,7 @@ import (
 
 var (
 	cfgFile string
+	host    string
 	rootCmd = &cobra.Command{
 		Use:   "pb-cli",
 		Short: "Client for pb-go.",
@@ -13,10 +14,10 @@ var (
 )
 
 func init() {
-	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file")
-	rootCmd.AddCommand(UploadCommand())
-	rootCmd.AddCommand(GetCommand())
-	rootCmd.AddCommand(DeleteCommand())
+	rootCmd.PersistentFlags().StringVarP(&cfgFile, "config", "c", "", "config file")
+	rootCmd.PersistentFlags().StringVarP(&host, "host", "h", "", "pb-go service url")
+	rootCmd.Flags().Bool("help", false, "help for pb-cli")
+	rootCmd.AddCommand(UploadCommand(), GetCommand(), DeleteCommand())
 }
 
 func Execute() error {

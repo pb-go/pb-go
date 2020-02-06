@@ -52,8 +52,8 @@ type Security struct {
 
 // Content : subconfig about content abusing detection
 type Content struct {
-	DetectAbuse       bool `yaml:"detect_abuse"`
-	ExpireHrs         int  `yaml:"expire_hrs"`
+	DetectAbuse bool `yaml:"detect_abuse"`
+	ExpireHrs   int  `yaml:"expire_hrs"`
 }
 
 // CheckConfig : detect uri validity, check needed config for recaptcha, check max expire, check cryptography requirement

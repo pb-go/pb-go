@@ -60,7 +60,7 @@ func UserUploadParse(c *fasthttp.RequestCtx) {
 	}
 	var userData []byte
 	userPOSTFdHd, err := c.FormFile("d")
-	if err != nil || userPOSTFdHd == nil{
+	if err != nil || userPOSTFdHd == nil {
 		userData = c.FormValue("d")
 		if userData == nil {
 			c.SetStatusCode(http.StatusBadRequest)
@@ -255,7 +255,7 @@ func StartVerifyCAPT(c *fasthttp.RequestCtx) {
 	formsnipid = make([]byte, base64.RawStdEncoding.DecodedLen(len(oriSnipid)))
 	_, err := base64.RawURLEncoding.Decode(formsnipid, oriSnipid)
 	currentSnipid := string(formsnipid)
-	if err != nil || currentSnipid == "" || len(currentSnipid) != 4{
+	if err != nil || currentSnipid == "" || len(currentSnipid) != 4 {
 		c.SetStatusCode(http.StatusBadRequest)
 		return
 	}
