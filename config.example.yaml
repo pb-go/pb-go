@@ -12,5 +12,5 @@ security:
   encryption_nonce:
 content:
   detect_abuse: true
-  default_expire: 24
+  expire_hrs: 24
   allow_b64enc: true
