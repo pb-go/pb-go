@@ -71,6 +71,10 @@ func GetUTCTimeHash(masterkey string) string {
 
 // GetNanoID : Nano ID Getter
 func GetNanoID() (string, error) {
+	// the nano id length is fixed as 4 chars,
+	// BUT you do REMEMBER if you wanna change it,
+	// you should change the byte buffer length in VerifyRECAPTCHA Function as well
+	// otherwise, you will never get correct res from db.
 	id, err := gonanoid.Nanoid(4)
 	if err != nil {
 		log.Fatalln("Failed to generate nanoid!")

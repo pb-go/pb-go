@@ -1,5 +1,4 @@
 http://localhost {
-    gzip
     cors
     ratelimit * / 3 5 minute
     proxy / 127.0.0.1:8181 {

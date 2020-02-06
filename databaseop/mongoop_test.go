@@ -71,7 +71,7 @@ func TestMongoDBConn(t *testing.T) {
 	time.Sleep(5 * time.Second)
 	update1 := bson.D{
 		{"$set", bson.D{
-			{"data", utils.Pack2BinData("testdata002")},
+			{"data", utils.Pack2BinData([]byte("testdata002"))},
 		}},
 	}
 	err = mgcli.ItemUpdate(filter1, update1)

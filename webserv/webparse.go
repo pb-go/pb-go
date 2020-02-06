@@ -248,6 +248,9 @@ func StartVerifyCAPT(c *fasthttp.RequestCtx) {
 		return
 	}
 	var formsnipid []byte
+	// this buffer length must be equal with the generated nanoid length,
+	// otherwise the mongodb-go-driver will not find your document
+	formsnipid = make([]byte, 4)
 	_, err := base64.RawURLEncoding.Decode(formsnipid, c.FormValue("snipid"))
 	currentSnipid := string(formsnipid)
 	if err != nil || currentSnipid == "" {
@@ -265,7 +268,7 @@ func StartVerifyCAPT(c *fasthttp.RequestCtx) {
 		return
 	}
 	if res == true {
-		filter1 := bson.M{"shortId": formsnipid}
+		filter1 := bson.M{"shortId": currentSnipid}
 		update1 := bson.D{
 			{"$set", bson.D{
 				{"waitVerify", false},
