@@ -116,6 +116,7 @@ func main() {
 		if config.FileExist(confPath) {
 			config.ServConf, err = config.LoadConfig(confPath)
 			if err != nil {
+				log.Println(err)
 				log.Println("Please check document on our project page.")
 				os.Exit(14)
 			} else {
