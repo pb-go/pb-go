@@ -135,8 +135,7 @@ The schema is:
   "status": 0,
   "captcha_enabled": true,
   "max_expire": 12,
-  "abuse_detection": true,
-  "base64_detection": true
+  "abuse_detection": true
 }
 ```
 

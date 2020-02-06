@@ -48,7 +48,6 @@ func UserUploadParse(c *fasthttp.RequestCtx) {
 	}
 	// first parse user form
 	userPwd := c.FormValue("p")
-	//todo: bug here
 	userExpireB := c.FormValue("e")
 	if userExpireB == nil {
 		c.SetStatusCode(http.StatusBadRequest)
@@ -59,7 +58,6 @@ func UserUploadParse(c *fasthttp.RequestCtx) {
 		c.SetStatusCode(http.StatusBadRequest)
 		return
 	}
-	//todo: bug here end
 	var userData []byte
 	userPOSTFdHd, err := c.FormFile("d")
 	if err != nil || userPOSTFdHd == nil{

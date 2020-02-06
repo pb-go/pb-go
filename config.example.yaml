@@ -13,4 +13,4 @@ security:
 content:
   detect_abuse: true
   expire_hrs: 24
-  allow_b64enc: true
+

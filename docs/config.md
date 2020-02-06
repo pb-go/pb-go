@@ -18,7 +18,6 @@ security:
 content:
   detect_abuse: true
   expire_hrs: 24
-  allow_b64enc: true
 ```
 
 Default listens at `127.0.0.1:8181`, Configure reCAPTCHA v2 related key and enable in `recaptcha` part.
@@ -31,8 +30,6 @@ The `masterkey` must be longer than 12 bytes, `encryption_key` will be used for 
 `encryption_nonce` will be used cooperate with `encryption_key`, must be equals to 12 bytes.
 
 If `content.detect_abuse` is enabled, the system will only allow to upload pure text.
-
-If you wanna use `content.allow_b64enc`, you must enable `detect_abuse` at the same time.
 
 `content.expire_hrs` defined the maximum TTL by default, CANNOT and SHOULD NOT BE LONGER than 24, the unit is hour.
 
