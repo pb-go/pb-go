@@ -42,7 +42,7 @@ func UserUploadParse(c *fasthttp.RequestCtx) {
 	// evaluate remote ip
 	var rmtIPhd string
 	rmtIPhd, err = utils.IP2Intstr(string(c.Request.Header.Peek("X-Real-IP")))
-	if len(rmtIPhd) < 4 || err != nil {
+	if len(rmtIPhd) < 1 || err != nil {
 		c.SetStatusCode(http.StatusBadGateway)
 		return
 	}
