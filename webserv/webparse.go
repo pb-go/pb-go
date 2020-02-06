@@ -3,7 +3,6 @@ package webserv
 import (
 	"bytes"
 	"encoding/base64"
-	"encoding/binary"
 	"github.com/pb-go/pb-go/config"
 	"github.com/pb-go/pb-go/contenttools"
 	"github.com/pb-go/pb-go/databaseop"
@@ -17,6 +16,7 @@ import (
 	"io"
 	"log"
 	"net/http"
+	"strconv"
 	"time"
 )
 
@@ -48,24 +48,40 @@ func UserUploadParse(c *fasthttp.RequestCtx) {
 	}
 	// first parse user form
 	userPwd := c.FormValue("p")
-	userExpire := int(binary.BigEndian.Uint16(c.FormValue("e")))
+	//todo: bug here
+	userExpireB := c.FormValue("e")
+	if userExpireB == nil {
+		c.SetStatusCode(http.StatusBadRequest)
+		return
+	}
+	userExpire, err := strconv.Atoi(string(userExpireB))
+	if err != nil {
+		c.SetStatusCode(http.StatusBadRequest)
+		return
+	}
+	//todo: bug here end
+	var userData []byte
 	userPOSTFdHd, err := c.FormFile("d")
-	if err != nil {
-		c.SetStatusCode(http.StatusBadRequest)
-		return
+	if err != nil || userPOSTFdHd == nil{
+		userData = c.FormValue("d")
+		if userData == nil {
+			c.SetStatusCode(http.StatusBadRequest)
+			return
+		}
+	} else {
+		userPOSTFile, err := userPOSTFdHd.Open()
+		if err != nil {
+			c.SetStatusCode(http.StatusBadRequest)
+			return
+		}
+		userDatabuf := bytes.NewBuffer(nil)
+		if _, err := io.Copy(userDatabuf, userPOSTFile); err != nil {
+			c.SetStatusCode(http.StatusBadRequest)
+			return
+		}
+		userData = userDatabuf.Bytes()
+		_ = userPOSTFile.Close()
 	}
-	userPOSTFile, err := userPOSTFdHd.Open()
-	if err != nil {
-		c.SetStatusCode(http.StatusBadRequest)
-		return
-	}
-	userDatabuf := bytes.NewBuffer(nil)
-	if _, err := io.Copy(userDatabuf, userPOSTFile); err != nil {
-		c.SetStatusCode(http.StatusBadRequest)
-		return
-	}
-	userData := userDatabuf.Bytes()
-	_ = userPOSTFile.Close()
 	if userExpire > config.ServConf.Content.ExpireHrs || userExpire < 0 || len(userData) < 1 {
 		c.SetStatusCode(http.StatusBadRequest)
 		return
