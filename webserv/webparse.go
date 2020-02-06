@@ -47,16 +47,17 @@ func UserUploadParse(c *fasthttp.RequestCtx) {
 		return
 	}
 	// first parse user form
-	userPwd := c.FormValue("p")
+	var userExpire int
+	userPwd := c.FormValue("p") // password can be nil and will get a hash, so no worry.
 	userExpireB := c.FormValue("e")
 	if userExpireB == nil {
-		c.SetStatusCode(http.StatusBadRequest)
-		return
-	}
-	userExpire, err := strconv.Atoi(string(userExpireB))
-	if err != nil {
-		c.SetStatusCode(http.StatusBadRequest)
-		return
+		userExpire = config.ServConf.Content.ExpireHrs
+	} else {
+		userExpire, err = strconv.Atoi(string(userExpireB))
+		if err != nil {
+			c.SetStatusCode(http.StatusBadRequest)
+			return
+		}
 	}
 	var userData []byte
 	userPOSTFdHd, err := c.FormFile("d")
@@ -80,6 +81,12 @@ func UserUploadParse(c *fasthttp.RequestCtx) {
 		userData = userDatabuf.Bytes()
 		_ = userPOSTFile.Close()
 	}
+	// uploaded file length detect
+	if len(userData) > 2*1024*1024 {
+		c.SetStatusCode(http.StatusBadRequest)
+		return
+	}
+	// set expire check
 	if userExpire > config.ServConf.Content.ExpireHrs || userExpire < 0 || len(userData) < 1 {
 		c.SetStatusCode(http.StatusBadRequest)
 		return
@@ -116,14 +123,20 @@ func UserUploadParse(c *fasthttp.RequestCtx) {
 			c.SetStatusCode(http.StatusBadGateway)
 			return
 		}
-		c.Redirect("/showVerify?id="+tempurlid, http.StatusFound) // use 302, instead of 307.
+		redirect2URI := "/showVerify?id=" + tempurlid
+		c.Redirect(redirect2URI, http.StatusFound) // use 302, instead of 307.
+		c.SetBodyString("Please go to https://" + config.ServConf.Network.Host + redirect2URI + " to finish CAPTCHA.")
 		return
 	} else {
-		userForm.ExpireAt = primitive.NewDateTimeFromTime(time.Now().Add(time.Duration(config.ServConf.Content.ExpireHrs) * time.Hour))
 		if userExpire > 0 {
 			userForm.ExpireAt = primitive.NewDateTimeFromTime(time.Now().Add(time.Duration(userExpire) * time.Hour))
 		} else if userExpire == 0 {
 			userForm.ReadThenBurn = true
+		}
+		err = databaseop.GlobalMDBC.ItemCreate(userForm)
+		if err != nil {
+			c.SetStatusCode(http.StatusBadGateway)
+			return
 		}
 	}
 	// return publish url instead

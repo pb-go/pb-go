@@ -35,15 +35,15 @@ Your data is encrypted and finally stored on our server using Chacha20 algorithm
 
 ## To-Do list (features)
 
--   [ ] | Content detection, only allow pure texts.
--   [x] | Expiring feature done in MongoDB. Support Read-After-Burn.
--   [ ] | Private Share optionally, Sharing password using BLAKE2b stored. 
--   [x] | <del> Rate-limit to avoid abusing. (SHOULD BE DONE IN REVERSE PROXY SIDE) </del>
--   [x] | ReCaptcha v2 support to prevent from a large scale abusing.
--   [x] | Code Syntax Highlighting.
--   [ ] | Shortlink using hashids.
--   [ ] | Pure CLI. (You could also use `curl` instead)
--   [x] | Web page upload.
+-   [X] | Content detection, only allow pure texts.
+-   [X] | Expiring feature done in MongoDB. Support Read-After-Burn.
+-   [X] | Private Share optionally, Sharing password using BLAKE2b stored. 
+-   [X] | <del> Rate-limit to avoid abusing. (SHOULD BE DONE IN REVERSE PROXY SIDE) </del>
+-   [X] | ReCaptcha v2 support to prevent from a large scale abusing.
+-   [X] | Code Syntax Highlighting.
+-   [X] | Shortlink using nano-id.
+-   [X] | Pure CLI. (You could also use `curl` instead)
+-   [X] | Web page upload.
 
 ## Usage
 
