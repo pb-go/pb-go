@@ -113,9 +113,14 @@ func UserUploadParse(c *fasthttp.RequestCtx) {
 	// calculate expire
 	// if recaptcha enabled, set to 5min expires first,
 	// else, set to 24hrs, then build next.
+	if userExpire == 0 {
+		userForm.ReadThenBurn = true
+		userForm.ExpireAt = primitive.NewDateTimeFromTime(time.Now().Add(time.Duration(config.ServConf.Content.ExpireHrs) * time.Hour))
+	} else {
+		userForm.ExpireAt = primitive.NewDateTimeFromTime(time.Now().Add(time.Duration(userExpire) * time.Hour))
+	}
 	if config.ServConf.Recaptcha.Enable {
 		userForm.WaitVerify = true
-		userForm.ExpireAt = primitive.NewDateTimeFromTime(time.Now().Add(5 * time.Minute))
 		// then return recaptcha url, set id param in url using rawurl_b64.
 		tempurlid := base64.RawURLEncoding.EncodeToString([]byte(userForm.ShortID))
 		err = databaseop.GlobalMDBC.ItemCreate(userForm)
@@ -127,17 +132,11 @@ func UserUploadParse(c *fasthttp.RequestCtx) {
 		c.Redirect(redirect2URI, http.StatusFound) // use 302, instead of 307.
 		c.SetBodyString("Please go to https://" + config.ServConf.Network.Host + redirect2URI + " to finish CAPTCHA.")
 		return
-	} else {
-		if userExpire > 0 {
-			userForm.ExpireAt = primitive.NewDateTimeFromTime(time.Now().Add(time.Duration(userExpire) * time.Hour))
-		} else if userExpire == 0 {
-			userForm.ReadThenBurn = true
-		}
-		err = databaseop.GlobalMDBC.ItemCreate(userForm)
-		if err != nil {
-			c.SetStatusCode(http.StatusBadGateway)
-			return
-		}
+	}
+	err = databaseop.GlobalMDBC.ItemCreate(userForm)
+	if err != nil {
+		c.SetStatusCode(http.StatusBadGateway)
+		return
 	}
 	// return publish url instead
 	c.SetStatusCode(http.StatusOK)
@@ -287,7 +286,6 @@ func StartVerifyCAPT(c *fasthttp.RequestCtx) {
 		update1 := bson.D{
 			{"$set", bson.D{
 				{"waitVerify", false},
-				{"expireAt", primitive.NewDateTimeFromTime(time.Now().Add(time.Duration(config.ServConf.Content.ExpireHrs) * time.Hour))},
 			}},
 		}
 		err = databaseop.GlobalMDBC.ItemUpdate(filter1, update1)
