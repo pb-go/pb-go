@@ -59,7 +59,7 @@ PLATFORMS="$PLATFORMS openbsd/amd64" # amd64 only as of go1.6
 PLATFORMS_ARM="linux"
 
 # GOLANG COMPILER BUILD FLAGS
-GC_FLAGS="-trimpath -race -ldflags '-s -w'"
+GC_FLAGS="-trimpath -ldflags '-s -w'"
 
 ##############################################################
 # Shouldn't really need to modify anything below this line.  #
