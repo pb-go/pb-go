@@ -52,9 +52,9 @@ func initConfig() {
 	_, _ = fmt.Fprintln(os.Stderr, "Using config file:", viper.ConfigFileUsed())
 }
 
-// validation global flag
+// AcquireValidGlobalFlag : validation global flag
 func AcquireValidGlobalFlag() {
-	// global flag adn config validation
+	// global flag and config validation
 	host := viper.Get("host").(string)
 	if !(len(host) == 0) && !strings.HasPrefix(host, "http://") && !strings.HasPrefix(host, "https://") {
 		_, _ = fmt.Fprintln(os.Stderr, "Invalid host url:"+host)
