@@ -69,7 +69,7 @@ func CheckConfig(servConf ServConfig) int {
 			return 3
 		}
 	}
-	if (servConf.Content.ExpireHrs > 24) || (servConf.Content.ExpireHrs < 0) {
+	if (servConf.Content.ExpireHrs > 24) || (servConf.Content.ExpireHrs <= 0) {
 		return 3
 	}
 	isMasterKeySec := len(servConf.Security.MasterKey) >= 12
