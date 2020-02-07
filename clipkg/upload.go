@@ -13,6 +13,7 @@ import (
 	"mime/multipart"
 	"os"
 	"strconv"
+	"time"
 )
 
 var (
@@ -159,6 +160,7 @@ func fetchPassword() string {
 func generateRandomPassword() string {
 	genpwdlen := viper.GetInt("pwdlen")
 	buffer := make([]byte, genpwdlen)
+	rand.Seed(time.Now().UTC().UnixNano())
 	for i := 0; i < genpwdlen; i++ {
 		buffer[i] = pool[rand.Intn(len(pool))]
 	}
