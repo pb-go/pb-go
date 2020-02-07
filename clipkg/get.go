@@ -29,8 +29,9 @@ func getOnline(command *cobra.Command, args []string) (err error) {
 
 	url := viper.Get("host").(string) + "/" + args[0]
 
+	url += "?f=raw"
 	if snipPassword != "" {
-		url += "?p=" + snipPassword
+		url += "&p=" + snipPassword
 	}
 
 	code, body, err := fasthttp.Get(make([]byte, 0), url)
