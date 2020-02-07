@@ -6,7 +6,7 @@ import (
 	"log"
 )
 
-const currentVersion = "v1.0.2"
+const currentVersion = "v1.0.3"
 
 // main function for client
 func main() {
