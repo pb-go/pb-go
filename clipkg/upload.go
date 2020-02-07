@@ -38,6 +38,7 @@ func UploadCommand() *cobra.Command {
 	return uploadCmd
 }
 
+// the first param will always be *cobra.Command, please do not delete it even if not used in function.
 func uploadOnline(command *cobra.Command, args []string) error {
 	if len(args) == 0 {
 		stdin, err := readFromStdin()
@@ -121,6 +122,7 @@ func uploadToPasteBin(context []byte) (err error) {
 	if err != nil {
 		log.Fatalln("Connect to Server Error. Check your config please.")
 	}
+	fmt.Println(" If you need raw format data, just append `f=raw` as your snippet URL param.")
 	_, _ = fmt.Fprintf(os.Stderr, "Server Response:\n")
 	_, _ = fmt.Fprintf(os.Stderr, "Http Status Code: %d\n", response.StatusCode())
 	_, _ = fmt.Fprintf(os.Stderr, "Http Response Body:\n")
@@ -148,5 +150,6 @@ func generateRandomPassword() string {
 	}
 	result := string(buffer)
 	_, _ = fmt.Fprintf(os.Stderr, "Private share password: %v\n", result)
+	_, _ = fmt.Printf("Please append `p=%v` as URL param after your snippet URL. \n", result)
 	return result
 }
