@@ -47,8 +47,7 @@ func initConfig() {
 
 	viper.AutomaticEnv()
 	if err := viper.ReadInConfig(); err != nil {
-		log.Println(err)
-		log.Fatalf("Error for reading config file: %s", viper.ConfigFileUsed())
+		log.Fatalln("Error for reading config file: ~/.pbcli.yaml")
 	}
 	_, _ = fmt.Fprintln(os.Stderr, "Using config file:", viper.ConfigFileUsed())
 }
