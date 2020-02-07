@@ -5,6 +5,7 @@ import (
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 	"github.com/valyala/fasthttp"
+	"log"
 	"os"
 )
 
@@ -33,7 +34,9 @@ func getOnline(command *cobra.Command, args []string) (err error) {
 	}
 
 	code, body, err := fasthttp.Get(make([]byte, 0), url)
-
+	if err != nil {
+		log.Fatal(err.Error())
+	}
 	_, _ = fmt.Fprintf(os.Stderr, "Server Response:\n")
 	_, _ = fmt.Fprintf(os.Stderr, "Http Status Code: %d\n", code)
 	_, _ = fmt.Fprintf(os.Stderr, "Http Response Body:\n")

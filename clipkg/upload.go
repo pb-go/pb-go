@@ -118,6 +118,9 @@ func uploadToPasteBin(context []byte) (err error) {
 	}
 	request.Header.SetContentType(writer.FormDataContentType())
 	err = fasthttp.Do(request, response)
+	if err != nil {
+		log.Fatal(err.Error())
+	}
 	_, _ = fmt.Fprintf(os.Stderr, "Server Response:\n")
 	_, _ = fmt.Fprintf(os.Stderr, "Http Status Code: %d\n", response.StatusCode())
 	_, _ = fmt.Fprintf(os.Stderr, "Http Response Body:\n")

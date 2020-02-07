@@ -6,6 +6,7 @@ import (
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 	"github.com/valyala/fasthttp"
+	"log"
 	"os"
 )
 
@@ -37,6 +38,9 @@ func deleteOnline(command *cobra.Command, args []string) (err error) {
 	request.Header.Set("X-Master-Key", utils.GetUTCTimeHash(viper.Get("masterKey").(string)))
 
 	err = fasthttp.Do(request, response)
+	if err != nil {
+		log.Fatal(err.Error())
+	}
 	_, _ = fmt.Fprintf(os.Stderr, "Server Response:\n")
 	_, _ = fmt.Fprintf(os.Stderr, "Http Status Code: %d\n", response.StatusCode())
 	_, _ = fmt.Fprintf(os.Stderr, "Http Response Body:\n")
