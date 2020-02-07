@@ -118,6 +118,9 @@ func uploadToPasteBin(context []byte) (err error) {
 	}
 	request.Header.SetContentType(writer.FormDataContentType())
 	err = fasthttp.Do(request, response)
+	if err != nil {
+		log.Fatalln("Connect to Server Error. Check your config please.")
+	}
 	_, _ = fmt.Fprintf(os.Stderr, "Server Response:\n")
 	_, _ = fmt.Fprintf(os.Stderr, "Http Status Code: %d\n", response.StatusCode())
 	_, _ = fmt.Fprintf(os.Stderr, "Http Response Body:\n")
@@ -137,7 +140,6 @@ func fetchPassword() string {
 	}
 }
 
-// generateRandomPassword: todo: let user define password length.
 func generateRandomPassword() string {
 	genpwdlen := viper.GetInt("pwdlen")
 	buffer := make([]byte, genpwdlen)

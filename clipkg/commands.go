@@ -46,9 +46,11 @@ func initConfig() {
 	}
 
 	viper.AutomaticEnv()
-	if err := viper.ReadInConfig(); err == nil {
-		_, _ = fmt.Fprintln(os.Stderr, "Using config file:", viper.ConfigFileUsed())
+	if err := viper.ReadInConfig(); err != nil {
+		log.Println(err)
+		log.Fatalf("Error for reading config file: %s", viper.ConfigFileUsed())
 	}
+	_, _ = fmt.Fprintln(os.Stderr, "Using config file:", viper.ConfigFileUsed())
 }
 
 // Execute : so-called init function
