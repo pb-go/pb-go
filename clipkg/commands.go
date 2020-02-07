@@ -9,6 +9,7 @@ import (
 	"os/user"
 )
 
+// define the config file path and init for root command
 var (
 	cfgFile string
 	rootCmd = &cobra.Command{

@@ -13,7 +13,7 @@ var (
 	deleteCmd = &cobra.Command{
 		Use:   "delete",
 		Short: "Delete a paste from pastebin with id.",
-		RunE:  onlineDelete,
+		RunE:  deleteOnline,
 		Args:  cobra.MinimumNArgs(1),
 	}
 )
@@ -25,7 +25,7 @@ func DeleteCommand() *cobra.Command {
 	return deleteCmd
 }
 
-func onlineDelete(command *cobra.Command, args []string) (err error) {
+func deleteOnline(command *cobra.Command, args []string) (err error) {
 	request := fasthttp.AcquireRequest()
 	response := fasthttp.AcquireResponse()
 

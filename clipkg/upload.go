@@ -22,7 +22,7 @@ var (
 		Use:   "upload",
 		Short: "Upload data to pastebin.",
 		Args:  cobra.MaximumNArgs(1),
-		RunE:  upload,
+		RunE:  uploadOnline,
 	}
 	pool = []uint8{'0', '1', '2', '3', '4', '5', '6', '7', '8', '9'}
 )
@@ -38,7 +38,7 @@ func UploadCommand() *cobra.Command {
 	return uploadCmd
 }
 
-func upload(command *cobra.Command, args []string) error {
+func uploadOnline(command *cobra.Command, args []string) error {
 	if len(args) == 0 {
 		stdin, err := readFromStdin()
 		if err != nil {
@@ -62,9 +62,8 @@ func readFromStdin() (context []byte, err error) {
 	context, err = bufio.NewReader(os.Stdin).ReadBytes(0)
 	if err == io.EOF {
 		return context, nil
-	} else {
-		return
 	}
+	return
 }
 
 func uploadToPasteBin(context []byte) (err error) {
