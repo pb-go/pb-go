@@ -32,9 +32,9 @@ var (
 func UploadCommand() *cobra.Command {
 	uploadCmd.Flags().Bool("help", false, "help for upload")
 	uploadCmd.Flags().StringVarP(&password, "private-share-password", "P", "", "Optional. Private share with specified password.")
-	uploadCmd.Flags().BoolVarP(&randomPwd, "private-share", "p", false, "Optional. Private share. Will using a random password for private share. You can control length with generated password like -p 4 will generate 4-characters password.")
-	uploadCmd.Flags().Uint8P("password-length", "l", 4, "Optional. Length for generated password. Default 4.")
-	uploadCmd.Flags().UintP("expire", "e", 24, "Optional. Set to 0 means burn-after-read. Default 24. (unit: hrs)")
+	uploadCmd.Flags().BoolVarP(&randomPwd, "private-share", "p", false, "Optional. Private share. Will using a random password for private share. You can control length with generated password like -l 4 will generate 4-characters password.")
+	uploadCmd.Flags().Uint8P("password-length", "l", 4, "Optional. Length for generated password. ")
+	uploadCmd.Flags().UintP("expire", "e", 24, "Optional. Set to 0 means burn-after-read. (unit: hrs)")
 	_ = viper.BindPFlag("expire", uploadCmd.Flags().Lookup("expire"))
 	_ = viper.BindPFlag("pwdlen", uploadCmd.Flags().Lookup("password-length"))
 	viper.SetDefault("expire", 24)
