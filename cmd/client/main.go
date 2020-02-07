@@ -1,12 +1,13 @@
 package main
 
 import (
-	"github.com/pb-go/pb-go/pkg/command"
+	"github.com/pb-go/pb-go/clipkg"
 	"log"
 )
 
+// main function for client
 func main() {
-	err := command.Execute()
+	err := clipkg.Execute()
 	if err != nil {
 		log.Fatalf(err.Error())
 	}

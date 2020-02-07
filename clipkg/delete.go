@@ -1,4 +1,4 @@
-package command
+package clipkg
 
 import (
 	"fmt"
@@ -13,18 +13,19 @@ var (
 	deleteCmd = &cobra.Command{
 		Use:   "delete",
 		Short: "Delete a paste from pastebin with id.",
-		RunE:  delete,
+		RunE:  onlineDelete,
 		Args:  cobra.MinimumNArgs(1),
 	}
 )
 
+// DeleteCommand : Parse the delete sub-command
 func DeleteCommand() *cobra.Command {
 	deleteCmd.Flags().StringP("masterKey", "k", "", "Required. Master key in pb-go server's config.")
-	viper.BindPFlag("masterKey",deleteCmd.Flags().Lookup("masterKey"))
+	_ = viper.BindPFlag("masterKey", deleteCmd.Flags().Lookup("masterKey"))
 	return deleteCmd
 }
 
-func delete(command *cobra.Command, args []string) (err error) {
+func onlineDelete(command *cobra.Command, args []string) (err error) {
 	request := fasthttp.AcquireRequest()
 	response := fasthttp.AcquireResponse()
 
@@ -35,12 +36,11 @@ func delete(command *cobra.Command, args []string) (err error) {
 	request.Header.SetMethod(fasthttp.MethodDelete)
 	request.Header.Set("X-Master-Key", utils.GetUTCTimeHash(viper.Get("masterKey").(string)))
 
-	fasthttp.Do(request, response)
 	err = fasthttp.Do(request, response)
-	fmt.Fprintf(os.Stderr, "Server Response:\n")
-	fmt.Fprintf(os.Stderr, "Http Status Code: %d\n", response.StatusCode())
-	fmt.Fprintf(os.Stderr, "Http Response Body:\n")
-	fmt.Printf(string(response.Body()))
-	fmt.Fprintf(os.Stderr, "\n")
+	_, _ = fmt.Fprintf(os.Stderr, "Server Response:\n")
+	_, _ = fmt.Fprintf(os.Stderr, "Http Status Code: %d\n", response.StatusCode())
+	_, _ = fmt.Fprintf(os.Stderr, "Http Response Body:\n")
+	_, _ = fmt.Printf(string(response.Body()))
+	_, _ = fmt.Fprintf(os.Stderr, "\n")
 	return
 }

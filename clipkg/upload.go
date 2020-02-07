@@ -1,4 +1,4 @@
-package command
+package clipkg
 
 import (
 	"bufio"
@@ -27,12 +27,13 @@ var (
 	pool = []uint8{'0', '1', '2', '3', '4', '5', '6', '7', '8', '9'}
 )
 
+// UploadCommand : sub-command processing function for upload
 func UploadCommand() *cobra.Command {
 	uploadCmd.Flags().Bool("help", false, "help for upload")
 	uploadCmd.Flags().StringVarP(&password, "private-share-password", "P", "", " Optional. Private share with specificated password.")
 	uploadCmd.Flags().BoolVarP(&randomPwd, "private-share", "p", false, "Optional. Private share. Will using a random password for private share.")
 	uploadCmd.Flags().UintP("expire", "e", 24, "Optional. Set to 0 means burn-after-read. Default 24. (unit: hrs)")
-	viper.BindPFlag("expire", uploadCmd.Flags().Lookup("expire"))
+	_ = viper.BindPFlag("expire", uploadCmd.Flags().Lookup("expire"))
 	viper.SetDefault("expire", 24)
 	return uploadCmd
 }
@@ -118,11 +119,11 @@ func uploadToPasteBin(context []byte) (err error) {
 	}
 	request.Header.SetContentType(writer.FormDataContentType())
 	err = fasthttp.Do(request, response)
-	fmt.Fprintf(os.Stderr, "Server Response:\n")
-	fmt.Fprintf(os.Stderr, "Http Status Code: %d\n", response.StatusCode())
-	fmt.Fprintf(os.Stderr, "Http Response Body:\n")
-	fmt.Printf(string(response.Body()))
-	fmt.Fprintf(os.Stderr, "\n")
+	_, _ = fmt.Fprintf(os.Stderr, "Server Response:\n")
+	_, _ = fmt.Fprintf(os.Stderr, "Http Status Code: %d\n", response.StatusCode())
+	_, _ = fmt.Fprintf(os.Stderr, "Http Response Body:\n")
+	_, _ = fmt.Printf(string(response.Body()))
+	_, _ = fmt.Fprintf(os.Stderr, "\n")
 	return
 }
 
@@ -137,12 +138,13 @@ func fetchPassword() string {
 	}
 }
 
+// generateRandomPassword: todo: let user define password length.
 func generateRandomPassword() string {
 	buffer := make([]byte, 4)
 	for i := 0; i < 4; i++ {
 		buffer[i] = pool[rand.Intn(len(pool))]
 	}
 	result := string(buffer)
-	fmt.Fprintf(os.Stderr, "Private share password: %v\n", result)
+	_, _ = fmt.Fprintf(os.Stderr, "Private share password: %v\n", result)
 	return result
 }

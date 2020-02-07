@@ -1,4 +1,4 @@
-package command
+package clipkg
 
 import (
 	"fmt"
@@ -46,9 +46,11 @@ func initConfig() {
 
 	viper.AutomaticEnv()
 	if err := viper.ReadInConfig(); err == nil {
-		fmt.Fprintln(os.Stderr, "Using config file:", viper.ConfigFileUsed())
+		_, _ = fmt.Fprintln(os.Stderr, "Using config file:", viper.ConfigFileUsed())
 	}
 }
+
+// Execute : so-called init function
 func Execute() error {
 	return rootCmd.Execute()
 }
