@@ -41,8 +41,12 @@ func deleteOnline(command *cobra.Command, args []string) (err error) {
 	if err != nil {
 		log.Fatal(err.Error())
 	}
+	respStatusCode := response.StatusCode()
 	_, _ = fmt.Fprintf(os.Stderr, "Server Response:\n")
-	_, _ = fmt.Fprintf(os.Stderr, "Http Status Code: %d\n", response.StatusCode())
+	_, _ = fmt.Fprintf(os.Stderr, "Http Status Code: %d\n", respStatusCode)
+	if respStatusCode >= 400 {
+		_, _ = fmt.Fprintf(os.Stderr, "Your request is rejected by server. Please check your masterkey or Snippet ID.")
+	}
 	_, _ = fmt.Fprintf(os.Stderr, "Http Response Body:\n")
 	_, _ = fmt.Printf(string(response.Body()))
 	_, _ = fmt.Fprintf(os.Stderr, "\n")

@@ -135,13 +135,18 @@ func uploadToPasteBin(context []byte) (err error) {
 	}
 	request.Header.SetContentType(writer.FormDataContentType())
 	err = fasthttp.Do(request, response)
+	respStatusCode := response.StatusCode()
 	if err != nil {
 		_, _ = fmt.Fprintln(os.Stderr, err.Error())
 		log.Fatalln("Connect to Server Error. Check your config please.")
 	}
 	fmt.Println("If you need raw format data, just append `f=raw` as your snippet URL param.")
 	_, _ = fmt.Fprintf(os.Stderr, "Server Response:\n")
-	_, _ = fmt.Fprintf(os.Stderr, "Http Status Code: %d\n", response.StatusCode())
+	_, _ = fmt.Fprintf(os.Stderr, "Http Status Code: %d\n", respStatusCode)
+	if respStatusCode >= 400 {
+		_, _ = fmt.Fprintf(os.Stderr, "Request is rejected by server. Please run `pb-cli status` to check server info.")
+		return
+	}
 	_, _ = fmt.Fprintf(os.Stderr, "Http Response Body:\n")
 	_, _ = fmt.Printf(string(response.Body()))
 	_, _ = fmt.Fprintf(os.Stderr, "\n")

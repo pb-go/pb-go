@@ -24,12 +24,11 @@ func init() {
 
 	rootCmd.PersistentFlags().StringVarP(&cfgFile, "config", "c", "", "config file")
 	rootCmd.PersistentFlags().StringP("host", "H", "", "pb-go service url")
-	//rootCmd.Flags().Bool("help", false, "help for pb-cli")
 	err := viper.BindPFlag("host", rootCmd.PersistentFlags().Lookup("host"))
 	if err != nil {
 		log.Fatalln(err.Error())
 	}
-	rootCmd.AddCommand(UploadCommand(), GetCommand(), DeleteCommand())
+	rootCmd.AddCommand(UploadCommand(), GetCommand(), DeleteCommand(), statusCommand())
 	rootCmd.SetHelpCommand(nil)
 }
 
@@ -58,7 +57,7 @@ func AcquireValidGlobalFlag() {
 	// global flag adn config validation
 	host := viper.Get("host").(string)
 	if !(len(host) == 0) && !strings.HasPrefix(host, "http://") && !strings.HasPrefix(host, "https://") {
-		fmt.Fprintln(os.Stderr, "Invalid host url:"+host)
+		_, _ = fmt.Fprintln(os.Stderr, "Invalid host url:"+host)
 		log.Fatalln("Host should start with http:// or https://")
 	}
 }
