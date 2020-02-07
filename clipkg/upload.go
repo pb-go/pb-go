@@ -139,8 +139,9 @@ func fetchPassword() string {
 
 // generateRandomPassword: todo: let user define password length.
 func generateRandomPassword() string {
-	buffer := make([]byte, 4)
-	for i := 0; i < 4; i++ {
+	genpwdlen := viper.GetInt("pwdlen")
+	buffer := make([]byte, genpwdlen)
+	for i := 0; i < genpwdlen; i++ {
 		buffer[i] = pool[rand.Intn(len(pool))]
 	}
 	result := string(buffer)
