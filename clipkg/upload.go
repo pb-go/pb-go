@@ -133,6 +133,7 @@ func uploadToPasteBin(context []byte) (err error) {
 	request.Header.SetContentType(writer.FormDataContentType())
 	err = fasthttp.Do(request, response)
 	if err != nil {
+		_, _ = fmt.Fprintln(os.Stderr, err.Error())
 		log.Fatalln("Connect to Server Error. Check your config please.")
 	}
 	fmt.Println(" If you need raw format data, just append `f=raw` as your snippet URL param.")
