@@ -139,7 +139,7 @@ func uploadToPasteBin(context []byte) (err error) {
 		_, _ = fmt.Fprintln(os.Stderr, err.Error())
 		log.Fatalln("Connect to Server Error. Check your config please.")
 	}
-	fmt.Println(" If you need raw format data, just append `f=raw` as your snippet URL param.")
+	fmt.Println("If you need raw format data, just append `f=raw` as your snippet URL param.")
 	_, _ = fmt.Fprintf(os.Stderr, "Server Response:\n")
 	_, _ = fmt.Fprintf(os.Stderr, "Http Status Code: %d\n", response.StatusCode())
 	_, _ = fmt.Fprintf(os.Stderr, "Http Response Body:\n")
