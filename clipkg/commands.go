@@ -7,6 +7,7 @@ import (
 	"log"
 	"os"
 	"os/user"
+	"strings"
 )
 
 // define the config file path and init for root command
@@ -50,6 +51,16 @@ func initConfig() {
 		log.Fatalln("Error for reading config file: ~/.pbcli.yaml")
 	}
 	_, _ = fmt.Fprintln(os.Stderr, "Using config file:", viper.ConfigFileUsed())
+}
+
+// validation global flag
+func AcquireValidGlobalFlag() {
+	// global flag adn config validation
+	host := viper.Get("host").(string)
+	if !(len(host) == 0) && !strings.HasPrefix(host, "http://") && !strings.HasPrefix(host, "https://") {
+		fmt.Fprintln(os.Stderr, "Invalid host url:"+host)
+		log.Fatalln("Host should start with http:// or https://")
+	}
 }
 
 // Execute : so-called init function

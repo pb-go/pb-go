@@ -40,6 +40,7 @@ func UploadCommand() *cobra.Command {
 
 // the first param will always be *cobra.Command, please do not delete it even if not used in function.
 func uploadOnline(command *cobra.Command, args []string) error {
+	AcquireValidGlobalFlag()
 	if len(args) == 0 {
 		stdin, err := readFromStdin()
 		if err != nil {
