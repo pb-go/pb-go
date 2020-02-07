@@ -95,7 +95,19 @@ func uploadToPasteBin(context []byte) (err error) {
 	if err != nil {
 		log.Fatal(err.Error())
 	}
-	_, err = field.Write([]byte(strconv.Itoa(viper.Get("expire").(int))))
+
+	expire := viper.Get("expire")
+	var result string
+	switch t := expire.(type) {
+	case int:
+		result = strconv.Itoa(t)
+	case string:
+		result = t
+	default:
+		result = fmt.Sprintf("%v", t)
+	}
+
+	_, err = field.Write([]byte(result))
 	if err != nil {
 		log.Fatal(err.Error())
 	}
