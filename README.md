@@ -64,7 +64,7 @@ Copy it to `~/.pbcli.yaml`, and change it according to [the document](/docs/clie
 Download `pb-go` From release assets, use `--help` to get usage.
 
 We have an example config named `config.example.yaml` in our root folder, rename to `config.yaml`, 
-, and change it according to [the document](/docs/config.md), finally put it in the same folder of the binary.
+and change it according to [the document](/docs/config.md), finally put it in the same folder of the binary.
 
 ## Compile
 

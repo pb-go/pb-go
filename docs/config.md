@@ -43,6 +43,8 @@ MongoDB should be configured as described in DB schema file to make sure the dat
 
 Please DO NOT APPEND database name in URI.
 
+Currently, you need to build the database schema and validator yourself via Mongo Shell, the initialization script can be found in our [docs](/docs/db-schema.md).
+
 ### FAQ about DB
 
 1. I always encounter MongoDB Connection Error especially when trying to establish first connection.
