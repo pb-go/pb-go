@@ -10,7 +10,8 @@ import (
 	"os"
 )
 
-type StatusData struct {
+// RespStatusData : Used to serialize server returned json data
+type RespStatusData struct {
 	RunHealth        int  `json:"status"`
 	CaptchaEnabled   bool `json:"captcha_enabled"`
 	MaxExpireTime    int  `json:"max_expire"`
@@ -26,8 +27,8 @@ var (
 	}
 )
 
-// GetCommand : sub-command get.
-func statusCommand() *cobra.Command {
+// StatusCommand : sub-command status.
+func StatusCommand() *cobra.Command {
 	return statusCmd
 }
 
@@ -45,7 +46,7 @@ func statusOnline(command *cobra.Command, args []string) (err error) {
 	}
 	_, _ = fmt.Fprintf(os.Stderr, "Http Response Body:\n")
 
-	var serverStatusData StatusData
+	var serverStatusData RespStatusData
 	err = json.Unmarshal(body, &serverStatusData)
 	if err != nil {
 		log.Fatalln("Please contact server administrator.")

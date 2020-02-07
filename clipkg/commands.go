@@ -28,7 +28,7 @@ func init() {
 	if err != nil {
 		log.Fatalln(err.Error())
 	}
-	rootCmd.AddCommand(UploadCommand(), GetCommand(), DeleteCommand(), statusCommand())
+	rootCmd.AddCommand(UploadCommand(), GetCommand(), DeleteCommand(), StatusCommand())
 	rootCmd.SetHelpCommand(nil)
 }
 
