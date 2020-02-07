@@ -50,7 +50,7 @@ func statusOnline(command *cobra.Command, args []string) (err error) {
 	if err != nil {
 		log.Fatalln("Please contact server administrator.")
 	}
-	_, _ = fmt.Printf("\t Server Status: Running")
+	_, _ = fmt.Printf("\t Server Status: Running \n")
 	_, _ = fmt.Printf("\t Server Requires CAPTCHA Verification: %v \n", serverStatusData.CaptchaEnabled)
 	_, _ = fmt.Printf("\t Server-allowed maximum expire time: %d (hrs) \n", serverStatusData.MaxExpireTime)
 	_, _ = fmt.Printf("\t Server Enabled Abuse Detection Feature: %v \n", serverStatusData.FileCheckEnabled)
