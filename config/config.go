@@ -11,7 +11,7 @@ import (
 
 // software version, sentry bug tracking id
 const (
-	CurrentVer string = "v1.0.1"
+	CurrentVer string = "v1.0.2"
 	CurrentDSN string = "https://72dd7f93900d4742a436a525692a13ed@sentry.io/2124482"
 )
 
