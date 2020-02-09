@@ -50,7 +50,7 @@ Your data is encrypted and finally stored on our server using Chacha20 algorithm
 
 ## Usage
 
-Current version: v1.0.3
+Current version: v1.0.4
 
 ### Client
 
