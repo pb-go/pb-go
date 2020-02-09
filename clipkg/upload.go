@@ -72,7 +72,7 @@ func readFromStdin() (context []byte, err error) {
 }
 
 func uploadToPasteBin(context []byte) (err error) {
-	request := fasthttp.AcquireRequest()
+	request := MakeRequest()
 	response := fasthttp.AcquireResponse()
 	defer fasthttp.ReleaseRequest(request)   // <- do not forget to release
 	defer fasthttp.ReleaseResponse(response) // <- do not forget to release

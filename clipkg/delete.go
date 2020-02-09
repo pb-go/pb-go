@@ -27,7 +27,7 @@ func DeleteCommand() *cobra.Command {
 }
 
 func deleteOnline(command *cobra.Command, args []string) (err error) {
-	request := fasthttp.AcquireRequest()
+	request := MakeRequest()
 	response := fasthttp.AcquireResponse()
 
 	defer fasthttp.ReleaseRequest(request)
