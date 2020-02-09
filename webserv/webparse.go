@@ -141,7 +141,10 @@ func UserUploadParse(c *fasthttp.RequestCtx) {
 	// return publish url instead
 	c.SetStatusCode(http.StatusOK)
 	c.SetContentType("text/plain")
-	c.SetBodyString("Published at https://" + config.ServConf.Network.Host + "/" + userForm.ShortID)
+	respBodyStr := "Published at https://" + config.ServConf.Network.Host + "/" + userForm.ShortID + ". \n" 
+	respBodyStr += "If you have set password, please append `p=<PASSWORD>` as URI Param. \n"
+	respBodyStr += "If you need raw snippet, please append `f=raw` as URI Param. \n"
+	c.SetBodyString(respBodyStr)
 	return
 }
 
@@ -296,7 +299,10 @@ func StartVerifyCAPT(c *fasthttp.RequestCtx) {
 		} else {
 			c.SetStatusCode(http.StatusOK)
 			c.SetContentType("text/plain")
-			c.SetBodyString("Verification Passed. Go to https://" + config.ServConf.Network.Host + "/" + currentSnipid + " to see your paste.")
+			respBodyStr := "Verification Passed. Go to https://" + config.ServConf.Network.Host + "/" + currentSnipid + " to see your paste. \n"
+			respBodyStr += "If you have set password, please append `p=<PASSWORD>` as URI Param. \n"
+	                respBodyStr += "If you need raw snippet, please append `f=raw` as URI Param. \n"
+			c.SetBodyString(respBodyStr)
 			return
 		}
 	}
