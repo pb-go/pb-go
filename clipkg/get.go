@@ -27,6 +27,11 @@ func GetCommand() *cobra.Command {
 
 func getOnline(command *cobra.Command, args []string) (err error) {
 
+	request := MakeRequest()
+	response := fasthttp.AcquireResponse()
+	defer fasthttp.ReleaseRequest(request)
+	defer fasthttp.ReleaseResponse(response)
+
 	url := viper.Get("host").(string) + "/" + args[0]
 
 	url += "?f=raw"
@@ -34,7 +39,12 @@ func getOnline(command *cobra.Command, args []string) (err error) {
 		url += "&p=" + snipPassword
 	}
 
-	code, body, err := fasthttp.Get(make([]byte, 0), url)
+	request.Header.SetMethod(fasthttp.MethodGet)
+	request.SetRequestURI(url)
+	err = fasthttp.Do(request, response)
+	code := response.StatusCode()
+	body := response.Body()
+
 	if err != nil {
 		log.Fatal(err.Error())
 	}
