@@ -27,7 +27,7 @@ will be like this: `https://<network.host>/<otherdata>`, so make sure you've cov
 
 The `masterkey` must be longer than 12 bytes, `encryption_key` will be used for storage encryption, must be equals to 32 bytes.
 
-`encryption_nonce` will be used cooperate with `encryption_key`, must be equals to 12 bytes.
+`encryption_nonce` will be used cooperate with `encryption_key`, must be equals to 12 bytes, you should drop database and change it after several days when you try to `compact` database and minimize the database disk cost. The nonce should not be reused after proceeded 256 GiB data or more.
 
 If `content.detect_abuse` is enabled, the system will only allow to upload pure text.
 
