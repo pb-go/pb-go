@@ -130,7 +130,7 @@ func UserUploadParse(c *fasthttp.RequestCtx) {
 		}
 		redirect2URI := "/showVerify?id=" + tempurlid
 		c.Redirect(redirect2URI, http.StatusFound) // use 302, instead of 307.
-		c.SetBodyString("Please go to https://" + config.ServConf.Network.Host + redirect2URI + " to finish CAPTCHA.")
+		c.SetBodyString("Please go to \n\n https://" + config.ServConf.Network.Host + redirect2URI + " \n\n to finish CAPTCHA.")
 		return
 	}
 	err = databaseop.GlobalMDBC.ItemCreate(userForm)
@@ -141,7 +141,7 @@ func UserUploadParse(c *fasthttp.RequestCtx) {
 	// return publish url instead
 	c.SetStatusCode(http.StatusOK)
 	c.SetContentType("text/plain")
-	respBodyStr := "Published at https://" + config.ServConf.Network.Host + "/" + userForm.ShortID + " . \n" 
+	respBodyStr := "Published at \n\n https://" + config.ServConf.Network.Host + "/" + userForm.ShortID + " \n\n"
 	respBodyStr += "If you have set password, please append `p=<PASSWORD>` as URI Param. \n"
 	respBodyStr += "If you need raw snippet, please append `f=raw` as URI Param. \n"
 	c.SetBodyString(respBodyStr)
@@ -301,7 +301,7 @@ func StartVerifyCAPT(c *fasthttp.RequestCtx) {
 			c.SetContentType("text/plain")
 			respBodyStr := "Verification Passed. Go to https://" + config.ServConf.Network.Host + "/" + currentSnipid + " to see your paste. \n"
 			respBodyStr += "If you have set password, please append `p=<PASSWORD>` as URI Param. \n"
-	                respBodyStr += "If you need raw snippet, please append `f=raw` as URI Param. \n"
+			respBodyStr += "If you need raw snippet, please append `f=raw` as URI Param. \n"
 			c.SetBodyString(respBodyStr)
 			return
 		}
