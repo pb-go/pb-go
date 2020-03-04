@@ -18,6 +18,7 @@ Config file should be written in `yaml` like:
 host: 'http://your.pastebin.bakcend:port'
 expire: 12
 masterKey: 'Same as your config on server'
+pwdlen: 6
 ```
 
 About `host`:  
@@ -33,6 +34,10 @@ It you are a user, just ignore this.
 About `expire`:  
 You can use `-e <expire>` with `upload` command.  
 Default pastes expire time in hours. If you do not set this value or `-e` flag, it will use 24 as expire time.
+
+About `pwdlen`:
+You can use `-p` with `upload` command.  
+When you use `-p` flag to generate random password, we will create a `pwdlen` byte-len digit password for you.
 
 **Using flag in commands will override the value from config file.**
 

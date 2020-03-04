@@ -1,0 +1,4 @@
+host: ""
+expire: 12
+masterKey: ""
+pwdlen: 6

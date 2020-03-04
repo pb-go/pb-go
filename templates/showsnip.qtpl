@@ -9,7 +9,7 @@
 <body>
 <div class="container">
     <div class="content-container">
-        <pre class="prettyprint linenums">
+        <pre class="prettyprint linenums" style="tab-size: 4">
 {%s data %}
         </pre>
     </div>

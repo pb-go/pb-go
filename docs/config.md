@@ -27,7 +27,7 @@ will be like this: `https://<network.host>/<otherdata>`, so make sure you've cov
 
 The `masterkey` must be longer than 12 bytes, `encryption_key` will be used for storage encryption, must be equals to 32 bytes.
 
-`encryption_nonce` will be used cooperate with `encryption_key`, must be equals to 12 bytes.
+`encryption_nonce` will be used cooperate with `encryption_key`, must be equals to 12 bytes, you should drop database and change it after several days when you try to `compact` database and minimize the database disk cost. The nonce should not be reused after proceeded 256 GiB data or more.
 
 If `content.detect_abuse` is enabled, the system will only allow to upload pure text.
 
@@ -35,13 +35,15 @@ If `content.detect_abuse` is enabled, the system will only allow to upload pure 
 
 > Note: `expire_hrs` is the maximum TTL allowed, user may override their own snippet TTL by define themselves, but
 > it cannot be longer than 24h, cuz the database will automatically expire after 24h in consideration of storage and 
-> anti-abuse. Set to `0` means burn after read, the valid values must be 0~24h.
+> anti-abuse. Set to `0` means burn-after-read, the valid values must be 1~24h. **We DO NOT allow server default set to burn-after-read.**
 
 ## Database
 
 MongoDB should be configured as described in DB schema file to make sure the data TTL is correctly set. You do need to add SCRAM authentication to your DB and make sure your DB listened just on localhost.
 
-Please DO NOT APPEND database name in URI.
+Please DO NOT APPEND database name in URI. The URI will like this: `mongodb://localhost:27017`.
+
+Currently, you need to build the database schema and validator yourself via Mongo Shell, the initialization script can be found in our [docs](/docs/db-schema.md).
 
 ### FAQ about DB
 
@@ -92,7 +94,9 @@ Normally, it should be set to about 10 reqs/min/IP.
 
 Our goal is to offer convenient service to developers, not for spammer.
 
-If your public instance is experiencing abusing, please do enable recaptcha and set API key. If enabled, All requests will need to pass recaptcha test in 5 mins before finally published. 
+If your public instance is experiencing abusing, please do enable recaptcha and set API key. If enabled, All requests will need to pass recaptcha test before finally published. 
+
+Please note, we use **Recaptcha V2** instead of v3.
 
 ## Security
 

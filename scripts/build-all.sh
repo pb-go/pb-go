@@ -59,7 +59,7 @@ PLATFORMS="$PLATFORMS openbsd/amd64" # amd64 only as of go1.6
 PLATFORMS_ARM="linux"
 
 # GOLANG COMPILER BUILD FLAGS
-GC_FLAGS="-trimpath -race -ldflags '-s -w'"
+GC_FLAGS="-trimpath -ldflags '-s -w'"
 
 ##############################################################
 # Shouldn't really need to modify anything below this line.  #
@@ -78,6 +78,9 @@ for PLATFORM in $PLATFORMS; do
   CMD="CGO_ENABLED=0 GOOS=${GOOS} GOARCH=${GOARCH} go build ${GC_FLAGS} -o ${BIN_FILENAME} $@"
   echo "${CMD}"
   eval "${CMD}" || FAILURES="${FAILURES} ${PLATFORM}"
+  if [[ "${GOOS}" != "darwin" ]]; then 
+	  strip "${BIN_FILENAME}" || true
+  fi
 done
 
 # ARM builds

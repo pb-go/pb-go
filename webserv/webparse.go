@@ -113,9 +113,14 @@ func UserUploadParse(c *fasthttp.RequestCtx) {
 	// calculate expire
 	// if recaptcha enabled, set to 5min expires first,
 	// else, set to 24hrs, then build next.
+	if userExpire == 0 {
+		userForm.ReadThenBurn = true
+		userForm.ExpireAt = primitive.NewDateTimeFromTime(time.Now().Add(time.Duration(config.ServConf.Content.ExpireHrs) * time.Hour))
+	} else {
+		userForm.ExpireAt = primitive.NewDateTimeFromTime(time.Now().Add(time.Duration(userExpire) * time.Hour))
+	}
 	if config.ServConf.Recaptcha.Enable {
 		userForm.WaitVerify = true
-		userForm.ExpireAt = primitive.NewDateTimeFromTime(time.Now().Add(5 * time.Minute))
 		// then return recaptcha url, set id param in url using rawurl_b64.
 		tempurlid := base64.RawURLEncoding.EncodeToString([]byte(userForm.ShortID))
 		err = databaseop.GlobalMDBC.ItemCreate(userForm)
@@ -125,24 +130,21 @@ func UserUploadParse(c *fasthttp.RequestCtx) {
 		}
 		redirect2URI := "/showVerify?id=" + tempurlid
 		c.Redirect(redirect2URI, http.StatusFound) // use 302, instead of 307.
-		c.SetBodyString("Please go to https://" + config.ServConf.Network.Host + redirect2URI + " to finish CAPTCHA.")
+		c.SetBodyString("Please go to \n\n https://" + config.ServConf.Network.Host + redirect2URI + " \n\n to finish CAPTCHA.")
 		return
-	} else {
-		if userExpire > 0 {
-			userForm.ExpireAt = primitive.NewDateTimeFromTime(time.Now().Add(time.Duration(userExpire) * time.Hour))
-		} else if userExpire == 0 {
-			userForm.ReadThenBurn = true
-		}
-		err = databaseop.GlobalMDBC.ItemCreate(userForm)
-		if err != nil {
-			c.SetStatusCode(http.StatusBadGateway)
-			return
-		}
+	}
+	err = databaseop.GlobalMDBC.ItemCreate(userForm)
+	if err != nil {
+		c.SetStatusCode(http.StatusBadGateway)
+		return
 	}
 	// return publish url instead
 	c.SetStatusCode(http.StatusOK)
 	c.SetContentType("text/plain")
-	c.SetBodyString("Published at https://" + config.ServConf.Network.Host + "/" + userForm.ShortID)
+	respBodyStr := "Published at \n\n https://" + config.ServConf.Network.Host + "/" + userForm.ShortID + " \n\n"
+	respBodyStr += "If you have set password, please append `p=<PASSWORD>` as URI Param. \n"
+	respBodyStr += "If you need raw snippet, please append `f=raw` as URI Param. \n"
+	c.SetBodyString(respBodyStr)
 	return
 }
 
@@ -287,7 +289,6 @@ func StartVerifyCAPT(c *fasthttp.RequestCtx) {
 		update1 := bson.D{
 			{"$set", bson.D{
 				{"waitVerify", false},
-				{"expireAt", primitive.NewDateTimeFromTime(time.Now().Add(time.Duration(config.ServConf.Content.ExpireHrs) * time.Hour))},
 			}},
 		}
 		err = databaseop.GlobalMDBC.ItemUpdate(filter1, update1)
@@ -298,7 +299,10 @@ func StartVerifyCAPT(c *fasthttp.RequestCtx) {
 		} else {
 			c.SetStatusCode(http.StatusOK)
 			c.SetContentType("text/plain")
-			c.SetBodyString("Verification Passed. Go to https://" + config.ServConf.Network.Host + "/" + currentSnipid + " to see your paste.")
+			respBodyStr := "Verification Passed. Go to https://" + config.ServConf.Network.Host + "/" + currentSnipid + " to see your paste. \n"
+			respBodyStr += "If you have set password, please append `p=<PASSWORD>` as URI Param. \n"
+			respBodyStr += "If you need raw snippet, please append `f=raw` as URI Param. \n"
+			c.SetBodyString(respBodyStr)
 			return
 		}
 	}

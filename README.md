@@ -2,7 +2,7 @@
 
 ![Logo](./readme-logo.png)
 
-Yet Another PasteBin implemented in Golang.
+Yet Another PasteBin implemented in Golang. The `pb-go` team have no affiliate with [ptpb/pb](https://github.com/ptpb/pb).
 
 ![GitHub stars](https://img.shields.io/github/stars/pb-go/pb-go?style=social)
 [![Go Report Card](https://goreportcard.com/badge/github.com/pb-go/pb-go)](https://goreportcard.com/report/github.com/pb-go/pb-go)
@@ -16,11 +16,14 @@ Yet Another PasteBin implemented in Golang.
 We use [Sentry.io](https://sentry.io) for bug tracking and log collection which was GDPR-complaint, 
 their privacy policy can be found at: [here](https://sentry.io/legal/privacy/2.1.0/)
 
+Our Documentation is [here](/docs).
+
 ## Discussion
 
-We need developer and help, for feature request and discussion, please go to our [Telegram Group](https://t.me/pb_go_discuss).
+We need developer and help, for feature request and discussion, 
+please go to our [Telegram Group](https://t.me/pb_go_discuss).
 
-Bug report please attach log and finish the whole issue template. Thanks.
+Bug Report please attach log and finish the whole GitHub Issue template. Thanks.
 
 ## Prerequisites
 
@@ -47,7 +50,21 @@ Your data is encrypted and finally stored on our server using Chacha20 algorithm
 
 ## Usage
 
-TODO
+Current version: v1.0.4
+
+### Client
+
+Download `pb-cli` From release assets, use `--help` to get usage.
+
+We have an example config named `pbcli.example.yaml` in our root folder to simplify your typing, 
+Copy it to `~/.pbcli.yaml`, and change it according to [the document](/docs/client.md). **This configuration file is OPTIONAL, not REQUIRED.**
+
+### Server
+
+Download `pb-go` From release assets, use `--help` to get usage.
+
+We have an example config named `config.example.yaml` in our root folder, rename to `config.yaml`, 
+and change it according to [the document](/docs/config.md), finally put it in the same folder of the binary.
 
 ## Compile
 

@@ -11,7 +11,7 @@ import (
 
 // software version, sentry bug tracking id
 const (
-	CurrentVer string = "v0.1.0"
+	CurrentVer string = "v1.0.4"
 	CurrentDSN string = "https://72dd7f93900d4742a436a525692a13ed@sentry.io/2124482"
 )
 
@@ -69,7 +69,7 @@ func CheckConfig(servConf ServConfig) int {
 			return 3
 		}
 	}
-	if (servConf.Content.ExpireHrs > 24) || (servConf.Content.ExpireHrs < 0) {
+	if (servConf.Content.ExpireHrs > 24) || (servConf.Content.ExpireHrs <= 0) {
 		return 3
 	}
 	isMasterKeySec := len(servConf.Security.MasterKey) >= 12

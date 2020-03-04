@@ -128,6 +128,9 @@ func main() {
 				}
 				defer os.Exit(0)
 			}
+		} else {
+			log.Printf("Wanted Config File: %s \n", confPath)
+			log.Fatalln("Cannot find the config file, please check documentation.")
 		}
 	} else {
 		os.Exit(13)

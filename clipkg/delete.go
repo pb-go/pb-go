@@ -1,4 +1,4 @@
-package command
+package clipkg
 
 import (
 	"fmt"
@@ -6,6 +6,7 @@ import (
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 	"github.com/valyala/fasthttp"
+	"log"
 	"os"
 )
 
@@ -13,19 +14,20 @@ var (
 	deleteCmd = &cobra.Command{
 		Use:   "delete",
 		Short: "Delete a paste from pastebin with id.",
-		RunE:  delete,
+		RunE:  deleteOnline,
 		Args:  cobra.MinimumNArgs(1),
 	}
 )
 
+// DeleteCommand : Parse the delete sub-command
 func DeleteCommand() *cobra.Command {
 	deleteCmd.Flags().StringP("masterKey", "k", "", "Required. Master key in pb-go server's config.")
-	viper.BindPFlag("masterKey",deleteCmd.Flags().Lookup("masterKey"))
+	_ = viper.BindPFlag("masterKey", deleteCmd.Flags().Lookup("masterKey"))
 	return deleteCmd
 }
 
-func delete(command *cobra.Command, args []string) (err error) {
-	request := fasthttp.AcquireRequest()
+func deleteOnline(command *cobra.Command, args []string) (err error) {
+	request := MakeRequest()
 	response := fasthttp.AcquireResponse()
 
 	defer fasthttp.ReleaseRequest(request)
@@ -35,12 +37,18 @@ func delete(command *cobra.Command, args []string) (err error) {
 	request.Header.SetMethod(fasthttp.MethodDelete)
 	request.Header.Set("X-Master-Key", utils.GetUTCTimeHash(viper.Get("masterKey").(string)))
 
-	fasthttp.Do(request, response)
 	err = fasthttp.Do(request, response)
-	fmt.Fprintf(os.Stderr, "Server Response:\n")
-	fmt.Fprintf(os.Stderr, "Http Status Code: %d\n", response.StatusCode())
-	fmt.Fprintf(os.Stderr, "Http Response Body:\n")
-	fmt.Printf(string(response.Body()))
-	fmt.Fprintf(os.Stderr, "\n")
+	if err != nil {
+		log.Fatal(err.Error())
+	}
+	respStatusCode := response.StatusCode()
+	_, _ = fmt.Fprintf(os.Stderr, "Server Response:\n")
+	_, _ = fmt.Fprintf(os.Stderr, "Http Status Code: %d\n", respStatusCode)
+	if respStatusCode >= 400 {
+		_, _ = fmt.Fprintf(os.Stderr, "Your request is rejected by server. Please check your masterkey or Snippet ID.")
+	}
+	_, _ = fmt.Fprintf(os.Stderr, "Http Response Body:\n")
+	_, _ = fmt.Printf(string(response.Body()))
+	_, _ = fmt.Fprintf(os.Stderr, "\n")
 	return
 }
