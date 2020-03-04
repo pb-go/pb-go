@@ -11,9 +11,9 @@ require (
 	github.com/golang/snappy v0.0.1 // indirect
 	github.com/h2non/filetype v1.0.10
 	github.com/klauspost/compress v1.9.8 // indirect
-	github.com/matoous/go-nanoid v1.1.0
+	github.com/matoous/go-nanoid v1.2.0
 	github.com/pkg/errors v0.9.1
-	github.com/rakyll/statik v0.1.6
+	github.com/rakyll/statik v0.1.7
 	github.com/spf13/cobra v0.0.5
 	github.com/spf13/viper v1.3.2
 	github.com/tidwall/pretty v1.0.0 // indirect
